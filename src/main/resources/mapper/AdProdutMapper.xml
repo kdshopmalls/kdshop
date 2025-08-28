@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kd.basic.admin.product.AdProductMapper">
+<insert id="pro_insert"  parameterType="com.kd.basic.admin.product.AdProductMapper">
+	insert into item_list( 
+	cate_code,
+	item_name,
+	item_price,
+	item_discount,
+	item_publisher,
+	item_content,
+	item_up_folder,
+	item_img,
+	item_amount
+	)values(
+	#{cate_code},
+	#{item_name},
+	#{item_price},
+	#{item_discount},
+	#{item_publisher},
+	#{item_content},
+	#{item_up_folder},
+	#{item_img},
+	#{item_amount} );
+</insert>
+
+<select id="pro_list" resultType="com.kd.basic.admin.product.ProductDTO" parameterType="com.kd.basic.common.utils.SearchCriteria">
+	
+		select 
+			item_num,cate_code,item_name,item_price,item_discount,item_publisher,item_content,item_up_folder,item_img,item_amount,item_buy, item_review, item_date,item_updatedate
+		from 
+			item_list
+		where
+			item_num > 0
+					
+		<include refid="search"></include>
+	
+		limit #{pageStart}, #{perPageNum}
+	
+	</select>
+	  <sql id="search">
+		   <if test="searchType != null">
+		   	<if test="searchType == 'n'.toString()">
+		   		and item_name like concat('%', #{keyword}, '%')
+		   	</if>
+		   	<if test="searchType == 'c'.toString()">
+		   		and item_num like concat('%', #{keyword}, '%')
+		   	</if>
+		   	<if test="searchType == 'p'.toString()">
+		   		and item_publisher like concat('%', #{keyword}, '%')
+		   	</if>
+		   	<if test="searchType == 'np'.toString()">
+		   		and item_name like concat('%', #{keyword}, '%') 
+		   		 or
+		   		item_publisher like concat('%', #{keyword}, '%')
+		   	</if>
+		   </if>
+		 </sql>
+ 
+</mapper>
