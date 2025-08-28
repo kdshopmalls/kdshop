@@ -53,8 +53,8 @@ public class MemberController {
 		log.info("회원정보: " + dto);
 		
 		//비밀번호 암호화작업
-		String enc_password = passwordEncoder.encode(dto.getMbsp_password());
-		dto.setMbsp_password(enc_password);
+		String enc_password = passwordEncoder.encode(dto.getMb_pw());
+		dto.setMb_pw(enc_password);
 		memberService.join(dto);
 		return "redirect:/member/login";
 	}
@@ -68,15 +68,15 @@ public class MemberController {
 	public String loginProcess(LoginDTO dto,HttpSession session, RedirectAttributes rttr) throws Exception{
 		//아이디가 존재하면 vo객체안에서 아이디에 해당하는 회원정보가 저장된다.
 		//아이디가 존재하지 않으면 vo객체는 null이 된다 
-		MemberDTO vo =  memberService.login(dto.getMbsp_id());
+		MemberDTO vo =  memberService.login(dto.getMb_id());
 		String url = "";// 로그인지 주소이동
 		String status = "";//로그인 성공 ,실패에 따른 메세지용
 		if(vo != null) {
 			log.info("회원아이디: " + vo);
-			if(passwordEncoder.matches(dto.getMbsp_password(), vo.getMbsp_password())) {
+			if(passwordEncoder.matches(dto.getMb_pw(), vo.getMb_pw())) {
 			
 				// 서버측의 메모리에 인증된 상태라는 의미의 정보를 세션형태로 저장한다.
-				vo.setMbsp_password("");//비밀번호를 공백처리
+				vo.setMb_pw("");//비밀번호를 공백처리
 				session.setAttribute("login_auth", vo);
 				
 				 url="/"; // 메인페이지 주소
@@ -112,9 +112,9 @@ public class MemberController {
 			MemberDTO  dto = (MemberDTO) session.getAttribute("login_auth");
 			if(dto != null) {
 				// 로그인시 저장한 구문. session.setAttribute("login_auth", userInfo);
-				String mbsp_id = ((MemberDTO) session.getAttribute("login_auth")).getMbsp_id();
+				String mb_id = ((MemberDTO) session.getAttribute("login_auth")).getMb_id();
 				
-				MemberDTO vo= memberService.modify(mbsp_id);
+				MemberDTO vo= memberService.modify(mb_id);
 				
 				log.info("회원수정정보" + vo);
 				

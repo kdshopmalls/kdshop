@@ -24,9 +24,9 @@
             <form class="form-horizontal" id="joinForm" action="/member/join" method="post">
             <div class="card-body">
                 <div class="form-group row mb-3">
-                    <label for="mbsp_id" class="col-sm-2 col-form-label">아이디</label>
+                    <label for="mb_id" class="col-sm-2 col-form-label">아이디</label>
                     <div class="col-sm-4">
-                        <input type="text" class="form-control" id="mbsp_id" name="mbsp_id" placeholder="아이디 입력">
+                        <input type="text" class="form-control" id="mb_id" name="mb_id" placeholder="아이디 입력">
                     </div>
                     
                     <div class="col-sm-4">
@@ -35,29 +35,29 @@
                     <span class="col-sm-2" id="idCheckMsg" style="color: red;"></span>
                 </div>
                 <div class="form-group row mb-3">
-                    <label for="mbsp_password" class="col-sm-2 col-form-label">비밀번호</label>
+                    <label for="mb_pw" class="col-sm-2 col-form-label">비밀번호</label>
                     <div class="col-sm-4">
-                        <input type="password" class="form-control" id="mbsp_password" name="mbsp_password" placeholder="비밀번호 입력">
+                        <input type="password" class="form-control" id="mb_pw" name="mb_pw" placeholder="비밀번호 입력">
                     </div>
-                    <label for="mbsp_password_2" class="col-sm-2 col-form-label">비밀번호 확인</label>
+                    <label for="mb_pw_2" class="col-sm-2 col-form-label">비밀번호 확인</label>
                     <div class="col-sm-4">
-                        <input type="password" class="form-control" id="mbsp_password_2" placeholder="비밀번호 확인">
-                    </div>
-                </div>
-                <div class="form-group row mb-3">
-                    <label for="mbsp_name" class="col-sm-2 col-form-label">이름</label>
-                    <div class="col-sm-4">
-                        <input type="text" class="form-control" id="mbsp_name" name="mbsp_name" placeholder="이름입력">
-                    </div>
-                    <label for="mbsp_nick" class="col-sm-2 col-form-label">별명</label>
-                    <div class="col-sm-4">
-                        <input type="text" class="form-control" id="mbsp_nick" name="mbsp_nick" placeholder="별명입력">
+                        <input type="password" class="form-control" id="mb_pw_2" placeholder="비밀번호 확인">
                     </div>
                 </div>
                 <div class="form-group row mb-3">
-                    <label for="mbsp_email" class="col-sm-2 col-form-label">전자우편</label>
+                    <label for="mb_name" class="col-sm-2 col-form-label">이름</label>
+                    <div class="col-sm-4">
+                        <input type="text" class="form-control" id="mb_name" name="mb_name" placeholder="이름입력">
+                    </div>
+                    <label for="mb_nick" class="col-sm-2 col-form-label">별명</label>
+                    <div class="col-sm-4">
+                        <input type="text" class="form-control" id="mb_nick" name="mb_nick" placeholder="별명입력">
+                    </div>
+                </div>
+                <div class="form-group row mb-3">
+                    <label for="mb_email" class="col-sm-2 col-form-label">전자우편</label>
                     <div class="col-sm-3">
-                        <input type="text" class="form-control" id="mbsp_email" name="mbsp_email" placeholder="전자우편입력">
+                        <input type="text" class="form-control" id="mb_email" name="mb_email" placeholder="전자우편입력">
                     </div>
                     <div class="col-sm-2">
                         <button type="button" class="btn btn-outline-primary" id="btnMailAuthcode">메일인증요청</button>
@@ -73,7 +73,7 @@
                 <div class="form-group row mb-3">
                     <label for="mbsp_zipcode" class="col-sm-2 col-form-label">우편번호</label>
                     <div class="col-sm-4">
-                        <input type="text" class="form-control" id="sample2_postcode" name="mbsp_zipcode" placeholder="우편번호 입력">
+                        <input type="text" class="form-control" id="sample2_postcode" name="mb_zipcode" placeholder="우편번호 입력">
                     </div>
                     <div class="col-sm-4">
                         <button type="button" class="btn btn-outline-primary" onclick="sample2_execDaumPostcode()">우편번호</button>
@@ -82,22 +82,22 @@
                 <div class="form-group row mb-3">
                     <label for="mbsp_addr" class="col-sm-2 col-form-label">기본주소</label>
                     <div class="col-sm-4">
-                        <input type="text" class="form-control" id="sample2_address" name="mbsp_addr" placeholder="기본주소 입력">
+                        <input type="text" class="form-control" id="sample2_address" name="mb_addr" placeholder="기본주소 입력">
                     </div>
                     <label for="mbsp_deaddr" class="col-sm-2 col-form-label">나머지 주소</label>
                     <div class="col-sm-4">
-                        <input type="text" class="form-control" id="sample2_detailAddress" name="mbsp_deaddr" placeholder="나머지 주소입력">
+                        <input type="text" class="form-control" id="sample2_detailAddress" name="mb_deaddr" placeholder="나머지 주소입력">
                         <input type="hidden" id="sample2_extraAddress" placeholder="참고항목">
                     </div>
                 </div>
                 <div class="form-group row mb-3">
                     <label for="mbsp_phone" class="col-sm-2 col-form-label">연락처</label>
                     <div class="col-sm-4">
-                        <input type="text" class="form-control" id="mbsp_phone" name="mbsp_phone" placeholder="연락처 입력">
+                        <input type="text" class="form-control" id="mb_phone" name="mb_phone" placeholder="연락처 입력">
                     </div>
                     <label for="mbsp_receive" class="col-sm-2 col-form-label">메일수신</label>
                     <div class="col-sm-4">
-                        <input class="form-check-input" type="checkbox" id="mbsp_receive" name="mbsp_receive" value="Y">
+                        <input class="form-check-input" type="checkbox" id="mb_receive" name="mb_receive" value="Y">
                     </div>
                 </div>
                 
@@ -218,9 +218,9 @@
         $("#btnIDCheck").on("click", function() {
             
 
-            let mbsp_id = $("#mbsp_id");
+            let mb_id = $("#mb_id");
             
-            if(mbsp_id.val() == "") {
+            if(mb_id.val() == "") {
                 alert("아이디를 입력하세요");
                 return;
             }
@@ -228,7 +228,7 @@
             $.ajax({
                 url : '/member/idCheck',
                 type: 'get',
-                data: {mbsp_id: mbsp_id.val()},
+                data: {mb_id: mb_id.val()},
                 dataType: 'text',
                 success : function(result) {
                     if(result == "yes") {
@@ -236,8 +236,8 @@
                         id_check = true; 
                     }else {
                         alert("사용불가능");
-                        mbsp_id.val("");
-                        mbsp_id.focus();
+                        mb_id.val("");
+                        mb_id.focus();
                     }
                 }
             });
@@ -246,7 +246,7 @@
 
         // 메일인증요청. id="btnMailAuthcode"   id="u_email"
         $("#btnMailAuthcode").on("click", function() {
-            if($("#mbsp_email").val() == "") {
+            if($("#mb_email").val() == "") {
                 alert("메일을 입력하세요.");
                 return;
             }
@@ -254,7 +254,7 @@
             $.ajax({
                 url: '/email/authcode',
                 type: 'get',
-                data : {receiverMail : $("#mbsp_email").val(), type : "authcode"},
+                data : {receiverMail : $("#mb_email").val(), type : "authcode"},
                 dataType : 'text',
                 success : function(result) {
                     if(result == "success") {

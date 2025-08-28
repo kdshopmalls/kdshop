@@ -4,9 +4,9 @@
 
 	<insert id="join" parameterType="com.kd.basic.member.MemberDTO">
 		insert into 
-			mb_list(mb_id,mb_name,mb_email,mb_password,mb_zipcode, mb_addr, mb_deaddr,mb_phone,mb_nick,mb_receive)
+			mb_list(mb_id,mb_name,mb_email,mb_pw,mb_zipcode, mb_addr, mb_deaddr,mb_phone,mb_nick,mb_receive)
 		values
-			(#{mb_id},#{mb_name},#{mb_email},#{mb_password},#{mb_zipcode},#{mb_addr},#{mb_deaddr},#{mb_phone},#{mb_nick},#{mb_receive})
+			(#{mb_id},#{mb_name},#{mb_email},#{mb_pw},#{mb_zipcode},#{mb_addr},#{mb_deaddr},#{mb_phone},#{mb_nick},#{mb_receive})
 	</insert>
 	<select id="idCheck"  resultType="String" parameterType="String">
 		select mb_id from mb_list
@@ -17,13 +17,13 @@
 			mb_id,
 			mb_name,
 			mb_email,
-			mb_password,
+			mb_pw,
 			mb_zipcode,
 			mb_addr, 
 			mb_deaddr,
 			mb_phone,
 			mb_nick
-	 	from mb_tbl 
+	 	from mb_list
 		where mb_id=#{mb_id}
 	</select>
 		<select id="modify" resultType="com.kd.basic.member.MemberDTO" parameterType="String">
@@ -31,7 +31,7 @@
 			mb_id,
 			mb_name,
 			mb_email,
-			mb_password,
+			mb_pw,
 			mb_zipcode,
 			mb_addr, 
 			mb_deaddr,

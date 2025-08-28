@@ -9,10 +9,10 @@
 
 		if(status == 'idFail') {
 			alert("아이디를 확인하세요");
-			document.getElementById("mbsp_id").focus();
+			document.getElementById("mb_id").focus();
 		}else if(status == 'pwFail') {
 			alert("비밀번호를 확인하세요");
-			document.getElementById("mbsp_password").focus();
+			document.getElementById("mb_pw").focus();
 		}
 
 	</script>
@@ -24,11 +24,11 @@
 			<form action="/member/login" method="post">
 				<div class="mb-3">
 					<label for="mbsp_id" class="form-label">아이디</label>
-					<input type="text" class="form-control" id="mbsp_id" name="mbsp_id" placeholder="아이디를 입력">
+					<input type="text" class="form-control" id="mb_id" name="mb_id" placeholder="아이디를 입력">
 				</div>
 				<div class="mb-3">
 					<label for="mbsp_password" class="form-label">비밀번호</label>
-					<input type="password" class="form-control" id="mbsp_password" name="mbsp_password" placeholder="비밀번호를 입력">
+					<input type="password" class="form-control" id="mb_pw" name="mb_pw" placeholder="비밀번호를 입력">
 				</div>
 				<div class="mb-3  text-center">
 					<button type="submit" class="btn btn-primary">Login</button>

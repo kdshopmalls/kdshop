@@ -12,18 +12,18 @@ import lombok.ToString;
 @ToString
 public class MemberDTO {
 
-	private String mbsp_id;
-	private String mbsp_name;
-	private String mbsp_email;
-	private String mbsp_password;
-	private String mbsp_zipcode;
-	private String mbsp_addr;
-	private String mbsp_deaddr;
-	private String mbsp_phone;
-	private String mbsp_nick;
-	private String mbsp_receive;
-	private int mbsp_point;
-	private Date mbsp_lastlogin;
-	private Date mbsp_datesub;
-	private Date mbsp_updatedate;
+	private String mb_id;
+	private String mb_name;
+	private String mb_email;
+	private String mb_pw;
+	private String mb_zipcode;
+	private String mb_addr;
+	private String mb_deaddr;
+	private String mb_phone;
+	private String mb_nick;
+	private String mb_receive;
+	private int mb_point;
+	private Date mb_lastlogin;
+	private Date mb_datesub;
+	private Date mb_updatedate;
 }
