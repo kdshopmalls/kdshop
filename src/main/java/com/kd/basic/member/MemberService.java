@@ -2,6 +2,8 @@ package com.kd.basic.member;
 
 import org.springframework.stereotype.Service;
 
+import com.kd.basic.common.domain.MemberDTO;
+
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor

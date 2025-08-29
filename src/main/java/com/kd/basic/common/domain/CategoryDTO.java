@@ -1,4 +1,4 @@
-package com.kd.basic.admin.category;
+package com.kd.basic.common.domain;
 
 import lombok.Getter;
 import lombok.Setter;
