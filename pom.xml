@@ -5,14 +5,14 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.4.8</version>
+		<version>3.5.5</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.kd</groupId>
-	<artifactId>kdmall</artifactId>
+	<artifactId>kdshop</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>kdmall</name>
-	<description>프로젝트</description>
+	<name>kdshop</name>
+	<description>포트폴리오 실전</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -34,12 +34,12 @@
 		<dependency>
 			<groupId>org.mybatis.spring.boot</groupId>
 			<artifactId>mybatis-spring-boot-starter</artifactId>
-			<version>3.0.3</version>
+			<version>3.0.5</version>
 		</dependency>
 		<dependency>
 			<groupId>org.mybatis.spring.boot</groupId>
 			<artifactId>mybatis-spring-boot-starter-test</artifactId>
-			<version>3.0.3</version>
+			<version>3.0.5</version>
 			<scope>test</scope>
 		</dependency>
 		
