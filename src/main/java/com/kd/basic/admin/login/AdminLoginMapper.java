@@ -1,6 +1,6 @@
 package com.kd.basic.admin.login;
 
-import com.kd.basic.member.MemberDTO;
+import com.kd.basic.common.domain.MemberDTO;
 
 public interface AdminLoginMapper {
 	

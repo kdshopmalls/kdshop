@@ -1,4 +1,4 @@
-package com.kd.basic.member;
+package com.kd.basic.common.domain;
 
 import java.util.Date;
 

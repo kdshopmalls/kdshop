@@ -1,4 +1,4 @@
-package com.kd.basic.admin.product;
+package com.kd.basic.common.domain;
 
 import java.util.Date;
 

@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 
 import com.kd.basic.admin.category.AdCategoryService;
+import com.kd.basic.common.domain.ProductDTO;
 import com.kd.basic.common.utils.FileUtils;
 import com.kd.basic.common.utils.SearchCriteria;
 
@@ -166,7 +167,11 @@ public class AdProductController {
 		
 		
 	}
-	
-	
+	// 상품목록 이미지출력하기.. 클라이언트에서 보낸 파라미터명 스프링의 컨트롤러에서 받는 파라미터명이 일치해야 한다.
+	@GetMapping("/image_display")
+	public ResponseEntity<byte[]> image_display(String dateFolderName, String fileName) throws Exception {
+		
+		return FileUtils.getFile(uploadPath + File.separator + dateFolderName, fileName);
+	}
 	
 }
