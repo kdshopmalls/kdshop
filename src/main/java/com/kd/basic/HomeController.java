@@ -1,8 +1,14 @@
 package com.kd.basic;
 
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.kd.basic.admin.category.AdCategoryService;
+import com.kd.basic.common.domain.CategoryDTO;
 
 import lombok.RequiredArgsConstructor;
 
@@ -10,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 @Controller
 public class HomeController {
 	private final TestMapper testMapper;
+	private final AdCategoryService adCategoryService;
 	
 	@ResponseBody
 	@GetMapping("/getTime")
@@ -18,7 +25,10 @@ public class HomeController {
 	}
 	//기본페이지
 	@GetMapping("/")
-	public String home() {
+	public String home(Model model) {
+		//1차 카테고리 작업
+		List<CategoryDTO> firstCategoryList = adCategoryService.getFirstCategoryList();
+		model.addAttribute("firstCategoryList", firstCategoryList);
 		return "index";
 	}
 	@GetMapping("/sub1")

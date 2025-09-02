@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kd.basic.product.ProductMapper">
+	<select id="getProductListBysecondCategory" resultType="com.kd.basic.common.domain.ProductDTO">
+		select 
+			item_num,
+			cate_code,
+			item_name,
+			item_price,
+			item_discount,
+			item_publisher,
+			item_content,
+			item_up_folder,
+			item_img,
+			item_amount,
+			item_buy,
+			item_review,
+			item_DATE,
+			item_UPDATEDATE  
+		from item_list
+			where cate_code = #{cate_code}
+			and item_buy = 'Y'
+		limit #{cri.pageStart},#{cri.perPageNum}
+	</select>
+		<select id="getProductListCountBysecondCategory" resultType="int">
+		select count(*) 
+		from item_list 
+		where cate_code = #{cate_code}
+		and item_buy = 'Y'
+	</select>
+</mapper>
