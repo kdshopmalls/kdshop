@@ -24,7 +24,7 @@
 	#{item_amount} );
 </insert>
 
-<select id="pro_list" resultType="com.kd.basic.common.domain.ProductDTO" parameterType="com.kd.basic.common.utils.SearchCriteria">
+<select id="pro_list" resultType="com.kd.basic.common.dto.ProductDTO" parameterType="com.kd.basic.common.utils.SearchCriteria">
 	
 		select 
 			item_num,cate_code,item_name,item_price,item_discount,item_publisher,item_content,item_up_folder,item_img,item_amount,item_buy, item_review, item_date,item_updatedate

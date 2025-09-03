@@ -5,7 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 
-import com.kd.basic.common.domain.ProductDTO;
+import com.kd.basic.common.dto.ProductDTO;
 import com.kd.basic.common.utils.Criteria;
 
 import lombok.RequiredArgsConstructor;

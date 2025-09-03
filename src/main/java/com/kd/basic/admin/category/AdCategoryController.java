@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.kd.basic.common.domain.CategoryDTO;
+import com.kd.basic.common.dto.CategoryDTO;
 
 import lombok.RequiredArgsConstructor;
 @RequestMapping("/admin/category/*")

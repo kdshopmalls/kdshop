@@ -1,4 +1,4 @@
-package com.kd.basic.common.domain;
+package com.kd.basic.common.dto;
 
 import lombok.Getter;
 import lombok.Setter;

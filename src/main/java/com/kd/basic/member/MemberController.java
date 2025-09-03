@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.kd.basic.common.domain.MemberDTO;
+import com.kd.basic.common.dto.MemberDTO;
 import com.kd.basic.mail.LoginDTO;
 
 import jakarta.servlet.http.HttpSession;

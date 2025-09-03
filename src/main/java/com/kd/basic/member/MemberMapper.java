@@ -1,6 +1,6 @@
 package com.kd.basic.member;
 
-import com.kd.basic.common.domain.MemberDTO;
+import com.kd.basic.common.dto.MemberDTO;
 
 public interface MemberMapper {
 	/*

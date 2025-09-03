@@ -7,8 +7,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.kd.basic.common.domain.MemberDTO;
-import com.kd.basic.common.domain.ProductDTO;
+import com.kd.basic.common.dto.MemberDTO;
+import com.kd.basic.common.dto.ProductDTO;
 import com.kd.basic.common.utils.SearchCriteria;
 
 import lombok.Getter;

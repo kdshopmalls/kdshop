@@ -32,4 +32,25 @@
 			c.item_num = p.item_num
 		where c.mb_id = #{mb_id}
 	</select>
+	<delete id="cart_empty" parameterType="String">
+		delete  from cart
+		where mb_id = #{mb_id}
+	</delete>
+	<delete id="cart_sel_delete" parameterType="map">
+		delete from
+			cart
+		where 
+			mb_id = #{mb_id}
+		and 
+			item_num	in 
+			<foreach collection="item_num_arr" item="item" open="(" separator="," close=")">
+			 #{item}
+			</foreach>	
+	
+	</delete>
+	<update id="cart_quantity_change" parameterType="com.kd.basic.cart.CartDTO">
+		update cart 
+			set cart_amount= #{cart_amount}
+		where mb_id = #{mb_id} and item_num=#{item_num}
+	</update>
 </mapper>
