@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kd.basic.member.MemberMapper">
 
-	<insert id="join" parameterType="com.kd.basic.common.domain.MemberDTO">
+	<insert id="join" parameterType="com.kd.basic.common.dto.MemberDTO">
 		insert into 
 			mb_list(mb_id,mb_name,mb_email,mb_pw,mb_zipcode, mb_addr, mb_deaddr,mb_phone,mb_nick,mb_receive)
 		values
@@ -12,7 +12,7 @@
 		select mb_id from mb_list
 		where mb_id=#{mb_id}
 	</select>
-	<select id="login" resultType="com.kd.basic.common.domain.MemberDTO" parameterType="String">
+	<select id="login" resultType="com.kd.basic.common.dto.MemberDTO" parameterType="String">
 		select 
 			mb_id,
 			mb_name,
@@ -26,7 +26,7 @@
 	 	from mb_list
 		where mb_id=#{mb_id}
 	</select>
-		<select id="modify" resultType="com.kd.basic.common.domain.MemberDTO" parameterType="String">
+		<select id="modify" resultType="com.kd.basic.common.dto.MemberDTO" parameterType="String">
 		select 
 			mb_id,
 			mb_name,
@@ -42,7 +42,7 @@
 	 	from mb_list 
 		where mb_id=#{mb_id}
 	</select>
-	<update id="modify_save" parameterType="com.kd.basic.common.domain.MemberDTO">
+	<update id="modify_save" parameterType="com.kd.basic.common.dto.MemberDTO">
 		update mb_list set 
 			mb_email = #{mb_email}, mb_zipcode = #{mb_zipcode}, mb_addr = #{mb_addr}, mb_deaddr = #{mb_deaddr}, 
 			mb_phone = #{mb_phone}, mb_nick = #{mb_nick}, mb_updatedate = now()

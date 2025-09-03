@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.kd.basic.common.domain.CategoryDTO;
+import com.kd.basic.common.dto.CategoryDTO;
 
 import lombok.RequiredArgsConstructor;
 

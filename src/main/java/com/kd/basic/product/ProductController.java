@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.kd.basic.admin.category.AdCategoryService;
-import com.kd.basic.common.domain.ProductDTO;
+import com.kd.basic.common.dto.ProductDTO;
 import com.kd.basic.common.utils.Criteria;
 import com.kd.basic.common.utils.FileUtils;
 import com.kd.basic.common.utils.PageMaker;

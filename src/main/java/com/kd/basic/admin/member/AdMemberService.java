@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.kd.basic.common.domain.MemberDTO;
+import com.kd.basic.common.dto.MemberDTO;
 import com.kd.basic.common.utils.SearchCriteria;
 
 import lombok.RequiredArgsConstructor;

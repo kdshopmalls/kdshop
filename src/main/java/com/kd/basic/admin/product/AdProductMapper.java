@@ -2,7 +2,7 @@ package com.kd.basic.admin.product;
 
 import java.util.List;
 
-import com.kd.basic.common.domain.ProductDTO;
+import com.kd.basic.common.dto.ProductDTO;
 import com.kd.basic.common.utils.SearchCriteria;
 
 public interface AdProductMapper {

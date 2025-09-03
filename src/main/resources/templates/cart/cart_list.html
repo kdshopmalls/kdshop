@@ -34,7 +34,7 @@
             <td th:text="${#numbers.formatInteger(item['item_price'], 3, 'COMMA') + '원'}"></td>
             <td>
               <input type="number" name="btn_cart_amount" th:value="${item['cart_amount']}" style="width: 60px;">
-              <button type="button" class="btn btn-success" name="btn_quantity_change" style="width: 80px;" th:data-pro_num="${item['item_num']}">변경</button>              
+              <button type="button" class="btn btn-success" name="btn_quantity_change" style="width: 80px;" th:data-item_num="${item['item_num']}">변경</button>              
             </td>
             <td th:text="${#numbers.formatInteger(item['unitprice'], 3, 'COMMA') + '원'}"></td>
           </tr>
@@ -98,14 +98,18 @@
       });
       //수량변경 이벤트 등록
       $("button[name='btn_quantity_change']").on("click",function(){
-          let pro_num =  $(this).data("pro_num");
+          let item_num =  $(this).data("item_num");
           let cart_amount = $(this).parent().find("input[name='btn_cart_amount']").val();
 
           //console.log("상품코드"+pro_num);
           //console.log("수량"+cart_amount);
           
           //location 방식
-          location.href="/cart/cart_quantity_change?pro_num="+pro_num + "&cart_amount=" + cart_amount;
+          location.href="/cart/cart_quantity_change?item_num="+item_num + "&cart_amount=" + cart_amount;
+      }); 
+      $("#btn_order_info").on("click",function(){
+        location.href="/order/order_info";
+        
       }); 
     });
   </script>
