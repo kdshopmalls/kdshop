@@ -56,29 +56,29 @@
             <div class="form-group row mb-3">
                 <label for="mb_name" class="col-sm-2 col-form-label">이름</label>
                 <div class="col-sm-4">
-                    <input type="hidden" id="ord_addr_zipcode_2" th:value="${memberDTO.mb_zipcode}">
-                    <input type="hidden" id="ord_addr_basic_2" th:value="${memberDTO.mb_addr}">
-                    <input type="hidden" id="ord_addr_detail_2" th:value="${memberDTO.mb_deaddr}">
+                    <input type="hidden" id="or_addr_zipcode_2" th:value="${memberDTO.mb_zipcode}">
+                    <input type="hidden" id="or_addr_basic_2" th:value="${memberDTO.mb_addr}">
+                    <input type="hidden" id="or_addr_detail_2" th:value="${memberDTO.mb_deaddr}">
 
                     <!-- 전체주문금액 -->
-                     <input type="hidden" name="ord_price" th:value="${order_total_price}">
+                     <input type="hidden" name="or_price" th:value="${order_total_price}">
 
                     <!-- 결제방식 --> 
                      <input type="hidden" id="p_method" name="p_method">
 
-                    <input type="text" class="form-control" id="ord_name_1" th:value="${memberDTO.mb_name}">
+                    <input type="text" class="form-control" id="or_name_1" th:value="${memberDTO.mb_name}">
                 </div>                          
             </div>
             <div class="form-group row mb-3">
                 <label for="mb_phone" class="col-sm-2 col-form-label">연락처</label>
                 <div class="col-sm-4">
-                    <input type="text" class="form-control" id="ord_tel_1" th:value="${memberDTO.mb_phone}">
+                    <input type="text" class="form-control" id="or_tel_1" th:value="${memberDTO.mb_phone}">
                 </div>                
             </div>
             <div class="form-group row mb-3">
                 <label for="mb_email_1" class="col-sm-2 col-form-label">이메일주소</label>
                 <div class="col-sm-4">
-                    <input type="text" class="form-control" id="ord_mail_1" th:value="${memberDTO.mb_email}">
+                    <input type="text" class="form-control" id="or_mail_1" th:value="${memberDTO.mb_email}">
                 </div>                
             </div>         
 
@@ -105,27 +105,27 @@
           <div class="form-group row mb-3">
               <label for="mb_id" class="col-sm-2 col-form-label">수령인</label>
               <div class="col">
-                  <input type="text" class="form-control" id="ord_name_2" name="ord_name" th:value="${memberDTO.mb_name}">
+                  <input type="text" class="form-control" id="or_name_2" name="or_name" th:value="${memberDTO.mb_name}">
               </div>                           
           </div>
           <div class="form-group row mb-3">
               <label for="mb_phone_2" class="col-sm-2 col-form-label">연락처</label>
               <div class="col">
-                  <input type="text" class="form-control" id="ord_tel_2" name="ord_tel" th:value="${memberDTO.mb_phone}">
+                  <input type="text" class="form-control" id="or_tel_2" name="or_tel" th:value="${memberDTO.mb_phone}">
               </div>              
           </div>
           
           <div class="form-group row mb-3">
               <label for="mb_email_2" class="col-sm-2 col-form-label">전자우편</label>
               <div class="col">
-                  <input type="text" class="form-control" id="ord_mail_2" name="ord_mail" th:value="${memberDTO.mb_email}">
+                  <input type="text" class="form-control" id="or_mail_2" name="or_mail" th:value="${memberDTO.mb_email}">
               </div>              
           </div>
           
           <div class="form-group row mb-3">
               <label for="mb_zipcode" class="col-sm-2 col-form-label">우편번호</label>
               <div class="col-sm-4">
-                  <input type="text" class="form-control" id="sample2_postcode" name="ord_addr_zipcode" th:value="${memberDTO.mb_zipcode}">
+                  <input type="text" class="form-control" id="sample2_postcode" name="or_addr_zipcode" th:value="${memberDTO.mb_zipcode}">
               </div>
               <div class="col-sm-4">
                   <button type="button" class="btn btn-outline-primary" onclick="sample2_execDaumPostcode()">우편번호</button>
@@ -134,11 +134,11 @@
           <div class="form-group row mb-3">
               <label for="mb_addr" class="col-sm-2 col-form-label">기본주소</label>
               <div class="col-sm-4">
-                  <input type="text" class="form-control" id="sample2_address" name="ord_addr_basic" th:value="${memberDTO.mb_addr}">
+                  <input type="text" class="form-control" id="sample2_address" name="or_addr_basic" th:value="${memberDTO.mb_addr}">
               </div>
               <label for="mb_deaddr" class="col-sm-2 col-form-label">나머지 주소</label>
               <div class="col-sm-4">
-                  <input type="text" class="form-control" id="sample2_detailAddress" name="ord_addr_detail" th:value="${memberDTO.mb_deaddr}">
+                  <input type="text" class="form-control" id="sample2_detailAddress" name="or_addr_detail" th:value="${memberDTO.mb_deaddr}">
                   <input type="hidden" id="sample2_extraAddress" placeholder="참고항목">
               </div>
           </div>                    
@@ -310,6 +310,25 @@
       $("#sample2_address").val("");
       //상세주소
       $("#sample2_detailAddress").val("");
+    });
+        //결제방법 클릭 이벤트
+    $("input[name='payment_method']").on("click",function(){
+      let pay_method = $("input[name='payment_method']:checked").val();
+
+      if(pay_method =="kakaopay"){
+        $("#account_transfer").hide();
+      }else if(pay_method == "account_transfer" ){
+          $("#account_transfer").show();
+      }
+    }); 
+    //주문결제하기 btn_order_payment
+    $("#btn_order_payment").on("click",function(){
+      let pay_method = $("input[name='payment_method']:checked").val();
+      if(pay_method =="kakaopay"){
+      }else if(pay_method == "account_transfer" ){
+    	     $("#p_method").val("무통장입금");
+        $("#orderForm").submit();
+      }
     });
   });
 </script>

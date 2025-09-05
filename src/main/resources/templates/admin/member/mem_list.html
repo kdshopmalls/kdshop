@@ -9,7 +9,49 @@
 
 	<th:block layout:fragment="content">
 	      
+<div class="container mt-5">
+    <h3 class="mb-4">회원 리스트</h3>
 
+    <!-- 검색창 -->
+    <form class="row g-3 mb-3" method="get" action="/member/mem_list">
+        <div class="col-auto">
+            <input type="text" name="keyword" class="form-control" placeholder="아이디/이름/이메일 검색" th:value="${keyword}">
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary">검색</button>
+        </div>
+    </form>
+
+    <!-- 회원 리스트 테이블 -->
+    <div class="card shadow-sm rounded-3">
+        <div class="card-body p-0">
+            <table class="table table-hover table-striped mb-0 align-middle text-center">
+                <thead class="table-dark">
+                <tr>
+                    <th scope="col">아이디</th>
+                    <th scope="col">이름</th>
+                    <th scope="col">닉네임</th>
+                    <th scope="col">이메일</th>
+                    <th scope="col">연락처</th>
+                    <th scope="col">포인트</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="memberDTO:${mem_list}">
+                    <td th:text="${memberDTO.mb_id}"></td>
+                    <td th:text="${memberDTO.mb_name}"></td>
+                    <td th:text="${memberDTO.mb_nick}"></td>
+                    <td th:text="${memberDTO.mb_email}"></td>
+                    <td th:text="${memberDTO.mb_phone}"></td>
+                    <td th:text="${memberDTO.mb_point}"></td>
+          
+                </tr>
+            
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
 	    
 	</th:block>

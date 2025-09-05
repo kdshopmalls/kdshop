@@ -6,6 +6,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.List;
 
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -18,8 +19,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 
 import com.kd.basic.admin.category.AdCategoryService;
+import com.kd.basic.common.constants.Constants;
 import com.kd.basic.common.dto.ProductDTO;
 import com.kd.basic.common.utils.FileUtils;
+import com.kd.basic.common.utils.PageMaker;
 import com.kd.basic.common.utils.SearchCriteria;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -35,6 +38,7 @@ import lombok.extern.slf4j.Slf4j;
 public class AdProductController {
 
 	
+
 	private final AdProductService adProductService;
 	private final AdCategoryService adCategoryService;
 	
@@ -155,8 +159,7 @@ public class AdProductController {
 
 	@GetMapping("/pro_list")
 	public void pro_list(SearchCriteria cri, Model model) throws Exception {
-		
-
+	    cri.setPerPageNum(Constants.ADMIN_PRODUCT_LIST_COUNT);
 		//1)상품목록
 		List<ProductDTO> pro_list = adProductService.pro_list(cri);
 		
@@ -164,7 +167,15 @@ public class AdProductController {
 	
 		
 		model.addAttribute("pro_list", pro_list); // 타임리프 페이지서 사용이 가능
+		PageMaker pageMaker = new PageMaker();
 		
+		pageMaker.setDisplayPageNum(Constants.ADMIN_PRODUCT_LIST_COUNT);
+		pageMaker.setCri(cri);
+		pageMaker.setTotalCount(adProductService.getTotalCount(cri));
+		
+		model.addAttribute("pageMaker", pageMaker); 
+		
+		model.addAttribute("cate_list", adCategoryService.getFirstCategoryList());
 		
 	}
 	// 상품목록 이미지출력하기.. 클라이언트에서 보낸 파라미터명 스프링의 컨트롤러에서 받는 파라미터명이 일치해야 한다.

@@ -38,6 +38,18 @@
 		limit #{pageStart}, #{perPageNum}
 	
 	</select>
+	<select id="getTotalCount" resultType="int">
+	
+		select
+			count(*)
+		from 
+			item_list
+		where 
+			item_num > 0
+			
+		<include refid="search"></include>
+	
+	</select>
 	  <sql id="search">
 		   <if test="searchType != null">
 		   	<if test="searchType == 'n'.toString()">
