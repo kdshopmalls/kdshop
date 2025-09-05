@@ -11,4 +11,6 @@ public interface AdProductMapper {
 	
 	List<ProductDTO> pro_list(SearchCriteria cri);
 	
+	int getTotalCount(SearchCriteria cri);
+	
 }

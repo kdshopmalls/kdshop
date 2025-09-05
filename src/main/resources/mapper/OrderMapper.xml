@@ -1,3 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.kd.basic.order.OrderMapper"></mapper>
+<mapper namespace="com.kd.basic.order.OrderMapper">
+	<insert id="order_insert" parameterType="com.kd.basic.common.dto.OrderDTO" useGeneratedKeys="true" keyProperty="or_code"> 
+		insert into order_list 
+		(
+			mb_id,
+			or_name,
+			or_addr_zipcode,
+			or_addr_basic,
+			or_addr_detail,
+			or_tel,
+			or_mail,
+			or_price
+		)values(
+			#{mb_id},
+			#{or_name},
+			#{or_addr_zipcode},
+			#{or_addr_basic},
+			#{or_addr_detail},
+			#{or_tel},
+			#{or_mail},
+			#{or_price}
+		)
+	
+	</insert>
+	<insert id="order_detail_insert" parameterType="map"  >
+		  insert into order_details(or_code, item_num, dt_amount, dt_price)
+		  select 
+		  	#{or_code},c.item_num,c.cart_amount,p.item_price    
+		  from 
+		  	cart c inner join item_list p 
+		  on 
+		  	c.item_num = p.item_num
+		  where 
+		  	mb_id=#{mb_id}
+	</insert>
+</mapper>

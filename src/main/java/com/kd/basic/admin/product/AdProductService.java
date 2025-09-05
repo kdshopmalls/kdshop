@@ -22,4 +22,8 @@ public class AdProductService {
 	public List<ProductDTO> pro_list(SearchCriteria cri){
 		return adProductMapper.pro_list(cri);
 	}
+	
+	public int getTotalCount(SearchCriteria cri) {
+		return adProductMapper.getTotalCount(cri);
+	}
 }
