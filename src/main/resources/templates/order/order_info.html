@@ -284,26 +284,26 @@
     //주문자 주소 클릭이벤트 설정 
     $("#receive_info_1").on("click",function(){
       //수령인
-      $("#ord_name_2").val($("#ord_name_1").val());
+      $("#or_name_2").val($("#or_name_1").val());
       //연락처
-      $("#ord_tel_2").val($("#ord_tel_1").val());
+      $("#or_tel_2").val($("#or_tel_1").val());
       //전자우편
-      $("#ord_mail_2").val($("#ord_mail_1").val());
+      $("#or_mail_2").val($("#or_mail_1").val());
       //우편번호
-      $("#sample2_postcode").val($("#ord_addr_zipcode_2").val());
+      $("#sample2_postcode").val($("#or_addr_zipcode_2").val());
       //기본주소
-      $("#sample2_address").val($("#ord_addr_basic_2").val());
+      $("#sample2_address").val($("#or_addr_basic_2").val());
       //상세주소
-      $("#sample2_detailAddress").val($("#ord_addr_detail_2").val());
+      $("#sample2_detailAddress").val($("#or_addr_detail_2").val());
     });
     //새로운 주소 클릭
     $("#receive_info_2").on("click",function(){
       //수령인
-      $("#ord_name_2").val("");
+      $("#or_name_2").val("");
       //연락처
-      $("#ord_tel_2").val("");
+      $("#or_tel_2").val("");
       //전자우편
-      $("#ord_mail_2").val("");
+      $("#or_mail_2").val("");
       //우편번호
       $("#sample2_postcode").val("");
       //기본주소
@@ -325,8 +325,26 @@
     $("#btn_order_payment").on("click",function(){
       let pay_method = $("input[name='payment_method']:checked").val();
       if(pay_method =="kakaopay"){
+        $.ajax({
+          url:'/kakao/kakaopay',
+          type:'post',
+         	 data: { 
+              item_name : [[${item_name}]], quantity : [[${quantity}]], or_price: [[${order_total_price}]],
+              or_name : $("#or_name_2").val(), or_addr_zipcode: $("#sample2_postcode").val(), 
+              or_addr_basic : $("#sample2_address").val(), or_addr_detail : $("#sample2_detailAddress").val(),
+              or_tel : $("#or_tel_2").val(), or_mail : $("#or_mail_2").val()
+            },
+          success:function(response){
+            location.href = response.next_redirect_pc_url;
+          }
+
+        });
+
+
       }else if(pay_method == "account_transfer" ){
-    	     $("#p_method").val("무통장입금");
+
+    	  $("#p_method").val("무통장입금");
+
         $("#orderForm").submit();
       }
     });

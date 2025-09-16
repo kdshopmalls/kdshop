@@ -24,4 +24,9 @@ public class ProductService {
 		return productMapper.getProductListCountBysecondCategory(cate_code);
 		
 	}
+	
+	public List<ProductDTO> mainList(){
+		return productMapper.mainList();
+	}
+	
 }

@@ -28,4 +28,25 @@
 		where cate_code = #{cate_code}
 		and item_buy = 'Y'
 	</select>
+		<select id="mainList" resultType="com.kd.basic.common.dto.ProductDTO">
+		select 
+			item_num,
+			cate_code,
+			item_name,
+			item_price,
+			item_discount,
+			item_publisher,
+			item_content,
+			item_up_folder,
+			item_img,
+			item_amount,
+			item_buy,
+			item_review,
+			item_DATE,
+			item_UPDATEDATE  
+		from item_list
+			where item_buy = 'Y'
+			order by item_num desc
+		limit 0,6
+	</select>
 </mapper>
