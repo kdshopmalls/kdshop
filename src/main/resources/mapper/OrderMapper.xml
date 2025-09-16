@@ -35,4 +35,16 @@
 		  where 
 		  	mb_id=#{mb_id}
 	</insert>
+		<select id="getOrderByOr_code" resultType="map" parameterType="Integer">
+		select 
+			ot.or_code, p.item_name, p.item_up_folder, p.item_img, ot.dt_amount, ot.dt_price, pt.pay_status 
+		from 
+			order_details ot
+		inner join item_list p 
+		 	on ot.item_num=p.item_num
+		inner join pay_list pt 
+			on ot.or_code = pt.or_code
+		where 
+			ot.or_code=#{or_code}
+	</select>
 </mapper>

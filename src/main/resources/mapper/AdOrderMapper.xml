@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kd.basic.admin.order.AdminOrderMapper">
+	<select id="order_list" resultType="map">
+	select 
+		o.or_code, o.or_name, o.or_status, o.or_price, o.or_regdate, 
+	 	pt.pay_id, pt.pay_method, pt.pay_status
+	 from order_list o
+	 	inner join pay_list pt 
+	 on o.or_code = pt.or_code 
+	 where o.or_code > 0 
+	 <include refid="search"></include>
+	 <include refid="period"></include>
+	 <include refid="pay_method"></include>
+	 <include refid="or_status"></include>
+	 <include refid="pay_status"></include>
+	 
+	 order by o.or_regdate desc 
+	 limit  #{cri.pageStart}, #{cri.perPageNum} 
+	</select>
+	<select id="getTotalcount" resultType="int">
+		select count(*) 
+		from 
+			order_list o 
+		inner join pay_list pt 
+		on o.or_code = pt.or_code 
+		where o.or_code > 0 
+		<include refid="search"></include>
+		<include refid="period"></include>
+		<include refid="pay_method"></include>
+		<include refid="or_status"></include>
+		 <include refid="pay_status"></include>
+	</select>
+	<sql id="search">
+		<if test="cri.searchType != null">
+			<if test="cri.searchType =='c'.toString()">
+				and o.or_code = #{cri.keyword}
+			</if>
+			<if test="cri.searchType =='m'.toString()">
+				and o.mb_id = #{cri.keyword}
+			</if>
+			<if test="cri.searchType =='o'.toString()">
+			  	and o.or_name = #{cri.keyword}
+			</if>
+			<if test="cri.searchType =='p'.toString()">
+				and pt.pay_method like concat('%',#{cri.keyword},'%')
+			</if>
+		
+		</if>
+		
+	
+	</sql>
+	<sql id="period">
+		<if test="period != null and !period.equals('') and start_date != null and  !start_date.equals('') and end_date != null and !end_date.equals('') ">
+			<if test="period == 'or_regdate'.toString()">
+				<![CDATA[
+					and o.or_regdate >= date(#{start_date}) and o.or_regdate < date(#{end_date}) + 1
+				]]>
+			</if>
+		
+			
+			<if test="period == 'pay_date'.toString()">
+				<![CDATA[
+					and pt.pay_date >= date(#{start_date}) and pt.pay_date < date(#{end_date}) + 1
+				]]>
+			</if>
+		</if>
+	</sql>
+		<sql id="pay_method">
+		<if test="pay_method != null and !pay_method.equals('')">
+			and pt.pay_method like concat('%',#{pay_method},'%')
+		</if>
+	</sql>
+	<sql id="or_status">
+		<if test="or_status != null and !or_status.equals('')">
+			and o.or_status like concat('%',#{or_status},'%')
+		</if>
+	</sql>
+	
+	<sql id="pay_status">
+	<if test="pay_status != null and !pay_status.equals('')">
+			and pt.pay_status like concat('%',#{pay_status},'%')
+		</if>
+	</sql>
+	<update id="order_status_change" parameterType="map">
+		update
+			order_list
+		set 	
+			or_status = #{or_status}
+		where 
+		 	or_code = #{or_code}
+	</update>
+	
+</mapper>

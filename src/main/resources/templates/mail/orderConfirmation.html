@@ -64,16 +64,16 @@
         </thead>
         <tbody>
             <tr th:each="item : ${order_info}">
-                <td th:text="${item.ord_code}"></td>
+                <td th:text="${item.or_code}"></td>
                 <td>
                     <img style="width: 100px; height: 100px;" 
-                         th:src="${'http://localhost:8888/order/image_display?dateFolderName=' + item.pro_up_folder + '&fileName=s_' + item.pro_img}">
+                         th:src="${'http://localhost:7070/order/image_display?dateFolderName=' + item.item_up_folder + '&fileName=s_' + item.item_img}">
                 </td>
-                <td th:text="${item['pro_name']}"></td>
+                <td th:text="${item['item_name']}"></td>
                 <td th:text="${#numbers.formatInteger(item['dt_price'], 3, 'COMMA') + '원'}"></td>
                 <td th:text="${item['dt_amount']}"></td>
                 <td th:text="${#numbers.formatInteger(item['dt_price'] * item['dt_amount'], 3, 'COMMA') + '원'}"></td>
-                <td th:text="${item.payment_status}"></td>
+                <td th:text="${item.pay_status}"></td>
                 <td>준비중</td>
             </tr>
         </tbody>
