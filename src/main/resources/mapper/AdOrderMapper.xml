@@ -82,6 +82,7 @@
 			and pt.pay_status like concat('%',#{pay_status},'%')
 		</if>
 	</sql>
+	
 	<update id="order_status_change" parameterType="map">
 		update
 			order_list
@@ -89,6 +90,59 @@
 			or_status = #{or_status}
 		where 
 		 	or_code = #{or_code}
+	</update>
+	<select id="orderdetail_info" resultType="map" parameterType="Integer">
+		select 
+			ot.or_code,pt.item_name,pt.item_num,pt.item_up_folder,pt.item_img,ot.dt_amount,ot.dt_price,o.or_price
+		from 
+			order_list o
+		inner join 
+			order_details ot
+		on ot.or_code=o.or_code
+		inner join 
+			item_list pt
+		on ot.item_num=pt.item_num
+		where o.or_code=#{or_code}
+	</select>
+	<select id="order_info" resultType="com.kd.basic.common.dto.OrderDTO" parameterType="Integer">
+	 	select 
+	 		mb_id,or_name,or_code,or_tel,or_addr_zipcode,or_addr_basic,or_addr_detail,or_mail,or_message
+ 		from order_list
+		where or_code=#{or_code}
+	</select>
+	
+	<delete id="order_product_del" parameterType="map">
+		delete from 
+			order_details
+		where 
+			or_code = #{or_code} and item_num = #{item_num}
+	</delete>
+	<update id="order_price_change" parameterType="map">
+		update  
+			order_list 
+		set or_price = or_price - #{unitprice}
+		where 
+			or_code = #{or_code} 
+
+	</update>
+	<update id="admin_order_message" parameterType="map">
+		update  
+			order_list 
+		set or_message= #{or_message}
+		where 
+			or_code=#{or_code} 
+
+	</update>
+	<update id="order_info_edit" parameterType="com.kd.basic.common.dto.OrderDTO">
+		 update order_list set 
+ 			 or_name=#{or_name},
+ 			 or_tel=#{or_tel},
+ 			 or_addr_basic=#{or_addr_basic},
+ 			 or_addr_detail=#{or_addr_detail},
+ 			 or_addr_zipcode=#{or_addr_zipcode},
+ 			 or_mail=#{or_mail}
+  		where or_code=#{or_code}
+
 	</update>
 	
 </mapper>

@@ -288,7 +288,7 @@
 									<option th:selected= "${order_info.or_status == '배송완료'}">배송완료</option>
 									<option th:selected= "${order_info.or_status == '주문취소'}">주문취소</option>
 								</select>
-								<button type="button" name="btn_or_status_change" th:data-ord_code="${order_info.or_code}">변경</button>
+								<button type="button" name="btn_or_status_change" th:data-or_code="${order_info.or_code}">변경</button>
 							  </td>
 							  <td>
 								<button type="button" class="btn btn-block btn-sm btn-outline-primary" th:data-or_code="${order_info.or_code}" name="btn_or_detail">상세보기</button>								
@@ -359,25 +359,33 @@
 					criteriaForm.submit();
 				});
 
-			});
-			//변경 버튼 클릭시 
-			$("button[name='btn_or_status_change']").on("click", function() {
-				let or_code = $(this).data("or_code");
-				let or_status = $(this).prev("select[name='or_status']").val(); // 주문상태
+							//변경 버튼 클릭시 
+				$("button[name='btn_or_status_change']").on("click", function() {
+					let or_code = $(this).data("or_code");
+					let or_status = $(this).prev("select[name='or_status']").val(); // 주문상태
 
+					alert(or_code + "-" + or_status);
 
-				$.ajax({
-					url : '/admin/order/order_status_change',
-					data: {or_code: or_code, or_status: or_status},
-					type: 'post',
-					dataType: 'text',
-					success: function(result) {
-						if(result == "success") {
-							alert("주문상태가 변경되었습니다.");
+					$.ajax({
+						url : '/admin/order/order_status_change',
+						data: {or_code: or_code, or_status: or_status},
+						type: 'post',
+						dataType: 'text',
+						success: function(result) {
+							if(result == "success") {
+								alert("주문상태가 변경되었습니다.");
+							}
 						}
-					}
+					});
+				});
+
+				//상세보기 클릭 
+				$("button[name='btn_or_detail']").on("click",function(){
+					let or_code= $(this).data("or_code");
+					location.href=`/admin/order/orderdetail_info?or_code=${or_code}`;
 				});
 			});
+
 
 			document.getElementById('btn_search_init').addEventListener('click', () => {
 				initializeSearchForm();
