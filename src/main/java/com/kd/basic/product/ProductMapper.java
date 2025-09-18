@@ -14,4 +14,8 @@ public interface ProductMapper {
 
 	
 	int getProductListCountBysecondCategory(Integer cate_code);
+	
+	ProductDTO pro_detail(Integer item_num);
+
 }
+

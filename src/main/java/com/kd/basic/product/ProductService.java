@@ -29,4 +29,7 @@ public class ProductService {
 		return productMapper.mainList();
 	}
 	
+	public ProductDTO pro_detail(Integer item_num) {
+		return	 productMapper.pro_detail(item_num);
+	}	
 }
