@@ -2,6 +2,14 @@
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layouts/layout}">
+    <th:block layout:fragment="css">
+      <style>
+      a.pro_info{
+      	text-decoration: none;
+  		color: inherit;
+  	  }
+  	  </style>
+      </th:block>	
 <th:block layout:fragment="content">
 <div class="row">
 	<div class="col text-center md-3 mt-3">
@@ -12,16 +20,18 @@
 		<div class="col" th:each="productDTO:${secodCateGoryList}"> 
 			<div class="card shadow-sm h-100">
       <!-- 상품 이미지 -->
+      <a href="#"  class="pro_info" th:data-item_num="${productDTO.item_num}">
       <img th:src="|/product/image_display?dateFolderName=${productDTO.item_up_folder}&fileName=s_${productDTO.item_img}|" 
            class="card-img-top" 
            alt="상품 이미지" 
            height="255" 
            style="object-fit: cover;">
-
+	  </a>
       <div class="card-body d-flex flex-column">
         <!-- 상품 제목 -->
+        <a href="#"  class="pro_info" th:data-item_num="${productDTO.item_num}">
         <h5 class="card-title mb-2" th:text="${productDTO.item_name}">상품 제목</h5>
-
+		</a>
         <!-- 상품 가격 -->
         <p class="card-text mb-1">
           <strong th:text="${#numbers.formatInteger(productDTO.item_price, 3, 'COMMA')}"></strong> 원
@@ -99,7 +109,7 @@
 	  </div>	
 </th:block>	
 <th:block layout:fragment="script2">
-  <script>
+  <script th:inline="javascript">
         $(document).ready(function(){
         //장바구니버튼 클릭 이벤트 설정 
         $("button[name='brn_cart_add']").on("click",function(){
@@ -125,6 +135,16 @@
                }
             });
         });
+        //상품이미지 클릭
+        $("a.pro_info").on("click",function(e){
+          e.preventDefault();
+          let item_num = $(this).data("item_num");
+          let cate_name = encodeURIComponent([[${cate_name}]]);
+          /*let cate_name = '카페고리';*/
+          location.href=`/product/pro_detail?item_num=${item_num}&cate_name=${cate_name}`;
+
+        });
+
     });
   </script>
 </th:block>

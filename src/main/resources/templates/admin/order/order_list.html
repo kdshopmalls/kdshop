@@ -229,8 +229,8 @@
 							<label class="form-check-label" for="inlineRadio1">전체</label>
 						</div>
 						<div class="form-check form-check-inline">
-							<input class="form-check-input" type="radio" name="pay_status" value="미결제" th:checked="${'미결제'} == ${pay_status}">
-							<label class="form-check-label" for="inlineRadio2">미결제</label>
+							<input class="form-check-input" type="radio" name="pay_status" value="입금미납" th:checked="${'입금미납'} == ${pay_status}">
+							<label class="form-check-label" for="inlineRadio2">입금미납</label>
 						</div>
 						<div class="form-check form-check-inline">
 							<input class="form-check-input" type="radio" name="pay_status" value="입금완료" th:checked="${'입금완료'} == ${pay_status}">
@@ -273,11 +273,14 @@
 							  <td>[[${#numbers.formatInteger(order_info.or_price, 3, 'COMMA') + '원'}]]</td>
 							  <td>[[${order_info.pay_method}]]</td>
 							  <td>
+							  [[${order_info.pay_status}]]
+							  <!--/*
 								<select name="pay_status">
 									<option th:selected= "${order_info.pay_status == '미결제'}">미결제</option>
 									<option th:selected= "${order_info.pay_status == '입금완료'}">입금완료</option>									
 								</select>
 								<button type="button" name="btn_pay_status_change" th:data-payment_id="${order_info.pay_id}">변경</button>
+							*/-->	
 							  </td>
 							  <td>
 								<select name="or_status">
