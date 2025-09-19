@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.kd.basic.cart.CartDTO;
 import com.kd.basic.cart.CartService;
 import com.kd.basic.common.dto.MemberDTO;
 import com.kd.basic.common.dto.OrderDTO;
@@ -39,9 +40,16 @@ public class OrderController {
 	@Value("${com.kd.upload.path}")
 	private String uploadPath;
 	
+	
+	//장바구니,바로구매 요청받앗는지 구분하기 위하여 ,type값이 cart or buy
 	@GetMapping("/order_info")
-	public void order_info(HttpSession session, Model model) throws Exception{
+	public void order_info(HttpSession session,CartDTO dto, String type, Model model) throws Exception{
 		String mb_id =((MemberDTO) session.getAttribute("login_auth")).getMb_id();
+		dto.setMb_id(mb_id);
+		//바로구매 type 이 buy 이면 장바구니테이블에 저장
+		if(type.equals("buy")) {
+			cartService.cart_add(dto);
+		}
 		//주문상품정보 
 		List<Map<String, Object>> orderDetails = cartService.cart_list(mb_id);
 		model.addAttribute("orderDetails", orderDetails);
