@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kd.basic.review.ReviewMapper">
+<select id="rev_list" resultType="com.kd.basic.common.dto.ReviewDTO" parameterType="map">
+	select 
+		rev_code,
+		mb_id,
+		item_num,
+		rev_content,
+		rev_rate,
+		rev_date 
+	from review_list 
+	where item_num = #{item_num}
+	order by rev_date  desc 
+	limit #{cri.pageStart},#{cri.perPageNum}
+</select>
+
+<select id="getReviewCount" resultType="int" parameterType="Integer">
+	select count(*) from review_list 
+	where item_num = #{item_num};
+</select>
+</mapper>

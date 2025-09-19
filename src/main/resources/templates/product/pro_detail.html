@@ -91,13 +91,13 @@
           $.ajax({
             url:'/cart/cart_add',
             type:'post',
-            data:{item_num:[[${productDTO.item_num}]],cart_amount:$(#cart_amount).val()},
+            data:{item_num:[[${productDTO.item_num}]],cart_amount:$("#cart_amount").val()},
             dataType:'text',
             success:function(result){
               if(result=="success"){
                 alert("장바구니에 등록됨");
                 if(confirm("장바구니로 이동하시겠습니가?")){
-                  location.href=""cart/cart_list;
+                  location.href="cart/cart_list";
                 }
               }
             }
@@ -105,10 +105,26 @@
         });
         //구매하기 버튼 클릭 btn_buy_add
          $("button#btn_buy_add").on("click",function(){
-             let cart_cmount=$(#cart_amount).val();
+             let cart_amount=$("#cart_amount").val();
              let url=`/order/order_info?item_num=[[${productDTO.item_num}]]&cart_amount:${cart_amount}&type=buy`;
              location.href = url;
         });
+         //상품후기 관련 작업코드
+         let item_num = [[${productDTO.item_num}]];
+         let reviewPage = 1; //상품후기 목록을  1번째 페이지
+         let url = "/review/rev_list/" + item_num + "/" + reviewPage; // 상품후기 목록 (페이징포함) 요청 주소
+         getPage(url);
+         function getPage(url){
+           $.getJSON(url,function(data){
+                console.log("상품후기목록",data.rev_list); 
+                console.log("페이지",data.pageMaker); 
+           });
+         }
+
+         //상품후기  id="btn_rev_save"
+         $("button#btn_rev_save").on("click",function(){
+
+         });
       });
     </script>
 </th:block>

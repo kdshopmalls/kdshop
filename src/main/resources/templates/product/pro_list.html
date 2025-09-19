@@ -74,7 +74,7 @@
           <form th:action="@{/order/now}" method="post" class="d-inline w-50">
             <input type="hidden" name="item_num" th:value="${productDTO.item_num}">
             <input type="hidden" name="quantity" value="1" class="selected-qty">
-            <button type="submit" class="btn btn-success btn-sm w-100">💳 구매하기</button>
+            <button type="button" name="btn_buy_add" class="btn btn-success btn-sm w-100" th:data-item_num="${productDTO.item_num}">💳 구매하기</button>
           </form>
         </div>
       </div>
@@ -144,8 +144,17 @@
           location.href=`/product/pro_detail?item_num=${item_num}&cate_name=${cate_name}`;
 
         });
-
+        // 구매버늩 클릭 이벤트 등록 btn_buy_add
+        $("button[name='btn_buy_add']").on("click",function(){
+            let item_num = $(this).data("item_num");
+            let cart_amount = $(this).parents("div.card").find("input[name='quantity']").val();
+            
+            let url = `/order/order_info?item_num=${item_num}&cart_amount=${cart_amount}&type=buy`;
+            location.href=url;
+        });
     });
+ 
+  
   </script>
 </th:block>
 </html>
