@@ -31,5 +31,8 @@ public class ProductService {
 	
 	public ProductDTO pro_detail(Integer item_num) {
 		return	 productMapper.pro_detail(item_num);
-	}	
+	}
+	public int getProductReviewCountByItem_num(Integer item_num){
+		return  productMapper.getProductReviewCountByItem_num(item_num);
+	}
 }

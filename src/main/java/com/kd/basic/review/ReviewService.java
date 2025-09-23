@@ -5,10 +5,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.kd.basic.common.dto.ReviewDTO;
 import com.kd.basic.common.utils.PageMaker;
 import com.kd.basic.common.utils.SearchCriteria;
+import com.kd.basic.product.ProductMapper;
 
 import lombok.RequiredArgsConstructor;
 
@@ -16,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class ReviewService {
 	private final ReviewMapper reviewMapper;
+	private final ProductMapper productMapper;
 	
 	public Map<String, Object> getReiviewList(Integer item_num, int page){
 	 Map<String, Object> map =new HashMap<>();
@@ -33,5 +36,15 @@ public class ReviewService {
 		
 		
 		return map;
-	}	
+	}
+	//상품후기 저장, 상품테이블 후기 카운트 변경
+	@Transactional
+	public void review_save(ReviewDTO dto) {
+	 reviewMapper.review_save(dto);	
+	 productMapper.review_count_update(dto.getItem_num());
+	}
+	
+	public void review_delete(Integer rev_code) {
+	  reviewMapper.review_delete(rev_code);	
+	}
 }

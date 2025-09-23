@@ -13,5 +13,11 @@ public interface ReviewMapper {
 	
 	//상품후기 갯수
 	int getReviewCount(Integer item_num);
+	
+	//상품후기 저장 
+	void review_save(ReviewDTO dto);
+	
+	//상품후기 삭제
+	void review_delete(Integer rev_code);
 
 }

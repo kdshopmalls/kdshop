@@ -30,7 +30,7 @@
       Handlebars.registerHelper("convertDate",function(reviewDate){
         const date= new Date(reviewDate);
         let year = date.getFullYear();
-        let month = (date.getMonth() + 1) < 10?"0"+ date.getMonth() + 1 : date.getMonth() + 1; 
+        let month = (date.getMonth() + 1) < 10?"0"+ (date.getMonth() + 1) : date.getMonth() + 1; 
         let day = date.getDay()  < 10? "0" + date.getDay() : date.getDay();
         let hour = date.getHours() < 10? "0" + date.getHours() : date.getHours();
         let minute = date.getMinutes() <10 ? "0" + date.getMinutes() : date.getMinutes();
@@ -53,15 +53,13 @@
       });  
 
       Handlebars.registerHelper("authControlView",function(mb_id, rev_code){
-        let memberDTO =[[${session.login_auth}]];
-        let loginID="";
-        if(memberDTO !== null){ 
-          loginId = [[${session.login_auth.mb_id}]];
-        }
+      
+          loginId = /*[[${session.login_auth !=null} ? '${session.login_auth.mb_id}':'']]*/ '';
+       
         let str ="";
-        if(memberDTO !== null && loginId == mb_id){
-          str += `<button type="button"  class="btn btn-outline-danger" data-rev_code="${rev_code}">delete</button>`;
-          str += `<button type ="button" class="btn btn-outline-primary" data-rev_code="${rev_code}">edit</button>`;
+        if(loginId  !== "" && loginId === mb_id){
+          str += `<button type="button" name="delete" class="btn btn-outline-danger" data-rev_code="${rev_code}">delete</button>`;
+          str += `<button type ="button" name="edit" class="btn btn-outline-primary" data-rev_code="${rev_code}">edit</button>`;
           return new Handlebars.SafeString(str);
         }else{
           return str;
@@ -198,6 +196,10 @@
                 console.log("상품후기목록",data.rev_list); 
                 console.log("페이지",data.pageMaker);
                 */ 
+                //상품후기내용초기화
+               $("#rev_content").val("");
+               //별평점 초기화
+                $("p#star_rev_rate a.rev.rate").remove();
                fn_dusplay_review(data.rev_list, $("div#reviewList"), $("#templateReview")); 
            });
          }
@@ -223,35 +225,67 @@
             let rev_content = $("#rev_content").val();
 
             let rev_rate = 0; //별(a태그) 에 css 클래스선택이  on 이 몇개 적용되어 있는지 ?
-             $("p#star_rev_rate a.rev_rate").each(function(){
-              if($(this).attr("class")=="rev_rate on"){
-                  rev_rate += 1;
-                
+              $("p#star_rev_rate a.rev_rate").each(function(){
+                  if($(this).hasClass("on")){
+                  
+                      rev_rate += 1;
+                    
+                  }
+              });
+              if(rev_content.trim()===""){
+                  alert("후기를 작성해주세요");
+                  return ;
               }
               if(rev_rate == 0){
                   alert("별 평점을 클릭하세요");
-                  return false;
+                  return ;
               }
-              let review_date = {item_num : item_num, rev_content : rev_content, rev_rate:rev_rate};
+              let review_data = {item_num : item_num, rev_content : rev_content, rev_rate:rev_rate};
               $.ajax({
-                ur:'/review/review_save',
-                type: 'post',
-                headers: {
-                  "Content-Type" : "application/json","X-HTTP-Method-Overrid" : "POST"
-                },
-                data : JSON.stringify(review_date),
-                dataType: 'text',
-                success : function(data){
-                  if(data > 0){
-                    alert("상품후기 등록됨");
-
-                    reviewPage = 1;
-                    getPage(url);
+                  url:'/review/review_save',
+                  type: 'post',
+                  headers: {
+                    "Content-Type" : "application/json","X-HTTP-Method-Override" : "POST"
+                  },
+                  data : JSON.stringify(review_data),
+                  dataType: 'text',
+                  success : function(data){
+                    if(data > 0){
+                      alert("상품후기 등록됨"); 
+                      $("span#review_count").html(data);
+                      reviewPage = 1;
+                      getPage(url);
+                    }
+                  },
+                  error:function(xhr, status, error){
+                    console.error("후기등록실패: ", status, error);
+                    alert("후기 등록중 오류가 발생햇습니다.");
                   }
-                }
               });
-            });
+            
          });
+           //사품후기 삭제버튼 
+          $("div#reviewList").on("click","button[name='delete']",function(){
+            let rev_code =$(this).data("rev_code");
+            if(!confirm("상품후기를 삭제하시겠습니까?")) return;
+
+            $.ajax({
+               url : '/review/review_delete/' + rev_code,
+               type : 'delete', 
+               headers: {
+                    "X-HTTP-Method-Override" : "DELETE"
+               }, dataType: 'text',
+                  success : function(result){
+                    if(result =='success'){
+                      alert("상품후기가 삭제 됨");
+                      // 리뷰카운트 출력 
+              
+                      getPage(url);
+                    }         
+                }
+
+            });
+          });  
       });
     </script>
 </th:block>
