@@ -70,5 +70,20 @@
 		from item_list 
 		where item_num = #{item_num}
 	</select>
+	<update id="review_count_update" parameterType="Integer">
+		update
+			item_list
+		set	
+		 	item_review =item_review+1
+		where item_num = #{item_num} 
 	
+	</update>
+	
+	<select id="getProductReviewCountByItem_num" resultType="int">
+		select 
+			item_review
+			from item_list 
+		where item_num = #{item_num} 
+	
+	</select>
 </mapper>

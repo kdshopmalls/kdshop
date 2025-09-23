@@ -16,6 +16,11 @@ public interface ProductMapper {
 	int getProductListCountBysecondCategory(Integer cate_code);
 	
 	ProductDTO pro_detail(Integer item_num);
+	
+	void review_count_update(Integer item_num);
+	
+	//상품후기 댓글개수
+	int getProductReviewCountByItem_num(Integer item_num);
 
 }
 

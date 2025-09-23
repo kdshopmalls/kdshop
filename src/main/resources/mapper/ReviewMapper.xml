@@ -19,4 +19,18 @@
 	select count(*) from review_list 
 	where item_num = #{item_num};
 </select>
+
+<insert id="review_save"  parameterType="com.kd.basic.common.dto.ReviewDTO">
+	insert into review_list (mb_id, item_num, rev_content, rev_rate)
+	values 
+	(#{mb_id}, #{item_num},#{rev_content},#{rev_rate})
+</insert>
+
+<delete id="review_delete" parameterType="Integer">
+
+	delete from
+	 	review_list 
+	where
+		rev_code = #{rev_code} 	
+</delete>
 </mapper>
