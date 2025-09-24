@@ -3,6 +3,8 @@ package com.kd.basic.review;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import com.kd.basic.common.dto.ReviewDTO;
 import com.kd.basic.common.utils.SearchCriteria;
@@ -19,5 +21,11 @@ public interface ReviewMapper {
 	
 	//상품후기 삭제
 	void review_delete(Integer rev_code);
+	
+	//상품후기 수정폼
+	ReviewDTO  review_info(Integer rev_code);
+	
+	//상품후기 수정
+	void review_modify(ReviewDTO dto);
 
 }

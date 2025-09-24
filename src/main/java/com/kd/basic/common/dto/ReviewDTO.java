@@ -2,6 +2,8 @@ package com.kd.basic.common.dto;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -16,6 +18,7 @@ public class ReviewDTO {
 	private Integer item_num;
 	private String rev_content;
 	private int rev_rate;
-	private LocalDateTime rev_date;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd HH:mm:ss", timezone = "Asia/Seoul")
+	   private LocalDateTime rev_date;
 
 }
