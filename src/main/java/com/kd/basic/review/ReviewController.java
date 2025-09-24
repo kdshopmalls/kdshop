@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -57,5 +58,23 @@ public class ReviewController {
 		entity = new ResponseEntity<String>("success", HttpStatus.OK);
 		return entity;
 	}
-	
+	//상품후기 수정폼 
+	@GetMapping(value = "/review_info/{rev_code}")
+	public ResponseEntity<ReviewDTO> review_info(@PathVariable("rev_code") Integer rev_code) throws Exception{
+		log.info("후기코드 : " +rev_code);
+		ResponseEntity<ReviewDTO> entity = null;
+		
+		entity = new ResponseEntity<ReviewDTO>(reviewService.review_info(rev_code),  HttpStatus.OK);
+		
+		return entity;
+	}
+	//상품후기 수정
+	@PutMapping(value = "/review_modify", consumes="application/json", produces = {MediaType.TEXT_PLAIN_VALUE})
+	public ResponseEntity<String> review_modify(@RequestBody ReviewDTO dto) throws Exception{
+		ResponseEntity<String> entity = null;
+		reviewService.review_modify(dto);
+		entity = new ResponseEntity<String>("success", HttpStatus.OK);
+		return entity;
+
+	}
 }

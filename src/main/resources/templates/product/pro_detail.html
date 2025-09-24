@@ -14,7 +14,7 @@
             <td>{{auth_id mb_id}}</td>
             <td>{{rev_content}}</td>
             <td>{{displayStar rev_rate}}</td>
-            <td>{{convertDate rev_date}}</td>
+            <td>{{rev_date}}</td>
             <td>
               {{authControlView mb_id rev_code}}
             </td>
@@ -27,16 +27,7 @@
     </script>
     <script th:inline="javascript">
       //핸들바 사용자 정의 함수
-      Handlebars.registerHelper("convertDate",function(reviewDate){
-        const date= new Date(reviewDate);
-        let year = date.getFullYear();
-        let month = (date.getMonth() + 1) < 10?"0"+ (date.getMonth() + 1) : date.getMonth() + 1; 
-        let day = date.getDay()  < 10? "0" + date.getDay() : date.getDay();
-        let hour = date.getHours() < 10? "0" + date.getHours() : date.getHours();
-        let minute = date.getMinutes() <10 ? "0" + date.getMinutes() : date.getMinutes();
-        let second =  date.getSeconds() <10 ? "0" + date.getSeconds() : date.getSeconds();
-        return year + "/" + month + "/" + day +" " + hour + ":" + minute  + ":" + second;
-      });
+
       Handlebars.registerHelper("displayStar", function(rating){
        
          rating = parseInt(rating,10);// 혹시 문자열로 들어올수 있으니 숫자로 변환
@@ -52,20 +43,31 @@
           return mb_id.substring(0,4) + "*".repeat(5);
       });  
 
-      Handlebars.registerHelper("authControlView",function(mb_id, rev_code){
-      
-          loginId = /*[[${session.login_auth !=null} ? '${session.login_auth.mb_id}':'']]*/ '';
-       
-        let str ="";
-        if(loginId  !== "" && loginId === mb_id){
-          str += `<button type="button" name="delete" class="btn btn-outline-danger" data-rev_code="${rev_code}">delete</button>`;
-          str += `<button type ="button" name="edit" class="btn btn-outline-primary" data-rev_code="${rev_code}">edit</button>`;
+      Handlebars.registerHelper("authControlView", function(ms_id, rev_code) {
+                
+        let memberVo = [[${session.login_auth}]];
+
+        let loginId = "";
+        
+        if(memberVo !== null) { // 로그인 상태이면
+          loginId = [[${session.login_auth == null? '' : session.login_auth.mb_id}]];
+        }
+        
+        console.log("아이디", loginId);
+
+        let str = "";
+
+        // 사용자가 로그인상태이고, 로그인아이디와 후기작성자아이디가 일치한다면
+        if(memberVo !== null && loginId == ms_id) {
+          str += `<button type="button" name="delete" class="btn btn-outline-danger btn-sm" data-rev_code="${rev_code}">delete</button> &nbsp; `;
+          str += `<button type="button" name="edit" class="btn btn-outline-info btn-sm" data-rev_code="${rev_code}">edit</button>`;
+          // str += `<button type="button" name="update" class="btn btn-outline-info btn-sm" data-rev_code="${rev_code}">update</button>`;
+
           return new Handlebars.SafeString(str);
-        }else{
+        }else {
           return str;
         }
-      });  
-
+      });
     </script>
 		<script>
 			$(document).ready(function(){
@@ -76,7 +78,7 @@
 	</th:block>
 	<th:block layout:fragment="css">
      <style>
-      
+      /*후기신규용*/ 
       p#star_rev_rate a.rev_rate{
         font-size:22px;
         text-decoration:none;
@@ -84,6 +86,18 @@
       }
       /*별평점에 클릭햇을경우 선택자*/
        p#star_rev_rate a.rev_rate.on{
+ 
+        color : red;
+      }
+
+       /*수정용*/ 
+       p#star_rev_rate2 a.rev_rate{
+        font-size:22px;
+        text-decoration:none;
+        color : lightgray;
+      }
+      /*별평점에 클릭햇을경우 선택자*/
+       p#star_rev_rate2 a.rev_rate.on{
  
         color : red;
       }
@@ -201,6 +215,7 @@
                //별평점 초기화
                 $("p#star_rev_rate a.rev.rate").remove();
                fn_dusplay_review(data.rev_list, $("div#reviewList"), $("#templateReview")); 
+                fn_dusplay_reviewPaging(data.pageMaker,$("div#reviewPaging"));
            });
          }
         //댓글목록 작업함수
@@ -212,13 +227,38 @@
           target.append(reviewHTML);
         }
         //페이징 작업함수
-        
+        function fn_dusplay_reviewPaging(pageData,target){
+          let pageStr='<nav aria-label="Page navigation example">';
+              pageStr += '<ul class="pagination">';
+          if(pageData.prev){     
+               pageStr += `<li class="page-item"><a class="page-link" href="${pageData.startPage-1}">Previous</a></li>`;
+          } 
+          for(let i=pageData.startPage;i<=pageData.endPage;i++){
+            let curPageClass=(pageData.cri.page==i)?'active':'';
+            pageStr += `<li class="page-item"><a class="page-link ${curPageClass}" href="${i}">${i}</a></li>`;
+          }
+          if(pageData.next){    
+               pageStr += `<li class="page-item"><a class="page-link" href="${pageData.endPage+1}">Next</a></li>`;
+          }
+          pageStr += '</ul></nav>'; 
+          target.empty();
+           target.append(pageStr);  
+        }
+
         //별을 클릭시 css효과작업 
         $("p#star_rev_rate a.rev_rate").on("click",function(e){
           e.preventDefault();
           $(this).parent().children().removeClass("on");
           $(this).addClass("on").prevAll("a").addClass("on");
         });
+
+          //별을 클릭시 css효과작업 :후기 수정하기 
+        $("div#reviewList").on("click","p#star_rev_rate2 a.rev_rate",function(e){
+          e.preventDefault();
+          $(this).parent().children().removeClass("on");
+          $(this).addClass("on").prevAll("a").addClass("on");
+        });
+
          //상품후기  id="btn_rev_save"
          $("button#btn_rev_save").on("click",function(){
             let item_num = $(this).data("item_num");
@@ -285,7 +325,103 @@
                 }
 
             });
-          });  
+          }); 
+               //상품후기 페이지 번호 클릭 
+           $("div#reviewPaging").on("click","nav li a",function(e){
+              
+              e.preventDefault();
+              reviewPage = $(this).attr("href");
+              console.log("후기페이지번호",reviewPage);
+              url = "/review/rev_list/" + item_num + "/" + reviewPage; // 상품후기 목록 (페이징포함) 요청 주소
+        
+              getPage(url);
+            
+           }); 
+
+          //상품 후기 수정 버튼 
+          $("div#reviewList").on("click","button[name='edit']",function(){
+            let rev_code =$(this).data("rev_code");
+
+            let cur_tr = $(this).closest("tr"); // 선택한 수정 버튼의 tr태그를 참조
+            //기존내용 비우기
+            cur_tr.empty(); //tr태그의 모든 td 태그를 제거한다 
+
+            //ajax호출로 상품 후기코드의 내용을 서버로부터 읽어옴. 화면에 출력. 업데이트, 취소버튼 동시에 같이 생성 
+            // 수정내용을 화면에 출력.
+            $.ajax({
+              url : '/review/review_info/' + rev_code,
+              type: 'get',
+              dataType: 'json',
+              success : function(result) {
+                
+                console.log("수정데이터",result);
+                // db에서 가져온 내용을 태그와 결합한 문자열
+                cur_tr.append(`<td>${result.rev_code}</td>`); //후기코드
+                cur_tr.append(`<td>${result.mb_id}</td>`); //사용자 아이디
+                cur_tr.append(`<td><input type="text" name="rev_content" class="form-control form-control-sm" value="${result.rev_content}"></td>`);
+                
+                //별점 (☆,★ 간단하게 출력)
+
+                let tempStr = '<p id="star_rev_rate2">';
+                for(let i=1; i<=5; i++) {
+                  if(i <= result.rev_rate) {
+                    tempStr += '<a class="rev_rate on" href="#">☆</a>';
+                  }else {
+                    tempStr += '<a class="rev_rate" href="#">☆</a>';
+                  }
+                }
+                tempStr += '</p>';
+
+                cur_tr.append(`<td>${tempStr}</td>`);
+              
+
+                //작성일
+                 cur_tr.append(`<td>${result.rev_date}</td>`);
+
+                 cur_tr.append(`
+                    <td>
+                      <button type="button" name="update" class="btn btn-sm btn-success" data-rev_code="${result.rev_code}">저장</button>
+                      <button type="button" name="cancel" class="btn btn-sm btn-secondary " data-rev_code="${result.rev_code}">취소</button>
+                    </td>
+                 `);
+              }
+            });
+          });
+
+               //편집모드에서 저장버튼 클릭 .
+          $("div#reviewList").on("click","button[name='update']",function(){
+            let rev_code = $(this).data("rev_code");
+            let cur_tr = $(this).closest("tr");
+
+            let rev_content =cur_tr.find("input[name='rev_content']").val();
+            let rev_rate = 0; 
+
+            $("p#star_rev_rate2 a.rev_rate").each(function(){
+                if($(this).hasClass("on")){
+                rev_rate += 1;
+                }
+            });
+            $.ajax({
+              url:'/review/review_modify',
+              type: 'put',
+                 headers: {
+                    "Content-Type" : "application/json","X-HTTP-Method-Override" : "PUT"
+                  },
+              data:JSON.stringify({rev_code:rev_code, rev_rate:rev_rate, rev_content:rev_content}),
+              dataType:'text',
+              success:function(result){
+                if(result=="success"){
+                  alert("상품후기 수정됨");
+                  getPage(url);
+                }
+              }    
+
+            });
+          });
+          //편집모드에서 취소버튼 클릭 
+          $("div#reviewList").on("click","button[name='cancel']",function(){
+            getPage(url);
+          });
       });
     </script>
 </th:block>

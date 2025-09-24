@@ -47,4 +47,11 @@ public class ReviewService {
 	public void review_delete(Integer rev_code) {
 	  reviewMapper.review_delete(rev_code);	
 	}
+	public  ReviewDTO  review_info(Integer rev_code) {
+		return	reviewMapper.review_info(rev_code);
+	}
+	
+	public void review_modify(ReviewDTO dto) {
+		reviewMapper.review_modify(dto);
+	}
 }

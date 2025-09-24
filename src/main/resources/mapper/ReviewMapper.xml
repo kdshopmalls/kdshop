@@ -33,4 +33,27 @@
 	where
 		rev_code = #{rev_code} 	
 </delete>
+	<select id="review_info" resultType="com.kd.basic.common.dto.ReviewDTO" parameterType="Integer">
+		select 
+			rev_code,
+			mb_id,
+			item_num,
+			rev_content,
+			rev_rate,
+			rev_date 
+		from 
+			review_list  
+		where 
+			rev_code= #{rev_code}
+	
+	</select>
+	<update id="review_modify" parameterType="com.kd.basic.common.dto.ReviewDTO">
+		update 
+			review_list  set
+			rev_content = #{rev_content},
+			rev_rate = #{rev_rate},
+			rev_date = now()
+		where 
+			rev_code=#{rev_code} 
+	</update>
 </mapper>
