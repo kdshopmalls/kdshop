@@ -31,7 +31,7 @@
               <img style="width: 100px;height: 100px;" th:src="${'/cart/image_display?dateFolderName=' + item.item_up_folder + '&fileName=s_' + item.item_img}">
             </td>
             <td th:text="${item['item_name']}"></td>
-            <td th:text="${#numbers.formatInteger(item['item_price'], 3, 'COMMA') + '원'}"></td>
+            <td th:text="${#numbers.formatInteger(item['item_price'], 3, 'COMMA') + ' 원'}"></td>
             <td>
               <input type="number" name="btn_cart_amount" th:value="${item['cart_amount']}" style="width: 60px;">
               <button type="button" class="btn btn-success" name="btn_quantity_change" style="width: 80px;" th:data-item_num="${item['item_num']}">변경</button>              
@@ -41,10 +41,10 @@
         </tbody>
         <tfoot>
           <tr>
-            <td colspan="6"  th:if="${cart_total_price !=null}" th:text="'총금액' + ${#numbers.formatInteger(cart_total_price, 3, 'COMMA') + '원'}"></td>
+            <td colspan="6"  th:if="${cart_total_price !=null}" th:text="'총금액 : ' + ${#numbers.formatInteger(cart_total_price, 3, 'COMMA') + ' 원'}"></td>
           </tr>
           <tr>
-            <td colspan="6"  th:unless= "${cart_total_price != null}" th:text="'장바구니가 비웠습니다.'"></td>
+            <td colspan="6"  th:unless= "${cart_total_price != null}" th:text="'장바구니가 비었습니다'"></td>
           </tr>
         </tfoot>
       </table>
@@ -69,7 +69,7 @@
     $(document).ready(function(){
       //장바구니 비우기 .
       $("#btn_cart_empty").on("click",function(){
-        if(!confirm("장바구니를 비우겠습니까>")) return;
+        if(!confirm("장바구니를 비우겠습니까?")) return;
         location.href="/cart/cart_empty";
       });
       let isCheck = false;
@@ -90,7 +90,7 @@
       });
        // 선택삭제 클릭 이벤트 설정.  id="btn_sel_delete"
       $("#btn_sel_delete").on("click", function() {
-        if(!confirm("체크된 상품을 삭제하시겠습니까?")) return;
+        if(!confirm("선택한 상품을 삭제하시겠습니까?")) return;
 
         // 폼 전송. id="cartForm"
         $("#cartForm").submit();

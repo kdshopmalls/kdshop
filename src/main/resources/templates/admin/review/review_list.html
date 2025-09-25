@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{admin/layouts/ad_layout}">
+  <th:block layout:fragment="content">
+    <div class="container mt-5">
+      <div class="row">
+        <div class="col">
+          <div class="card card-primary">
+            <div class="card-header">
+              <h3 class="card-title">주문 목록</h3>
+            </div>
+            <div class="card-body">
+              <form id="searchForm" action="/admin/review/review_list" method="get">
+                <div class="row">
+                  <div class="col-1">검색어</div>
+                  <div class="col-2">
+                    <select name="searchType" class="form-control">
+                      <option value="">전체</option>
+                      <option value="n">상품명</option>
+                      <option value="c">상품코드</option>
+                      <option value="i">작성자ID</option>
+                    </select>
+                  </div>
+                  <div class="col-3">
+                    <input type="text" name="keyword" class="form-control" placeholder="검색어를 입력하세요." />
+                  </div>
+                  <div class="col-1">평점/내용</div>
+                  <div class="col-2">
+                    <select class="form-control" name="rev_rate">
+                      <option value="">전체평점</option>
+                      <option value="5">5점</option>
+                      <option value="4">4점</option>
+                      <option value="3">3점</option>
+                      <option value="2">2점</option>
+                      <option value="1">1점</option>
+                    </select>
+                  </div>
+                  <div class="col-3">
+                    <input type="text" name="rev_content" class="form-control" placeholder="작성내용" />
+                  </div>
+                </div>
+                <div class="row mt-3">
+                  <div class="col text-center">
+                    <button type="submit" class="btn btn-primary">검색</button>
+                    <button type="button" class="btn btn-outline-primary" id="btn_search_init">초기화</button>
+                  </div>
+                </div>
+              </form>
+              <div class="row mt-4">
+                <div class="col">
+                  <form name="frm_pro_list" id="frm_pro_list" method="post" action="/admin/product/pro_sel_delete_2">
+                    <table class="table table-bordered">
+                      <thead>
+                        <tr>
+                          <th style="width: 10%">주문날짜</th>
+                          <th style="width: 10%">주문번호</th>
+                          <th style="width: 40%">주문자</th>
+                          <th style="width: 10%">주문금액</th>
+                          <th style="width: 10%">결제방법</th>
+                          <th style="width: 10%">주문상태</th>
+                          <th style="width: 10%">관리</th>
+                        </tr>
+                      </thead>
+                      <tbody></tbody>
+                    </table>
+                  </form>
+                  <form id="criteriaForm" action="/admin/order/order_list" method="get"></form>
+                </div>
+              </div>
+            </div>
+            <!-- 페이징 출력위치 -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </th:block>
+</html>
