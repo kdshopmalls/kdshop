@@ -1,22 +1,19 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-    layout:decorate="~{layouts/layout}">
-    <th:block layout:fragment="css">
-     <style></style>
-    </th:block>
-    <th:block layout:fragment="script1">
-	    <script>
-	    //자바스크립트 1
-	    </script>
-    </th:block>
-	<th:block layout:fragment="content">
-	
-	<h3>세번째페이지</h3>
-	</th:block>
-	<th:block layout:fragment="script2">
-	    <script>
-	    //자바스크립트 2
-	    </script>
-    </th:block>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/layout}">
+  <th:block layout:fragment="css">
+    <style></style>
+  </th:block>
+  <th:block layout:fragment="script1">
+    <script>
+      //자바스크립트 1
+    </script>
+  </th:block>
+  <th:block layout:fragment="content">
+    <h3>세번째페이지</h3>
+  </th:block>
+  <th:block layout:fragment="script2">
+    <script>
+      //자바스크립트 2
+    </script>
+  </th:block>
 </html>

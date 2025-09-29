@@ -1,169 +1,160 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="~{admin/layouts/ad_layout}">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{admin/layouts/ad_layout}">
   <th:block layout:fragment="script1">
-		<script src="/ckeditor/ckeditor.js"></script>
-	</th:block>
-<th:block layout:fragment="content">
+    <script src="/ckeditor/ckeditor.js"></script>
+  </th:block>
+  <th:block layout:fragment="content">
     <div class="container mt-5">
-  <div class="row justify-content-center">
-    <div class="col-md-10"> <!-- 좌우 여백, 가운데 정렬 -->
-      <div class="card border-primary shadow-sm">
-        <div class="card-header bg-primary text-white">
-          <h3 class="card-title mb-0">상품 등록</h3>
+      <div class="row justify-content-center">
+        <div class="col-md-10">
+          <!-- 좌우 여백, 가운데 정렬 -->
+          <div class="card border-primary shadow-sm">
+            <div class="card-header bg-primary text-white">
+              <h3 class="card-title mb-0">상품 등록</h3>
+            </div>
+            <!-- form start -->
+            <form action="/admin/product/pro_insert" method="post" enctype="multipart/form-data">
+              <div class="card-body">
+                <!-- 카테고리 -->
+                <div class="mb-3">
+                  <label class="form-label">1차카테고리</label>
+                  <select class="form-select" name="cate_prt_code" id="btn_firstCategory">
+                    <option selected>1차카테고리 선택</option>
+                    <option th:each="category : ${fristCategoryList}" th:value="${category.cate_code}" th:text="${category.cate_name}"></option>
+                  </select>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">2차카테고리</label>
+                  <select class="form-select" name="cate_code" id="btn_secondCategory">
+                    <option selected>2차카테고리 선택</option>
+                  </select>
+                </div>
+
+                <!-- 상품명 -->
+                <div class="mb-3">
+                  <label for="pro_name" class="form-label">상품명</label>
+                  <input type="text" class="form-control" id="item_name" name="item_name" placeholder="상품명 입력" />
+                </div>
+
+                <!-- 가격 -->
+                <div class="mb-3">
+                  <label for="pro_price" class="form-label">가격</label>
+                  <input type="text" class="form-control" id="item_price" name="item_price" placeholder="가격 입력" />
+                </div>
+
+                <!-- 할인율 -->
+                <div class="mb-3">
+                  <label for="pro_discount" class="form-label">할인율</label>
+                  <input type="text" class="form-control" id="item_discount" name="item_discount" placeholder="할인율 입력" />
+                </div>
+
+                <!-- 제조사 -->
+                <div class="mb-3">
+                  <label for="pro_publisher" class="form-label">제조사</label>
+                  <input type="text" class="form-control" id="item_publisher" name="item_publisher" placeholder="제조사 입력" />
+                </div>
+
+                <!-- 상품 설명 -->
+                <div class="mb-3">
+                  <label for="pro_content" class="form-label">상품설명</label>
+                  <textarea class="form-control" id="item_content" name="item_content" rows="4" placeholder="상품설명 입력"></textarea>
+                </div>
+
+                <!-- 상품 이미지 업로드 -->
+                <div class="mb-3">
+                  <label for="pro_img_upload" class="form-label">상품이미지</label>
+                  <input class="form-control" type="file" id="item_img_upload" name="item_img_upload" />
+                </div>
+
+                <!-- 이미지 미리보기 -->
+                <div class="mb-3">
+                  <label class="form-label">미리보기 이미지</label>
+                  <div>
+                    <img id="img_preview" style="width: 200px; height: 200px; object-fit: cover; border: 1px solid #ccc" />
+                  </div>
+                </div>
+
+                <!-- 수량 -->
+                <div class="mb-3">
+                  <label for="pro_amount" class="form-label">수량</label>
+                  <input type="number" class="form-control" id="item_amount" name="item_amount" placeholder="수량 입력" />
+                </div>
+
+                <!-- 판매여부 -->
+                <div class="mb-3">
+                  <label class="form-label">판매여부</label>
+                  <div>
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" name="item_buy" id="item_buy1" value="Y" checked />
+                      <label class="form-check-label" for="pro_buy1">판매함</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" name="item_buy" id="item_buy2" value="N" />
+                      <label class="form-check-label" for="pro_buy2">판매안함</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- /.card-body -->
+
+              <div class="card-footer text-end">
+                <button type="submit" class="btn btn-primary">Submit</button>
+              </div>
+            </form>
+          </div>
         </div>
-        <!-- form start -->
-        <form action="/admin/product/pro_insert" method="post" enctype="multipart/form-data">
-          <div class="card-body">
-
-            <!-- 카테고리 -->
-            <div class="mb-3">
-              <label class="form-label">1차카테고리</label>
-              <select class="form-select" name="cate_prt_code" id="btn_firstCategory">
-                <option selected>1차카테고리 선택</option>
-                <option th:each="category : ${fristCategoryList}" 
-		                th:value="${category.cate_code}" 
-		                th:text="${category.cate_name}"></option>
-              </select>
-            </div>
-            <div class="mb-3">
-              <label class="form-label">2차카테고리</label>
-              <select class="form-select" name="cate_code" id="btn_secondCategory">
-                <option selected>2차카테고리 선택</option>
-              </select>
-            </div>
-
-            <!-- 상품명 -->
-            <div class="mb-3">
-              <label for="pro_name" class="form-label">상품명</label>
-              <input type="text" class="form-control" id="item_name" name="item_name" placeholder="상품명 입력">
-            </div>
-
-            <!-- 가격 -->
-            <div class="mb-3">
-              <label for="pro_price" class="form-label">가격</label>
-              <input type="text" class="form-control" id="item_price" name="item_price" placeholder="가격 입력">
-            </div>
-
-            <!-- 할인율 -->
-            <div class="mb-3">
-              <label for="pro_discount" class="form-label">할인율</label>
-              <input type="text" class="form-control" id="item_discount" name="item_discount" placeholder="할인율 입력">
-            </div>
-
-            <!-- 제조사 -->
-            <div class="mb-3">
-              <label for="pro_publisher" class="form-label">제조사</label>
-              <input type="text" class="form-control" id="item_publisher" name="item_publisher" placeholder="제조사 입력">
-            </div>
-
-            <!-- 상품 설명 -->
-            <div class="mb-3">
-              <label for="pro_content" class="form-label">상품설명</label>
-              <textarea class="form-control" id="item_content" name="item_content" rows="4" placeholder="상품설명 입력"></textarea>
-            </div>
-
-            <!-- 상품 이미지 업로드 -->
-            <div class="mb-3">
-              <label for="pro_img_upload" class="form-label">상품이미지</label>
-              <input class="form-control" type="file" id="item_img_upload" name="item_img_upload">
-            </div>
-
-            <!-- 이미지 미리보기 -->
-            <div class="mb-3">
-              <label class="form-label">미리보기 이미지</label>
-              <div>
-                <img id="img_preview" style="width: 200px; height: 200px; object-fit: cover; border:1px solid #ccc;">
-              </div>
-            </div>
-
-            <!-- 수량 -->
-            <div class="mb-3">
-              <label for="pro_amount" class="form-label">수량</label>
-              <input type="number" class="form-control" id="item_amount" name="item_amount" placeholder="수량 입력">
-            </div>
-
-            <!-- 판매여부 -->
-            <div class="mb-3">
-              <label class="form-label">판매여부</label>
-              <div>
-                <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="item_buy" id="item_buy1" value="Y" checked>
-                  <label class="form-check-label" for="pro_buy1">판매함</label>
-                </div>
-                <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="item_buy" id="item_buy2" value="N">
-                  <label class="form-check-label" for="pro_buy2">판매안함</label>
-                </div>
-              </div>
-            </div>
-
-          </div>
-          <!-- /.card-body -->
-
-          <div class="card-footer text-end">
-            <button type="submit" class="btn btn-primary">Submit</button>
-          </div>
-        </form>
       </div>
     </div>
-  </div>
-</div>
-	  <script>
-		// ckeditor 설정
-		var ckeditor_config = {
-	             resize_enabled : false,
-	             enterMode : CKEDITOR.ENTER_BR,
-	             shiftEnterMode : CKEDITOR.ENTER_P,
-	             toolbarCanCollapse : true,
-	             removePlugins : "elementspath", 
-	             //업로드 탭기능추가 속성. CKEditor에서 파일업로드해서 서버로 전송클릭하면 , 이 주소가 동작된다.
-	             filebrowserUploadUrl: '/admin/product/imageupload'
-	     }
-	
-		 // id="content" 인 textarea태그에 ckeditor_config변수가 가지고 있는 설정정보를 적용하겠다.
-		 CKEDITOR.replace("item_content", ckeditor_config);
+    <script>
+      // ckeditor 설정
+      var ckeditor_config = {
+        resize_enabled: false,
+        enterMode: CKEDITOR.ENTER_BR,
+        shiftEnterMode: CKEDITOR.ENTER_P,
+        toolbarCanCollapse: true,
+        removePlugins: "elementspath",
+        //업로드 탭기능추가 속성. CKEditor에서 파일업로드해서 서버로 전송클릭하면 , 이 주소가 동작된다.
+        filebrowserUploadUrl: "/admin/product/imageupload",
+      };
 
-	</script>
+      // id="content" 인 textarea태그에 ckeditor_config변수가 가지고 있는 설정정보를 적용하겠다.
+      CKEDITOR.replace("item_content", ckeditor_config);
+    </script>
+  </th:block>
+  <th:block layout:fragment="script2">
+    <script>
+      $(document).ready(function () {
+        //1차 카테고리 클릭 이벤트 설정
+        $("#btn_firstCategory").on("change", function () {
+          //console.log("1차 카테고리 선택");
+          let firstCategoryCode = $("#btn_firstCategory").val();
+          let url = "/admin/category/secondCategoryList/" + firstCategoryCode;
 
-</th:block>
-<th:block layout:fragment="script2">
-  <script>
-    $(document).ready(function(){
-      //1차 카테고리 클릭 이벤트 설정 
-      $("#btn_firstCategory").on("change",function(){
-        //console.log("1차 카테고리 선택");
-        let firstCategoryCode = $("#btn_firstCategory").val();
-         let url="/admin/category/secondCategoryList/" + firstCategoryCode; 
+          $.getJSON(url, function (data) {
+            //console.log(data);
+            //btn_secondCategory
+            let btn_secondCategory = $("#btn_secondCategory");
 
-         $.getJSON(url,function(data){
-          //console.log(data);
-          //btn_secondCategory
-          let btn_secondCategory=$("#btn_secondCategory");
+            let optionStr = "";
+            for (let i = 0; i < data.length; i++) {
+              optionStr += `<option value='${data[i].cate_code}'>${data[i].cate_name}</option> `;
+            }
+            btn_secondCategory.find("option").remove();
+            btn_secondCategory.append("<option >2차카테고리 선택</option>");
+            btn_secondCategory.append(optionStr);
+          });
+        });
+        $("#item_img_upload").on("change", function (e) {
+          let file = e.target.files[0];
+          let reader = new FileReader();
 
-          let optionStr = "";
-          for(let i=0; i<data.length;i++){
-            optionStr += `<option value='${data[i].cate_code}'>${data[i].cate_name}</option> `;
-          }
-          btn_secondCategory.find("option").remove();
-          btn_secondCategory.append("<option >2차카테고리 선택</option>");
-          btn_secondCategory.append(optionStr);
-         });
+          reader.readAsDataURL(file);
+
+          reader.onload = function (e) {
+            $("#img_preview").attr("src", e.target.result);
+          };
+        });
       });
-      $("#item_img_upload").on("change",function(e){
-        let file =e.target.files[0];
-        let reader = new FileReader();
-
-        reader.readAsDataURL(file);
-
-        reader.onload = function(e){
-          $("#img_preview").attr("src", e.target.result);
-        }
-        
-      });
-      
-    });
-  </script>
-</th:block>
+    </script>
+  </th:block>
 </html>
