@@ -8,10 +8,12 @@
 		values
 			(#{mb_id},#{mb_name},#{mb_email},#{mb_pw},#{mb_zipcode},#{mb_addr},#{mb_deaddr},#{mb_phone},#{mb_nick},#{mb_receive})
 	</insert>
+	
 	<select id="idCheck"  resultType="String" parameterType="String">
 		select mb_id from mb_list
 		where mb_id=#{mb_id}
 	</select>
+	
 	<select id="login" resultType="com.kd.basic.common.dto.MemberDTO" parameterType="String">
 		select 
 			mb_id,
@@ -26,6 +28,7 @@
 	 	from mb_list
 		where mb_id=#{mb_id}
 	</select>
+	
 		<select id="modify" resultType="com.kd.basic.common.dto.MemberDTO" parameterType="String">
 		select 
 			mb_id,
@@ -42,10 +45,36 @@
 	 	from mb_list 
 		where mb_id=#{mb_id}
 	</select>
+	
 	<update id="modify_save" parameterType="com.kd.basic.common.dto.MemberDTO">
 		update mb_list set 
 			mb_email = #{mb_email}, mb_zipcode = #{mb_zipcode}, mb_addr = #{mb_addr}, mb_deaddr = #{mb_deaddr}, 
 			mb_phone = #{mb_phone}, mb_nick = #{mb_nick}, mb_updatedate = now()
 		where mb_id=#{mb_id}
 	</update>
+	
+	<select id="mypage" resultType="com.kd.basic.common.dto.MemberDTO" parameterType="String">
+	
+		select 
+			mb_id, 
+			mb_name, 
+			mb_email, 
+			mb_pw, 
+			mb_zipcode, 
+			mb_addr, 
+			mb_deaddr, 
+			mb_phone, 
+			mb_nick, 
+			mb_receive, 
+			mb_point, 
+			mb_lastlogin, 
+			mb_datesub, 
+			mb_updatedate
+		from 
+			mb_list
+		where 
+			mb_id = #{mb_id}
+	
+	</select>
+	
 </mapper>

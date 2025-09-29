@@ -137,5 +137,19 @@ public class MemberController {
 		rttr.addFlashAttribute("status", "modify");
 		return "redirect:/";
 	}
-
+	
+	@GetMapping("/mypage")
+	public String mypage(HttpSession session, Model model) {
+		String url = "";
+		
+		MemberDTO dto = (MemberDTO) session.getAttribute("login_auth");
+		if (dto != null) {
+			memberService.mypage(dto.getMb_id());
+			model.addAttribute("memberDTO", dto);
+			url = "/member/mypage";
+		} else {
+			url = "redirect:/member/login";		}
+		
+		return url;
+	}
 }

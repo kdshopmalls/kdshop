@@ -30,4 +30,8 @@ public class MemberService {
 	public void modify_save(MemberDTO dto) {
 		memberMapper.modify_save(dto);
 	}
+	
+	public MemberDTO mypage(String mbsp_id) {
+		return memberMapper.mypage(mbsp_id);
+	}
 }

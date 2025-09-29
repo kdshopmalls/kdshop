@@ -17,4 +17,5 @@ public interface MemberMapper {
 	
 	void modify_save(MemberDTO dto);
 	
+	MemberDTO mypage(String mbsp_id);
 }
