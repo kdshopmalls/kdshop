@@ -1,5 +1,6 @@
 package com.kd.basic.common.dto;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import lombok.Getter;

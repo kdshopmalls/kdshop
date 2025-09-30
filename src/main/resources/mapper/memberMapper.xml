@@ -59,7 +59,6 @@
 			mb_id, 
 			mb_name, 
 			mb_email, 
-			mb_pw, 
 			mb_zipcode, 
 			mb_addr, 
 			mb_deaddr, 
@@ -76,5 +75,16 @@
 			mb_id = #{mb_id}
 	
 	</select>
+	
+	<update id="lastlogin">
+	
+		update 
+			mb_list
+		set 
+			mb_lastlogin = now()
+		where 
+			mb_id = #{mb_id}
+	
+	</update>
 	
 </mapper>

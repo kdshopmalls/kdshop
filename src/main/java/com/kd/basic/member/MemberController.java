@@ -76,7 +76,9 @@ public class MemberController {
 		if (vo != null) {
 			log.info("회원아이디: " + vo);
 			if (passwordEncoder.matches(dto.getMb_pw(), vo.getMb_pw())) {
-
+				
+				
+				
 				// 서버측의 메모리에 인증된 상태라는 의미의 정보를 세션형태로 저장한다.
 				vo.setMb_pw("");// 비밀번호를 공백처리
 				session.setAttribute("login_auth", vo);
@@ -144,8 +146,8 @@ public class MemberController {
 		
 		MemberDTO dto = (MemberDTO) session.getAttribute("login_auth");
 		if (dto != null) {
-			memberService.mypage(dto.getMb_id());
-			model.addAttribute("memberDTO", dto);
+			MemberDTO member = memberService.mypage(dto.getMb_id());
+			model.addAttribute("memberDTO", member);
 			url = "/member/mypage";
 		} else {
 			url = "redirect:/member/login";		}

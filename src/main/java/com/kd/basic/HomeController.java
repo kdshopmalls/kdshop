@@ -8,15 +8,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.kd.basic.admin.category.AdCategoryService;
 import com.kd.basic.common.dto.CategoryDTO;
 import com.kd.basic.common.dto.ProductDTO;
-import com.kd.basic.common.utils.Criteria;
 import com.kd.basic.common.utils.FileUtils;
-import com.kd.basic.common.utils.SearchCriteria;
 import com.kd.basic.product.ProductService;
 
 import lombok.RequiredArgsConstructor;

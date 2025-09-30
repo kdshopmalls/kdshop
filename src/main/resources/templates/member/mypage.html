@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/layout}">
+  <head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+      body {
+        background-color: #f8f9fa;
+      }
+
+      .card {
+        border-radius: 1rem;
+      }
+
+      .card-header {
+        background: linear-gradient(45deg, #0d6efd, #0b5ed7);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .card-header h4 {
+        font-weight: bold;
+        font-size: 1.5rem;
+      }
+
+      .form-label {
+        font-size: 0.9rem;
+        color: #555;
+      }
+
+      .form-control-plaintext {
+        font-size: 0.95rem;
+        padding-top: 0.25rem;
+      }
+
+      h5 {
+        font-size: 1.1rem;
+        color: #343a40;
+      }
+
+      .btn {
+        min-width: 110px;
+      }
+    </style>
+  </head>
+
+  <th:block layout:fragment="content">
+    <div class="container my-4">
+      <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10">
+          <div class="card border-0 shadow-lg">
+            <div class="card-header text-white d-flex justify-content-between align-items-center">
+              <h4 class="mb-0"><i class="fa-solid fa-user-circle me-2"></i> MyPage</h4>
+            </div>
+            <div class="card-body px-4 py-3">
+              <!-- 기본 정보 -->
+              <h5 class="mb-3 border-bottom pb-2"><i class="fa-solid fa-id-card me-2"></i>기본 정보</h5>
+              <div class="row mb-3">
+                <div class="col-md-4">
+                  <label class="form-label fw-bold">아이디</label>
+                  <div class="form-control-plaintext" th:text="${memberDTO.mb_id}"></div>
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label fw-bold">이름</label>
+                  <div class="form-control-plaintext" th:text="${memberDTO.mb_name}"></div>
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label fw-bold">별명</label>
+                  <div class="form-control-plaintext" th:text="${memberDTO.mb_nick}"></div>
+                </div>
+              </div>
+
+              <!-- 연락처 및 이메일 -->
+              <h5 class="mb-3 mt-4 border-bottom pb-2"><i class="fa-solid fa-envelope me-2"></i>연락처 & 이메일</h5>
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label class="form-label fw-bold">이메일</label>
+                  <div class="form-control-plaintext" th:text="${memberDTO.mb_email}"></div>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label fw-bold">연락처</label>
+                  <div class="form-control-plaintext" th:text="${memberDTO.mb_phone}"></div>
+                </div>
+              </div>
+
+              <!-- 주소 -->
+              <h5 class="mb-3 mt-4 border-bottom pb-2"><i class="fa-solid fa-house me-2"></i>주소</h5>
+              <div class="mb-2">
+                <label class="form-label fw-bold">기본 주소</label>
+                <div class="form-control-plaintext">
+                  <span th:text="'(' + ${memberDTO.mb_zipcode} + ') ' + ${memberDTO.mb_addr}"></span>
+                </div>
+              </div>
+              <div class="mb-3">
+                <label class="form-label fw-bold">상세 주소</label>
+                <div class="form-control-plaintext" th:text="${memberDTO.mb_deaddr}"></div>
+              </div>
+
+              <!-- 기타 정보 -->
+              <h5 class="mb-3 mt-4 border-bottom pb-2"><i class="fa-solid fa-gear me-2"></i>기타</h5>
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label class="form-label fw-bold">메일 수신 여부</label>
+                  <div class="form-control-plaintext">
+                    <span class="badge" th:classappend="${memberDTO.mb_receive == 'Y'} ? 'bg-success' : 'bg-secondary'" th:text="${memberDTO.mb_receive == 'Y' ? '수신함' : '수신안함'}"></span>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label fw-bold">포인트</label>
+                  <div class="form-control-plaintext text-primary fw-bold" th:text="${memberDTO.mb_point + '점'}"></div>
+                </div>
+              </div>
+
+              <!-- 날짜 정보 -->
+              <h5 class="mb-3 mt-4 border-bottom pb-2"><i class="fa-solid fa-calendar-days me-2"></i>활동 정보</h5>
+              <div class="row mb-3">
+                <div class="col-md-4">
+                  <label class="form-label fw-bold">마지막 로그인</label>
+                  <div class="form-control-plaintext" th:text="${#dates.format(memberDTO.mb_lastlogin, 'yyyy-MM-dd HH:mm:ss')}"></div>
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label fw-bold">가입일</label>
+                  <div class="form-control-plaintext" th:text="${#dates.format(memberDTO.mb_datesub, 'yyyy-MM-dd')}"></div>
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label fw-bold">정보 수정일</label>
+                  <div class="form-control-plaintext" th:text="${#dates.format(memberDTO.mb_updatedate, 'yyyy-MM-dd HH:mm')}"></div>
+                </div>
+              </div>
+
+              <!-- 버튼 -->
+              <div class="text-end mt-4">
+                <a href="/" class="btn btn-primary me-2"><i class="fa-solid fa-house"></i> 홈</a>
+                <a href="/member/modify" class="btn btn-outline-success"><i class="fa-solid fa-pen"></i> 정보 수정</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </th:block>
+</html>

@@ -34,4 +34,8 @@ public class MemberService {
 	public MemberDTO mypage(String mbsp_id) {
 		return memberMapper.mypage(mbsp_id);
 	}
+	
+	public void lastlogin(String mbsp_id) {
+		memberMapper.lastlogin(mbsp_id);
+	}
 }

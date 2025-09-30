@@ -26,9 +26,58 @@
     <!-- Custom styles for this template -->
 
     <link href="/css/sticky-footer-navbar.css" rel="stylesheet" />
+    <style>
+      /* 1차 카테고리 메뉴 */
+      #category_menu {
+        margin-top: 20px;
+      }
+      #category_menu .nav-item {
+        border-radius: 10px; /* 둥근 모서리 */
+        margin: 5px; /* 항목들 간의 간격 */
+        overflow: hidden; /* 둥근 모서리 효과가 사라지지 않도록 */
+      }
+
+      #category_menu .nav-link {
+        border-radius: 10px; /* 1차 카테고리 링크 둥글게 */
+        padding: 10px 20px; /* 여백을 주어 더 둥글게 보이게 */
+        transition: background-color 0.3s ease, color 0.3s ease; /* 마우스 호버 효과 */
+      }
+
+      #category_menu .nav-link.active {
+        background-color: #007bff; /* 활성화된 항목 배경색 */
+        color: white; /* 활성화된 항목 텍스트 색 */
+      }
+
+      #category_menu .nav-link:hover {
+        background-color: #0056b3; /* 마우스 호버 시 배경색 */
+        color: white; /* 호버 시 텍스트 색 */
+      }
+
+      /* 2차 카테고리 메뉴 */
+      #subCategory_menu .nav-item {
+        border-radius: 10px; /* 둥근 모서리 */
+        margin: 5px; /* 항목들 간의 간격 */
+        overflow: hidden; /* 둥근 모서리 효과가 사라지지 않도록 */
+      }
+
+      #subCategory_menu .nav-link {
+        border-radius: 10px; /* 2차 카테고리 링크 둥글게 */
+        padding: 10px 20px; /* 여백을 주어 더 둥글게 보이게 */
+        transition: background-color 0.3s ease, color 0.3s ease; /* 마우스 호버 효과 */
+      }
+
+      #subCategory_menu .nav-link.active {
+        background-color: #28a745; /* 활성화된 항목 배경색 */
+        color: white; /* 활성화된 항목 텍스트 색 */
+      }
+
+      #subCategory_menu .nav-link:hover {
+        background-color: #218838; /* 마우스 호버 시 배경색 */
+        color: white; /* 호버 시 텍스트 색 */
+      }
+    </style>
     <th:block layout:fragment="script1"></th:block>
     <th:block layout:fragment="css"></th:block>
-    <th:block></th:block>
   </head>
   <body class="d-flex flex-column h-100">
     <th:block th:replace="~{fragments/header.html::header}"></th:block>
