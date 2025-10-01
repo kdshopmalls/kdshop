@@ -2,38 +2,43 @@
 <html xmlns:th="http://www.thymeleaf.org">
   <th:block th:fragment="header">
     <header>
-      <!-- Fixed navbar -->
-      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+      <!-- Fixed navbar with new background color -->
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top" style="background-color: #a8fbd3">
         <div class="container-fluid">
-          <a class="navbar-brand" href="/">KD BookStore</a>
+          <!-- Left aligned KD BookStore -->
+          <a class="navbar-brand" href="/" style="font-size: 1.8rem; font-weight: bold; color: #2c7d6b">KD BookStore</a>
+
+          <!-- Toggle button for smaller screens -->
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
+
+          <!-- Navbar items aligned to the right -->
           <div class="collapse navbar-collapse" id="navbarCollapse">
-            <ul class="navbar-nav me-auto mb-2 mb-md-0">
+            <ul class="navbar-nav ms-auto mb-2 mb-md-0">
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="/">Home</a>
+                <a class="nav-link active" aria-current="page" href="/" style="color: #34656d; font-size: 1.1rem; font-weight: 700">Home</a>
               </li>
               <th:block th:if="${session.login_auth == null}">
                 <li class="nav-item">
-                  <a class="nav-link active" aria-current="page" href="/member/login">로그인</a>
+                  <a class="nav-link active" aria-current="page" href="/member/login" style="color: #34656d; font-size: 1.1rem; font-weight: 700">로그인</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link active" aria-current="page" href="/member/join">회원가입</a>
+                  <a class="nav-link active" aria-current="page" href="/member/join" style="color: #34656d; font-size: 1.1rem; font-weight: 700">회원가입</a>
                 </li>
               </th:block>
               <th:block th:if="${session.login_auth != null}">
                 <li class="nav-item">
-                  <a class="nav-link active" aria-current="page" href="/member/logout">로그아웃</a>
+                  <a class="nav-link active" aria-current="page" href="/member/logout" style="color: #34656d; font-size: 1.1rem; font-weight: 700">로그아웃</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link active" aria-current="page" href="/member/modify">정보수정</a>
+                  <a class="nav-link active" aria-current="page" href="/member/modify" style="color: #34656d; font-size: 1.1rem; font-weight: 700">정보수정</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link active" aria-current="page" href="/member/mypage">MYPAGE</a>
+                  <a class="nav-link active" aria-current="page" href="/member/mypage" style="color: #34656d; font-size: 1.1rem; font-weight: 700">MYPAGE</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link active" aria-current="page" href="/cart/cart_list">장바구니</a>
+                  <a class="nav-link active" aria-current="page" href="/cart/cart_list" style="color: #34656d; font-size: 1.1rem; font-weight: 700">장바구니</a>
                 </li>
               </th:block>
             </ul>
@@ -42,4 +47,44 @@
       </nav>
     </header>
   </th:block>
+
+  <style>
+    /* Navbar Background Color */
+    nav {
+      background-color: #a8fbd3 !important; /* Set the new background color */
+    }
+
+    /* Hover Effect for Nav Items */
+    .nav-link:hover {
+      color: #ff9a8b !important;
+      text-decoration: underline;
+      transition: all 0.3s ease-in-out;
+    }
+
+    /* Active Link Color */
+    .nav-link.active {
+      color: #ff9a8b !important;
+    }
+
+    /* Navbar Toggler Icon Color */
+    .navbar-toggler-icon {
+      background-color: #34656d;
+    }
+
+    /* Adjust the navbar brand color */
+    .navbar-brand {
+      color: #2c7d6b;
+      font-weight: 700; /* Increased font weight */
+    }
+
+    /* Make the nav item text bolder */
+    .nav-link {
+      font-weight: 700; /* Set font weight to 700 to make it bolder */
+    }
+
+    /* If you want to make the toggler button text bolder */
+    .navbar-toggler {
+      font-weight: 700; /* Set font weight to 700 */
+    }
+  </style>
 </html>
