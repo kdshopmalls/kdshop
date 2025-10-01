@@ -58,6 +58,7 @@
 		<include refid="rev_rate"></include>
 		<include refid="rev_content"></include>
 	</select>
+	
 	<sql id="search">
 		<if test="cri.searchType != null and !cri.searchType.equals('')">
 			<if test="cri.searchType == 'n'.toString()">

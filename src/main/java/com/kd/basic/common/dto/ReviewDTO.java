@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+
 @Setter
 @Getter
 @ToString
@@ -20,12 +21,8 @@ public class ReviewDTO {
 	private String rev_content;
 	private int rev_rate;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd HH:mm:ss", timezone = "Asia/Seoul")
-	   private LocalDateTime rev_date;
+	private LocalDateTime rev_date;
 	
-	private ProductDTO product;
-	
-	List<AdReviewReplyDTO> replies;
-
 	//상품
 	private ProductDTO product;
 	
