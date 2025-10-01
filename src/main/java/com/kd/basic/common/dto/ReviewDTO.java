@@ -1,6 +1,7 @@
 package com.kd.basic.common.dto;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -21,4 +22,10 @@ public class ReviewDTO {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd HH:mm:ss", timezone = "Asia/Seoul")
 	   private LocalDateTime rev_date;
 
+	//상품
+	private ProductDTO product;
+	
+	
+	// 상품후기답변
+	private List<ReviewReplyDTO> replies;
 }
