@@ -77,7 +77,7 @@ public class MemberController {
 			log.info("회원아이디: " + vo);
 			if (passwordEncoder.matches(dto.getMb_pw(), vo.getMb_pw())) {
 				
-				
+				memberService.lastlogin(vo.getMb_id());
 				
 				// 서버측의 메모리에 인증된 상태라는 의미의 정보를 세션형태로 저장한다.
 				vo.setMb_pw("");// 비밀번호를 공백처리
