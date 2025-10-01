@@ -21,6 +21,10 @@ public class ReviewDTO {
 	private int rev_rate;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd HH:mm:ss", timezone = "Asia/Seoul")
 	   private LocalDateTime rev_date;
+	
+	private ProductDTO product;
+	
+	List<AdReviewReplyDTO> replies;
 
 	//상품
 	private ProductDTO product;

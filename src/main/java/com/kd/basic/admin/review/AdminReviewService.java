@@ -1,5 +1,6 @@
 package com.kd.basic.admin.review;
 
+
 import java.util.List;
 import java.util.Map;
 
@@ -39,4 +40,5 @@ public class AdminReviewService {
 	public void reply_delete(Integer reply_id) {
 		adminReviewMapper.reply_delete(reply_id);
 	}
+
 }

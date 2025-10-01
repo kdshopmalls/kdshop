@@ -1,6 +1,7 @@
 package com.kd.basic.admin.review;
 
 import java.util.List;
+
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
@@ -22,5 +23,6 @@ public interface AdminReviewMapper {
 	void reply_modify(ReviewReplyDTO dto);
 	
 	void reply_delete(Integer reply_id);
+
 
 }

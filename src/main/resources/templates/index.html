@@ -1,148 +1,126 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-    layout:decorate="~{layouts/layout}">
-     <th:block layout:fragment="script1">
-     <script th:inline="javascript">
-     	let status=[[${status}]];
-     	if(status=="modify"){
-     		alert("회원정보가 수정됨");
-     	}
-     </script>
-     </th:block>
-      <th:block layout:fragment="css">
-      <style>
-      a.pro_info{
-      	text-decoration: none;
-  		color: inherit;
-  	  }
-  	  </style>
-      </th:block>
-	<th:block layout:fragment="content">
-<div class="row">
-	<div class="col text-center md-3 mt-3">
-		<h3 th:utext="${cate_name}"></h3> 
-	</div> 
-</div>
-<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3"> 
-		<div class="col" th:each="productDTO:${mainList}"> 
-			<div class="card shadow-sm h-100">
-      <!-- 상품 이미지 -->
-      <a href="#"  class="pro_info" th:data-item_num="${productDTO.item_num}" th:data-cate_name="${productDTO.cate_name}">
-      <img th:src="|/product/image_display?dateFolderName=${productDTO.item_up_folder}&fileName=s_${productDTO.item_img}|" 
-           class="card-img-top" 
-           alt="상품 이미지" 
-           height="255" 
-           style="object-fit: cover;">
-		</a>
-      <div class="card-body d-flex flex-column">
-        <!-- 상품 제목 -->
-        <a href="#"  class="pro_info" th:data-item_num="${productDTO.item_num}" th:data-cate_name="${productDTO.cate_name}">
-        <h5 class="card-title mb-2" th:text="${productDTO.item_name}">상품 제목</h5>
-		</a>
-        <!-- 상품 가격 -->
-        <p class="card-text mb-1">
-          <strong th:text="${#numbers.formatInteger(productDTO.item_price, 3, 'COMMA')}"></strong> 원
-        </p>
-
-        <!-- 상품 수량 표시 -->
-        <p class="card-text mb-2"
-           th:classappend="${productDTO.item_amount == 0} ? 'text-danger fw-bold' : 'text-muted'">
-          <span th:if="${productDTO.item_amount > 0}">
-            재고: <span th:text="${productDTO.item_amount}"></span> 개
-          </span>
-          <span th:if="${productDTO.item_amount == 0}">
-            품절
-          </span>
-        </p>
-
-        <!-- 구매 수량 선택 (재고 있을 때만) -->
-       <div class="mb-3" th:if="${productDTO.item_amount > 0}">
-        <div class="d-flex align-items-center">
-          <label class="form-label small me-2 mb-0">구매 수량</label>
-          <input type="number" 
-                class="form-control form-control-sm" 
-                name="quantity"
-                value="1"
-                min="1" 
-                th:attr="max=${productDTO.item_amount}"
-                style="width: 100px;" />
-        </div>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/layout}">
+  <th:block layout:fragment="script1">
+    <script th:inline="javascript">
+      let status=[[${status}]];
+      if(status=="modify"){
+      	alert("회원정보가 수정됨");
+      }
+    </script>
+  </th:block>
+  <th:block layout:fragment="css">
+    <style>
+      a.pro_info {
+        text-decoration: none;
+        color: inherit;
+      }
+    </style>
+  </th:block>
+  <th:block layout:fragment="content">
+    <div class="row">
+      <div class="col text-center md-3 mt-3">
+        <h3 th:utext="${cate_name}"></h3>
       </div>
-        <!-- 버튼 영역 -->
-        <div class="mt-auto d-flex justify-content-between">
-          <!-- 장바구니 담기 -->
-          <form th:action="@{/cart/add}" method="post" class="d-inline w-50 me-1">
-            <input type="hidden" name="item_num" th:value="${productDTO.item_num}">
-            <input type="hidden" name="quantity" value="1" class="selected-qty">
-            <button type="button" name="brn_cart_add" th:data-item_num="${productDTO.item_num}" class="btn btn-outline-primary btn-sm w-100">🛒 장바구니</button>
-          </form>
+    </div>
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+      <div class="col" th:each="productDTO:${mainList}">
+        <div class="card shadow-sm h-100">
+          <!-- 상품 이미지 -->
+          <a href="#" class="pro_info" th:data-item_num="${productDTO.item_num}" th:data-cate_name="${productDTO.cate_name}">
+            <img
+              th:src="|/product/image_display?dateFolderName=${productDTO.item_up_folder}&fileName=s_${productDTO.item_img}|"
+              class="card-img-top"
+              alt="상품 이미지"
+              height="255"
+              style="object-fit: cover"
+            />
+          </a>
+          <div class="card-body d-flex flex-column">
+            <!-- 상품 제목 -->
+            <a href="#" class="pro_info" th:data-item_num="${productDTO.item_num}" th:data-cate_name="${productDTO.cate_name}">
+              <h5 class="card-title mb-2" th:text="${productDTO.item_name}">상품 제목</h5>
+            </a>
+            <!-- 상품 가격 -->
+            <p class="card-text mb-1"><strong th:text="${#numbers.formatInteger(productDTO.item_price, 3, 'COMMA')}"></strong> 원</p>
 
-          <!-- 구매하기 -->
-          <form th:action="@{/order/now}" method="post" class="d-inline w-50">
-            <input type="hidden" name="item_num" th:value="${productDTO.item_num}">
-            <input type="hidden" name="quantity" value="1" class="selected-qty">
-            <button type="button" name="btn_buy_add" class="btn btn-success btn-sm w-100" th:data-item_num="${productDTO.item_num}">💳 구매하기</button>
-          </form>
+            <!-- 상품 수량 표시 -->
+            <p class="card-text mb-2" th:classappend="${productDTO.item_amount == 0} ? 'text-danger fw-bold' : 'text-muted'">
+              <span th:if="${productDTO.item_amount > 0}"> 재고: <span th:text="${productDTO.item_amount}"></span> 개 </span>
+              <span th:if="${productDTO.item_amount == 0}"> 품절 </span>
+            </p>
+
+            <!-- 구매 수량 선택 (재고 있을 때만) -->
+            <div class="mb-3" th:if="${productDTO.item_amount > 0}">
+              <div class="d-flex align-items-center">
+                <label class="form-label small me-2 mb-0">구매 수량</label>
+                <input type="number" class="form-control form-control-sm" name="quantity" value="1" min="1" th:attr="max=${productDTO.item_amount}" style="width: 100px" />
+              </div>
+            </div>
+            <!-- 버튼 영역 -->
+            <div class="mt-auto d-flex justify-content-between">
+              <!-- 장바구니 담기 -->
+              <form th:action="@{/cart/add}" method="post" class="d-inline w-50 me-1">
+                <input type="hidden" name="item_num" th:value="${productDTO.item_num}" />
+                <input type="hidden" name="quantity" value="1" class="selected-qty" />
+                <button type="button" name="brn_cart_add" th:data-item_num="${productDTO.item_num}" class="btn btn-outline-primary btn-sm w-100">🛒 장바구니</button>
+              </form>
+
+              <!-- 구매하기 -->
+              <form th:action="@{/order/now}" method="post" class="d-inline w-50">
+                <input type="hidden" name="item_num" th:value="${productDTO.item_num}" />
+                <input type="hidden" name="quantity" value="1" class="selected-qty" />
+                <button type="button" name="btn_buy_add" class="btn btn-success btn-sm w-100" th:data-item_num="${productDTO.item_num}">💳 구매하기</button>
+              </form>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-		</div>
+  </th:block>
+  <th:block layout:fragment="script2">
+    <script th:inline="javascript">
+      $(document).ready(function () {
+        //장바구니버튼 클릭 이벤트 설정
+        $("button[name='brn_cart_add']").on("click", function () {
+          let item_num = $(this).data("item_num");
+          //현재 선택한 장바구니 태그$(this) 에서 장바구니버튼태그와 수량태그를  감싸는 부모테그를 감사는 부모테그 div.card로 위치를 이동하여
+          // find()메서드로 수량 태그를 찾아 ,현재 수량값을 읽어온다
+          let cart_amount = $(this).parents("div.card").find("input[name='quantity']").val();
 
-	</div>
-	
-
-
-	
-	
-
-</th:block>	
-<th:block layout:fragment="script2">
-  <script th:inline="javascript">
-        $(document).ready(function(){
-        //장바구니버튼 클릭 이벤트 설정 
-        $("button[name='brn_cart_add']").on("click",function(){
-            let item_num = $(this).data("item_num");
-            //현재 선택한 장바구니 태그$(this) 에서 장바구니버튼태그와 수량태그를  감싸는 부모테그를 감사는 부모테그 div.card로 위치를 이동하여
-            // find()메서드로 수량 태그를 찾아 ,현재 수량값을 읽어온다
-            let cart_amount = $(this).parents("div.card").find("input[name='quantity']").val();
-
-            //console.log("상품코드",pro_num);
-            //console.log("수량",cart_amount);
-            $.ajax({
-               url:'/cart/cart_add',
-               type:'post',
-               data: {item_num:item_num,cart_amount:cart_amount},
-               dataType:'text',
-               success:function(data){
-                if(data == "success"){
-                  alert("장바구니에 등록됨");
-                  if(confirm("장바구니로 이동하겠습니까?")){
-                    location.href="/cart/cart_list";
-                  }
+          //console.log("상품코드",pro_num);
+          //console.log("수량",cart_amount);
+          $.ajax({
+            url: "/cart/cart_add",
+            type: "post",
+            data: { item_num: item_num, cart_amount: cart_amount },
+            dataType: "text",
+            success: function (data) {
+              if (data == "success") {
+                alert("장바구니에 등록됨");
+                if (confirm("장바구니로 이동하겠습니까?")) {
+                  location.href = "/cart/cart_list";
                 }
-               }
-            });
-    
+              }
+            },
+          });
         });
         //상품이미지 클릭
-        $("a.pro_info").on("click",function(e){
+        $("a.pro_info").on("click", function (e) {
           e.preventDefault();
           let item_num = $(this).data("item_num");
-         let cate_name = encodeURIComponent($(this).data("cate_name"));
+          let cate_name = encodeURIComponent($(this).data("cate_name"));
 
-          location.href=`/product/pro_detail?item_num=${item_num}&cate_name=${cate_name}`;
-
+          location.href = `/product/pro_detail?item_num=${item_num}&cate_name=${cate_name}`;
         });
         // 구매버늩 클릭 이벤트 등록 btn_buy_add
-        $("button[name='btn_buy_add']").on("click",function(){
-            let item_num = $(this).data("item_num");
-            let cart_amount = $(this).parents("div.card").find("input[name='quantity']").val();
-            
-            let url = `/order/order_info?item_num=${item_num}&cart_amount=${cart_amount}&type=buy`;
-            location.href=url;
+        $("button[name='btn_buy_add']").on("click", function () {
+          let item_num = $(this).data("item_num");
+          let cart_amount = $(this).parents("div.card").find("input[name='quantity']").val();
+
+          let url = `/order/order_info?item_num=${item_num}&cart_amount=${cart_amount}&type=buy`;
+          location.href = url;
         });
-    });
-  </script>
-</th:block>
+      });
+    </script>
+  </th:block>
 </html>
