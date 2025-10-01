@@ -26,4 +26,10 @@ public class ReviewDTO {
 	
 	List<AdReviewReplyDTO> replies;
 
+	//상품
+	private ProductDTO product;
+	
+	
+	// 상품후기답변
+	private List<ReviewReplyDTO> replies;
 }
