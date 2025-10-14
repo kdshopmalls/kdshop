@@ -23,7 +23,7 @@
           <!--begin::Sidebar Menu-->
           <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="navigation" aria-label="Main navigation" data-accordion="false" id="navigation">
             <li class="nav-item menu-open">
-              <a href="#" class="nav-link active">
+              <a href="#" class="nav-link">
                 <i class="nav-icon bi bi-speedometer"></i>
                 <p>
                   회원관리
@@ -32,17 +32,36 @@
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a href="/admin/member/mem_list" class="nav-link active">
+                  <a href="/admin/member/mem_list" class="nav-link">
                     <i class="nav-icon bi bi-circle"></i>
                     <p>회원목록</p>
                   </a>
                 </li>
               </ul>
             </li>
-
+              <!-- 카테고리관리 -->
+              <li class="nav-item menu-open">
+                <a href="#" class="nav-link ">
+                  <i class="nav-icon bi bi-speedometer"></i>
+                  <p>
+                    카테고리관리
+                    <i class="nav-arrow bi bi-chevron-right"></i>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="/admin/category/categorymenu" class="nav-link">
+                      <i class="nav-icon bi bi-circle"></i>
+                      <p>카테고리순서</p>
+                    </a>
+                  </li>
+      
+                
+                </ul>
+              </li>
             <!-- 상품관리 -->
             <li class="nav-item menu-open">
-              <a href="#" class="nav-link active">
+              <a href="#" class="nav-link">
                 <i class="nav-icon bi bi-speedometer"></i>
                 <p>
                   상품관리
@@ -51,7 +70,7 @@
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a href="/admin/product/pro_insert" class="nav-link active">
+                  <a href="/admin/product/pro_insert" class="nav-link">
                     <i class="nav-icon bi bi-circle"></i>
                     <p>상품등록</p>
                   </a>
@@ -66,7 +85,7 @@
             </li>
             <!-- 주문관리 -->
             <li class="nav-item menu-open">
-              <a href="#" class="nav-link active">
+              <a href="#" class="nav-link">
                 <i class="nav-icon bi bi-speedometer"></i>
                 <p>
                   주문관리
@@ -75,7 +94,7 @@
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a href="/admin/order/order_list" class="nav-link active">
+                  <a href="/admin/order/order_list" class="nav-link">
                     <i class="nav-icon bi bi-circle"></i>
                     <p>주문목록</p>
                   </a>
@@ -84,7 +103,7 @@
             </li>
             <!-- 상품리뷰및문의관리 -->
             <li class="nav-item menu-open">
-              <a href="#" class="nav-link active">
+              <a href="#" class="nav-link">
                 <i class="nav-icon bi bi-speedometer"></i>
                 <p>
                   상품리뷰 및 문의관리
@@ -93,32 +112,34 @@
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a href="/admin/review/review_list" class="nav-link active">
+                  <a href="/admin/review/review_list" class="nav-link">
                     <i class="nav-icon bi bi-circle"></i>
                     <p>리뷰목록</p>
                   </a>
                 </li>
               </ul>
             </li>
-            <!-- 게시판관리 -->
-            <li class="nav-item menu-open">
-              <a href="#" class="nav-link active">
-                <i class="nav-icon bi bi-speedometer"></i>
-                <p>
-                  게시판관리
-                  <i class="nav-arrow bi bi-chevron-right"></i>
-                </p>
-              </a>
-            </li>
+
             <!-- 통계관리 -->
             <li class="nav-item menu-open">
-              <a href="#" class="nav-link active">
+              <a href="#" class="nav-link">
                 <i class="nav-icon bi bi-speedometer"></i>
                 <p>
                   통계관리
                   <i class="nav-arrow bi bi-chevron-right"></i>
                 </p>
               </a>
+               <ul class="nav nav-treeview">
+
+                  <li class="nav-item">
+                    <a href="/admin/statist/static_sale_all" class="nav-link active">
+                      <i class="nav-icon bi bi-circle"></i>
+                      <p>매출통계</p>
+                    </a>
+                  </li>
+ 
+                
+                </ul>
             </li>
           </ul>
           <!--end::Sidebar Menu-->

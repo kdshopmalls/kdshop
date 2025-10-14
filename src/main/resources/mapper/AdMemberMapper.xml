@@ -15,6 +15,14 @@
 			mb_datesub,
 			mb_updatedate
 	 	from mb_list
+	 	<include refid="search"></include> 
 	 	order by mb_datesub desc
 	</select>
+		<sql id="search">
+			<if test="keyword != null">
+					where (mb_id like concat('%',#{keyword},'%') 
+					or mb_name like concat('%',#{keyword},'%') 
+					or mb_email like concat('%',#{keyword},'%'))
+			</if>
+		</sql>
 </mapper>
