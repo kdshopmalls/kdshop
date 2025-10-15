@@ -5,427 +5,739 @@
 	layout:decorate="~{admin/layouts/ad_layout}">
 
 	<th:block layout:fragment="script1">
-	
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js" integrity="sha384-G/EV+4j2dNv+tEPo3++6LCgdCROaejBqfUeNjuKAiuXbjrxilcCdDz6ZAVfHWe1Y" crossorigin="anonymous"></script>
-	
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+		<style>
+			:root {
+				--primary-color: #4F46E5;
+				--success-color: #10B981;
+				--danger-color: #EF4444;
+				--warning-color: #F59E0B;
+				--gray-50: #F9FAFB;
+				--gray-100: #F3F4F6;
+				--gray-200: #E5E7EB;
+				--gray-700: #374151;
+				--gray-900: #111827;
+			}
+
+			.page-header {
+				background: linear-gradient(135deg, var(--primary-color) 0%, #7C3AED 100%);
+				color: white;
+				padding: 2rem;
+				border-radius: 12px;
+				margin-bottom: 2rem;
+				box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+			}
+
+			.page-header h3 {
+				margin: 0;
+				font-weight: 600;
+				display: flex;
+				align-items: center;
+				gap: 0.75rem;
+			}
+
+			.search-card {
+				background: white;
+				border-radius: 12px;
+				padding: 1.5rem;
+				box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+				margin-bottom: 1.5rem;
+			}
+
+			.search-label {
+				font-weight: 600;
+				color: var(--gray-700);
+				margin-bottom: 0.5rem;
+				display: block;
+				font-size: 0.875rem;
+			}
+
+			.form-control, .form-select {
+				border: 2px solid var(--gray-200);
+				border-radius: 8px;
+				padding: 0.625rem 0.875rem;
+				transition: all 0.2s;
+			}
+
+			.form-control:focus, .form-select:focus {
+				border-color: var(--primary-color);
+				box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+			}
+
+			.btn {
+				border-radius: 8px;
+				padding: 0.625rem 1.25rem;
+				font-weight: 500;
+				transition: all 0.2s;
+				border: none;
+			}
+
+			.btn-primary {
+				background: var(--primary-color);
+			}
+
+			.btn-primary:hover {
+				background: #4338CA;
+				transform: translateY(-1px);
+				box-shadow: 0 4px 12px rgba(79, 70, 229, 0.4);
+			}
+
+			.btn-outline-primary {
+				border: 2px solid var(--primary-color);
+				color: var(--primary-color);
+				background: white;
+			}
+
+			.btn-outline-primary:hover {
+				background: var(--primary-color);
+				color: white;
+				transform: translateY(-1px);
+			}
+
+			.table-container {
+				background: white;
+				border-radius: 12px;
+				overflow: hidden;
+				box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+			}
+
+			.table {
+				margin-bottom: 0;
+			}
+
+			.table thead {
+				background: var(--gray-50);
+			}
+
+			.table thead th {
+				border-bottom: 2px solid var(--gray-200);
+				color: var(--gray-700);
+				font-weight: 600;
+				padding: 1rem;
+				font-size: 0.875rem;
+				text-transform: uppercase;
+				letter-spacing: 0.05em;
+			}
+
+			.table tbody td {
+				padding: 1rem;
+				vertical-align: middle;
+				border-color: var(--gray-200);
+			}
+
+			.table tbody tr:hover {
+				background: var(--gray-50);
+			}
+
+			.badge-status {
+				padding: 0.5rem 1rem;
+				border-radius: 20px;
+				font-weight: 600;
+				font-size: 0.75rem;
+				text-transform: uppercase;
+				letter-spacing: 0.05em;
+			}
+
+			.badge-completed {
+				background: #D1FAE5;
+				color: #065F46;
+			}
+
+			.badge-pending {
+				background: #FEE2E2;
+				color: #991B1B;
+			}
+
+			.product-info {
+				display: flex;
+				align-items: center;
+				gap: 1rem;
+			}
+
+			.product-img {
+				width: 80px;
+				height: 80px;
+				object-fit: cover;
+				border-radius: 8px;
+				border: 2px solid var(--gray-200);
+			}
+
+			.product-details {
+				flex: 1;
+			}
+
+			.product-code {
+				color: var(--gray-700);
+				font-size: 0.75rem;
+				font-weight: 500;
+			}
+
+			.product-name {
+				font-weight: 600;
+				color: var(--gray-900);
+				margin-top: 0.25rem;
+			}
+
+			.rating-display {
+				display: inline-flex;
+				align-items: center;
+				gap: 0.5rem;
+				padding: 0.375rem 0.75rem;
+				background: #FEF3C7;
+				border-radius: 6px;
+				margin-bottom: 0.5rem;
+			}
+
+			.star-rating {
+				color: #F59E0B;
+				font-size: 1.25rem;
+			}
+
+			.review-content {
+				color: var(--gray-700);
+				line-height: 1.6;
+				margin-top: 0.5rem;
+			}
+
+			.reply-box {
+				background: linear-gradient(135deg, #FEF2F2 0%, #FEE2E2 100%);
+				border: 2px solid #FECACA;
+				border-radius: 10px;
+				padding: 1rem;
+				margin-top: 1rem;
+			}
+
+			.reply-header {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				margin-bottom: 0.75rem;
+			}
+
+			.reply-author {
+				font-weight: 600;
+				color: var(--danger-color);
+			}
+
+			.reply-date {
+				font-size: 0.75rem;
+				color: var(--gray-700);
+			}
+
+			.reply-text {
+				color: var(--gray-900);
+				line-height: 1.6;
+				margin-bottom: 0.75rem;
+			}
+
+			.reply-actions {
+				display: flex;
+				gap: 0.5rem;
+			}
+
+			.btn-sm {
+				padding: 0.375rem 0.875rem;
+				font-size: 0.813rem;
+			}
+
+			.btn-outline-success {
+				border: 2px solid var(--success-color);
+				color: var(--success-color);
+				background: white;
+			}
+
+			.btn-outline-success:hover {
+				background: var(--success-color);
+				color: white;
+			}
+
+			.btn-outline-danger {
+				border: 2px solid var(--danger-color);
+				color: var(--danger-color);
+				background: white;
+			}
+
+			.btn-outline-danger:hover {
+				background: var(--danger-color);
+				color: white;
+			}
+
+			.modal-content {
+				border: none;
+				border-radius: 16px;
+				overflow: hidden;
+			}
+
+			.modal-header {
+				background: linear-gradient(135deg, var(--primary-color) 0%, #7C3AED 100%);
+				color: white;
+				padding: 1.5rem;
+				border: none;
+			}
+
+			.modal-title {
+				font-weight: 600;
+			}
+
+			.modal-body {
+				padding: 2rem;
+			}
+
+			.modal-product-img {
+				width: 120px;
+				height: 120px;
+				object-fit: cover;
+				border-radius: 12px;
+				border: 3px solid var(--gray-200);
+			}
+
+			.modal-footer {
+				border-top: 2px solid var(--gray-200);
+				padding: 1.5rem;
+			}
+
+			#admin_reply {
+				border: 2px solid var(--gray-200);
+				border-radius: 8px;
+				min-height: 120px;
+			}
+
+			#admin_reply:focus {
+				border-color: var(--primary-color);
+				box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+			}
+
+			.user-info {
+				display: flex;
+				align-items: center;
+				gap: 0.5rem;
+			}
+
+			.user-icon {
+				width: 32px;
+				height: 32px;
+				border-radius: 50%;
+				background: var(--gray-200);
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				color: var(--gray-700);
+			}
+
+			.date-display {
+				color: var(--gray-700);
+				font-size: 0.875rem;
+			}
+
+			.action-btn {
+				display: inline-flex;
+				align-items: center;
+				gap: 0.375rem;
+			}
+		</style>
 	</th:block>
 	
-	
 	<th:block layout:fragment="content">
-		<div class="container mt-5">
-		<div class="row">
-			<div class="col">
-				<div class="card card-primary">
-					<div class="card-header">
-					  <h3 class="card-title">주문 목록</h3>
-					</div>
-					<!-- /.card-header -->
-					<!-- list start -->
-					<div class="card-body">
-						<!-- search form start -->
-				<form id="searchForm" action="/admin/review/review_list" method="get">
-					 <div class="row">
-					 	<div class="col-1">검색어</div>	
-						<div class="col-2">												
-							<select name="searchType" class="form-control">
-								<option value="" th:selected="${''} == ${pageMaker.cri.searchType}" >전체</option>
-								<option value="n" th:selected="${'n'} == ${pageMaker.cri.searchType}">상품명</option>
-								<option value="c" th:selected="${'c'} == ${pageMaker.cri.searchType}">상품코드</option>
-								<option value="i"th:selected="${'i'} == ${pageMaker.cri.searchType}">작성자ID</option>							
-							</select>								
-						</div>					
-						<div class="col-3">
-							<input type="text" name="keyword" class="form-control" th:value="${pageMaker.cri.keyword}"  placeholder="검색어를 입력하세요.">
-						</div>
-						<div class="col-1">평점/내용</div>
-						<div class="col-2">
-							<select class="form-control" name="rev_rate">
-								<option value="" th:selected="${rev_rate == ''}">전체평점</option>
-								<option value="5" th:selected="${rev_rate == '5'}">5점</option>
-								<option value="4" th:selected="${rev_rate == '4'}">4점</option>
-								<option value="3" th:selected="${rev_rate == '3'}">3점</option>
-								<option value="2" th:selected="${rev_rate == '2'}">2점</option>
-								<option value="1" th:selected="${rev_rate == '1'}">1점</option>
-							</select>
-						</div>
-						<div class="col-3">
-							<input type="text" name="rev_content" class="form-control" th:value="${rev_content}" placeholder="작성내용..">
-						</div>
-					 </div>											
-				
-				
-				<div class="row mt-3">
-					<div class="col text-center">
-						<button type="submit" class="btn btn-primary">검색</button>
-						<button type="button" class="btn btn-outline-primary" id="btn_search_init">초기화</button>
-					</div>
-				</div>
-			</form>	
-				<div class="row mt-4">
-					<div class="col">
-					 <form name="" id="" method="post" action="">
-						<table class="table table-bordered">
-						  <thead>
-							<tr>
-							  <th style="width: 10%;">번호</th>
-							  <th style="width: 10%;">답변</th>
-							  <th style="width: 20%;">상품정보</th>
-							  <th style="width: 30%">평점 / 내용</th>
-							  <th style="width: 10%">작성자</th>
-							  <th style="width: 10%">작성일</th>
-							  <th style="width: 10%">관리</th>
-							</tr>
-						  </thead>
-						  <tbody>
-							<tr th:each="reviewDTO : ${review_list}">
-								<td>
-									[[${reviewDTO.rev_code}]]
-								</td>
-								<td>
-									<div class="alert alert-success" th:if="${#lists.size(reviewDTO.replies) > 0}">
-										답변완료
-									</div>
-									<div class="alert alert-danger" th:unless="${#lists.size(reviewDTO.replies) > 0}">
-										답변대기
-									</div>
-								</td>
-								<td>
-									<img style="width: 100px; height: 100px;" th:src="|/admin/review/image_display?dateFolderName=${reviewDTO.product.item_up_folder}&fileName=s_${reviewDTO.product.item_img}|">
-									[[${reviewDTO.item_num}]] <br>
-									[[${reviewDTO.product.item_name}]]
-								</td>
-								<td>
-									<span class="star" style="color: red;font-size: large;">[[${reviewDTO.rev_rate}]]</span><br>
-									[[${reviewDTO.rev_content}]]
-									<div class="review_reply_info" th:each="review_reply_dto : ${reviewDTO.replies}" style="border: 1px; border-style: dashed; border-radius: 10px; border-color: red ; padding: 10px;margin-top: 20px;">
-										<div class="row">
-											<div class="col">관리자</div>
-											<div class="col">
-												<span th:text="${#temporals.format(review_reply_dto.reply_date, 'yyyy-MM-dd HH:mm:ss')}"></span>
-											</div>
-																
-										</div>
-										<div class="row">
-											<div class="col">
-												<span class="reply_text_info" th:text="${review_reply_dto.reply_text}"></span>
-											</div>
-										</div>
-										<div class="row">
-											<div class="col">
-												<button type="button" class="btn btn-outline-success" name="btn_reply_edit" th:data-reply_id="${review_reply_dto.reply_id}" th:data-rev_code="${reviewDTO.rev_code}">답변수정</button>
-												<button type="button" class="btn btn-outline-danger" name="btn_reply_del" th:data-reply_id="${review_reply_dto.reply_id}">답변삭제</button>
-											</div> 
-										</div>
-									</div>	
-								</td>
-								<td>
-									[[${reviewDTO.mb_id}]]
-								</td>
-								<td>
-									[[${#temporals.format(reviewDTO.rev_date, 'yyyy-MM-dd HH:mm:ss')}]]
-								</td>
-								<td>
-									<button type="button" name="btn_review_reply" class="btn btn-outline-primary" th:data-rev_code="${reviewDTO.rev_code}">답변하기</button>
-								</td>
-							</tr>
-							
-						  </tbody>
-						</table>
-					</form>
-					<!-- 주문목록의 모든 검색정보 : 페이지번호 클릭할 때, 현재 목록상태를 작업(수정,삭제)을 하고 돌아왔을 때 유지. -->
-					<form id="criteriaForm" action="/admin/order/order_list" method="get">
-						
-
-						
-					</form>
-				</div>
-				</div>	 
+		<div class="container-fluid mt-4">
+			<!-- 페이지 헤더 -->
+			<div class="page-header">
+				<h3>
+					<i class="bi bi-star-fill"></i>
+					상품후기 관리
+				</h3>
+				<p style="margin: 0.5rem 0 0 0; opacity: 0.9;">고객 리뷰를 확인하고 답변을 관리하세요</p>
 			</div>
 
-					<!-- 페이징출력위치 -->
-				 </div>
+			<!-- 검색 카드 -->
+			<div class="search-card">
+				<form id="searchForm" action="/admin/review/review_list" method="get">
+					<div class="row g-3">
+						<div class="col-md-6">
+							<label class="search-label">검색 조건</label>
+							<div class="row g-2">
+								<div class="col-5">
+									<select name="searchType" class="form-select">
+										<option value="" th:selected="${''} == ${pageMaker.cri.searchType}">전체</option>
+										<option value="n" th:selected="${'n'} == ${pageMaker.cri.searchType}">상품명</option>
+										<option value="c" th:selected="${'c'} == ${pageMaker.cri.searchType}">상품코드</option>
+										<option value="i" th:selected="${'i'} == ${pageMaker.cri.searchType}">작성자ID</option>
+									</select>
+								</div>
+								<div class="col-7">
+									<input type="text" name="keyword" class="form-control" th:value="${pageMaker.cri.keyword}" placeholder="검색어를 입력하세요">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<label class="search-label">평점 및 내용</label>
+							<div class="row g-2">
+								<div class="col-5">
+									<select class="form-select" name="rev_rate">
+										<option value="" th:selected="${rev_rate == ''}">전체평점</option>
+										<option value="5" th:selected="${rev_rate == '5'}">⭐ 5점</option>
+										<option value="4" th:selected="${rev_rate == '4'}">⭐ 4점</option>
+										<option value="3" th:selected="${rev_rate == '3'}">⭐ 3점</option>
+										<option value="2" th:selected="${rev_rate == '2'}">⭐ 2점</option>
+										<option value="1" th:selected="${rev_rate == '1'}">⭐ 1점</option>
+									</select>
+								</div>
+								<div class="col-7">
+									<input type="text" name="rev_content" class="form-control" th:value="${rev_content}" placeholder="리뷰 내용 검색">
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row mt-3">
+						<div class="col text-center">
+							<button type="submit" class="btn btn-primary action-btn">
+								<i class="bi bi-search"></i>
+								검색
+							</button>
+							<button type="button" class="btn btn-outline-primary action-btn" id="btn_search_init">
+								<i class="bi bi-arrow-clockwise"></i>
+								초기화
+							</button>
+						</div>
+					</div>
+				</form>
+			</div>
+
+			<!-- 테이블 컨테이너 -->
+			<div class="table-container">
+				<table class="table">
+					<thead>
+						<tr>
+							<th style="width: 8%;">번호</th>
+							<th style="width: 10%;">답변상태</th>
+							<th style="width: 25%;">상품정보</th>
+							<th style="width: 30%;">평점 / 내용</th>
+							<th style="width: 10%;">작성자</th>
+							<th style="width: 10%;">작성일</th>
+							<th style="width: 7%;">관리</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="reviewDTO : ${review_list}">
+							<td>
+								<strong>[[${reviewDTO.rev_code}]]</strong>
+							</td>
+							<td>
+								<span class="badge-status badge-completed" th:if="${#lists.size(reviewDTO.replies) > 0}">
+									<i class="bi bi-check-circle-fill"></i> 완료
+								</span>
+								<span class="badge-status badge-pending" th:unless="${#lists.size(reviewDTO.replies) > 0}">
+									<i class="bi bi-clock-fill"></i> 대기
+								</span>
+							</td>
+							<td>
+								<div class="product-info">
+									<img class="product-img" th:src="|/admin/review/image_display?dateFolderName=${reviewDTO.product.item_up_folder}&fileName=s_${reviewDTO.product.item_img}|" alt="상품이미지">
+									<div class="product-details">
+										<div class="product-code">[[${reviewDTO.item_num}]]</div>
+										<div class="product-name">[[${reviewDTO.product.item_name}]]</div>
+									</div>
+								</div>
+							</td>
+							<td>
+								<div class="rating-display">
+									<span class="star star-rating">[[${reviewDTO.rev_rate}]]</span>
+								</div>
+								<div class="review-content">[[${reviewDTO.rev_content}]]</div>
+								
+								<div class="reply-box" th:each="review_reply_dto : ${reviewDTO.replies}">
+									<div class="reply-header">
+										<span class="reply-author"><i class="bi bi-shield-check"></i> 관리자</span>
+										<span class="reply-date" th:text="${#temporals.format(review_reply_dto.reply_date, 'yyyy-MM-dd HH:mm:ss')}"></span>
+									</div>
+									<div class="reply-text">
+										<span class="reply_text_info" th:text="${review_reply_dto.reply_text}"></span>
+									</div>
+									<div class="reply-actions">
+										<button type="button" class="btn btn-outline-success btn-sm action-btn" name="btn_reply_edit" th:data-reply_id="${review_reply_dto.reply_id}" th:data-rev_code="${reviewDTO.rev_code}">
+											<i class="bi bi-pencil"></i> 수정
+										</button>
+										<button type="button" class="btn btn-outline-danger btn-sm action-btn" name="btn_reply_del" th:data-reply_id="${review_reply_dto.reply_id}">
+											<i class="bi bi-trash"></i> 삭제
+										</button>
+									</div>
+								</div>
+							</td>
+							<td>
+								<div class="user-info">
+									<div class="user-icon">
+										<i class="bi bi-person-fill"></i>
+									</div>
+									<span>[[${reviewDTO.mb_id}]]</span>
+								</div>
+							</td>
+							<td>
+								<div class="date-display">
+									<i class="bi bi-calendar3"></i>
+									[[${#temporals.format(reviewDTO.rev_date, 'yyyy-MM-dd')}]]<br>
+									<small>[[${#temporals.format(reviewDTO.rev_date, 'HH:mm:ss')}]]</small>
+								</div>
+							</td>
+							<td>
+								<button type="button" name="btn_review_reply" class="btn btn-primary btn-sm action-btn" th:data-rev_code="${reviewDTO.rev_code}">
+									<i class="bi bi-chat-dots"></i> 답변
+								</button>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<form id="criteriaForm" action="/admin/order/order_list" method="get"></form>
+		</div>
+
+		<!-- 모달 -->
+		<div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="reviewModalLabel">
+							<i class="bi bi-star-fill"></i> 상품 리뷰 상세보기 
+							<span id="review_reviewcode"></span>
+						</h5>
+						<button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-md-4 text-center">
+								<img alt="상품이미지" class="modal-product-img" id="review_product_img">
+							</div>
+
+							<div class="col-md-8">
+								<h6 class="fw-bold mb-3">
+									<i class="bi bi-box-seam"></i> 상품명: 
+									<span id="product-name">샘플 상품명</span>
+								</h6>
+
+								<div class="mb-3">
+									<span class="fw-bold"><i class="bi bi-star-fill" style="color: #F59E0B;"></i> 평점:</span>
+									<div id="product_rating" class="rating-display mt-2">
+										<span class="star2 star-rating"></span>
+										(<span id="review_rev_rate"></span>/5)
+									</div>
+								</div>
+
+								<div class="mb-3">
+									<label class="fw-bold d-block"><i class="bi bi-chat-left-text"></i> 리뷰 내용</label>
+									<div id="review-content" class="border rounded p-3 bg-light" style="line-height: 1.6;">
+										상품이 정말 마음에 듭니다. 배송도 빠르고 품질도 좋아요!
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<hr>
+
+						<div class="mb-3">
+							<label for="admin_reply" class="fw-bold">
+								<i class="bi bi-shield-check"></i> 관리자 답변
+							</label>
+							<textarea id="admin_reply" class="form-control mt-2" rows="4" placeholder="고객에게 전달할 답변을 입력하세요..."></textarea>
+						</div>
+					</div>
+
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary action-btn" data-bs-dismiss="modal">
+							<i class="bi bi-x-circle"></i> 닫기
+						</button>
+						<button type="button" class="btn btn-primary action-btn" id="btn_review_reply">
+							<i class="bi bi-send"></i> 답변 등록
+						</button>
+						<button type="button" class="btn btn-primary action-btn" id="btn_review_reply_edit" style="display:none;">
+							<i class="bi bi-pencil-square"></i> 답변 수정
+						</button>
+					</div>
+				</div>
 			</div>
 		</div>
-	  </div>
-	  <!--모달 답변한기 -->
-<div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      
-      <!-- 헤더 -->
-      <div class="modal-header">
-        <h5 class="modal-title" id="reviewModalLabel">상품 리뷰 상세보기 <span id="review_reviewcode"></span></h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
 
-      <!-- 바디 -->
-      <div class="modal-body">
-        <div class="row">
-          <!-- 상품 이미지 -->
-          <div class="col-md-4 text-center">
-			<img alt="상품이마지" style="width: 100px; height: 100px;" id="review_product_img">
-          </div>
-
-          <!-- 상품 정보 및 리뷰 -->
-          <div class="col-md-8">
-            <!-- 상품명 -->
-            <h6 class="fw-bold mb-2">상품명: <span id="product-name">샘플 상품명</span></h6>
-
-            <!-- 평점 -->
-            <div class="mb-3">
-              <span class="fw-bold">평점:</span>
-			  
-              <div id="product_rating" class="text-warning fs-5">
-				<span class="star2" style="color: red;font-size: large;"></span>
-				(<span id="review_rev_rate"></span>/5)
-			 </div>
-              
-            </div>
-
-            <!-- 리뷰 내용 -->
-            <div class="mb-3">
-              <label class="fw-bold d-block">리뷰 내용</label>
-              <p id="review-content" class="border rounded p-2 bg-light">
-                상품이 정말 마음에 듭니다. 배송도 빠르고 품질도 좋아요!
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <hr>
-
-        <!-- 관리자 답변 -->
-        <div class="mb-3">
-          <label for="adminReply" class="fw-bold">관리자 답변</label>
-          <textarea id="admin_reply" class="form-control" rows="3" placeholder="관리자 답변을 입력하세요."></textarea>
-        </div>
-      </div>
-
-      <!-- 푸터 -->
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-        <button type="button" class="btn btn-primary" id="btn_review_reply">답변 등록</button>
-		<button type="button" class="btn btn-primary" id="btn_review_reply_edit" style="display:none;">답변 수정</button>
-      </div>
-
-    </div>
-  </div>
-</div>
-	<script>
-			const myModal = new bootstrap.Modal('#reviewModal',{
-				keyboard:false
+		<script>
+			const myModal = new bootstrap.Modal('#reviewModal', {
+				keyboard: false
 			});
+
 			$(document).ready(function(){
-				//상품후기 답변하기 버튼 클릭이벤트 설정 name="btn_review_reply"
-				$("button[name='btn_review_reply']").on("click",function(){
+				$("button[name='btn_review_reply']").on("click", function(){
 					$("button#btn_review_reply_edit").hide();
 					$("button#btn_review_reply").show();
 					let rev_code = $(this).data("rev_code");
 					$.ajax({
-						url:'/admin/review/review_info/'+rev_code,
+						url: '/admin/review/review_info/' + rev_code,
 						type: 'get',
 						dataType: 'json',
-						success:function(result){
-							console.log("상품후기정보",result);
-									// 이전상태 초기화
+						success: function(result){
+							console.log("상품후기정보", result);
 							$("#review_product_img").attr("src", "");
 							$("#product-name").html("");
 							$("#review-content").html("");
 							$("#review_reviewcode").html("");
-							$("div#product-rating span").html("");
+							$("div#product_rating span").html("");
 							$("#review_rev_rate").html("");
-							$("#admin_reply").html("");
+							$("#admin_reply").val("");
 
 							let url = `/admin/review/image_display?dateFolderName=${result.item_up_folder}&fileName=s_${result.item_img}`;
-							$("#review_product_img").attr("src",url);
+							$("#review_product_img").attr("src", url);
 							$("#product-name").html(result.item_name);
 							$("#review-content").html(result.rev_content);
 							$("#review_reviewcode").html(result.rev_code);
 							$("#product_rating span").html(result.rev_rate);
 							$("#review_rev_rate").html(result.rev_rate);
-							$("button#btn_review_reply").attr("data-rev_code",result.rev_code);
+							$("button#btn_review_reply").attr("data-rev_code", result.rev_code);
 							displayStar2();
-						
 						},
-						error:function(){
-
+						error: function(){
+							alert("정보를 불러오는데 실패했습니다.");
 						}
 					});
 					myModal.show();
 				});
-				//id="btn_review_reply"
-				$("button#btn_review_reply").on("click",function(){
+
+				$("button#btn_review_reply").on("click", function(){
 					let rev_code = $(this).data("rev_code");
 					let admin_reply = $("#admin_reply").val();
+					if(!admin_reply.trim()) {
+						alert("답변 내용을 입력해주세요.");
+						return;
+					}
 					$.ajax({
-							url:'/admin/review/reply_insert',
-							type: 'post',
-							headers: {
-								"Content-Type" : "application/json"},
-							data:JSON.stringify({rev_code:rev_code,reply_text:admin_reply}) ,
-							dataType: 'text',
-							success:function(result){
-								if(result == "success"){
-									alert("답변달기 등록됨");
-									location.href = "/admin/review/review_list";
-								}
-							},
-							error:function(){
-
+						url: '/admin/review/reply_insert',
+						type: 'post',
+						headers: {"Content-Type": "application/json"},
+						data: JSON.stringify({rev_code: rev_code, reply_text: admin_reply}),
+						dataType: 'text',
+						success: function(result){
+							if(result == "success"){
+								alert("답변이 등록되었습니다.");
+								location.href = "/admin/review/review_list";
 							}
-					});			
+						},
+						error: function(){
+							alert("답변 등록에 실패했습니다.");
+						}
+					});
 				});
 
-				//답변수정 	
-				$("button[name='btn_reply_edit']").on("click",function(){
-					// 상품후기내용 불러오기.
-					let rev_code = $(this).data("rev_code"); // 상품후기 pk
-					let reply_id = $(this).data("reply_id"); // 상품후기 답변 pk
+				$("button[name='btn_reply_edit']").on("click", function(){
+					let rev_code = $(this).data("rev_code");
+					let reply_id = $(this).data("reply_id");
 					$("button#btn_review_reply_edit").attr("data-reply_id", reply_id);
 					$.ajax({
 						url: '/admin/review/review_info/' + rev_code,
 						type: 'get',
 						dataType: 'json',
-						success: function(result) {
+						success: function(result){
 							console.log("상품후기정보", result);
-
 							let url = `/admin/review/image_display?dateFolderName=${result.item_up_folder}&fileName=s_${result.item_img}`;
 							$("#review_product_img").attr("src", url);
-
-							// id="product-name"
 							$("#product-name").html(result.item_name);
-
-							// id="review-content"
 							$("#review-content").html(result.rev_content);
-
-							// id="review_reviewcode"
 							$("#review_reviewcode").html(result.rev_code);
-							
-							// id="product-rating"
 							$("div#product_rating span").html(result.rev_rate);
-
-							// id="review_rev_rate"
 							$("#review_rev_rate").html(result.rev_rate);
-
-							// 답변 버튼에 상품후기코드를 data-rev_code="상품후기코드"
 							$("button#btn_review_reply").attr("data-rev_code", result.rev_code);
-							
-
-							displayStar2();   // 숫자를 별평점으로 변환.
-
-
-
+							displayStar2();
 						},
-						error : function() {
-
+						error: function(){
+							alert("정보를 불러오는데 실패했습니다.");
 						}
 					});
 					$("button#btn_review_reply_edit").show();
 					$("button#btn_review_reply").hide();
-
-					let reply_txt = $(this).closest("div.review_reply_info").find("span.reply_text_info").html();
-					$("#admin_reply").html(reply_txt);
+					let reply_txt = $(this).closest("div.reply-box").find("span.reply_text_info").html();
+					$("#admin_reply").val(reply_txt);
 					myModal.show();
 				});
-						// 답변수정하기.   id="btn_review_reply_edit"
-				$("button#btn_review_reply_edit").on("click", function() {
 
+				$("button#btn_review_reply_edit").on("click", function(){
 					let reply_id = $(this).data("reply_id");
-					let admin_reply = $("#admin_reply").val(); // 관리자 답변내용
-
-					//console.log("관리자답변", admin_reply);
-
-					//return;
-
+					let admin_reply = $("#admin_reply").val();
+					if(!admin_reply.trim()) {
+						alert("답변 내용을 입력해주세요.");
+						return;
+					}
 					$.ajax({
 						url: '/admin/review/reply_modify',
 						type: 'post',
-						data: {reply_id : reply_id, reply_text : admin_reply},
-						dataType : 'text',
-						success : function(result) {
-							if(result == "success") {
-								alert("답변글이 수정됨");
+						data: {reply_id: reply_id, reply_text: admin_reply},
+						dataType: 'text',
+						success: function(result){
+							if(result == "success"){
+								alert("답변이 수정되었습니다.");
 								location.href = "/admin/review/review_list";
 							}
 						},
-						error : function() {
-
+						error: function(){
+							alert("답변 수정에 실패했습니다.");
 						}
-
 					});
 				});
-				//답글삭제 
-				$("button[name='btn_reply_del']").on("click",function(){
+
+				$("button[name='btn_reply_del']").on("click", function(){
 					let reply_id = $(this).data("reply_id");
-					if(!confirm(reply_id + " 번 답변글을 삭제하시겠습니까?")) return;
-
-						$.ajax({
-							url: '/admin/review/reply_delete/' + reply_id,
-							type: 'delete',
-							headers: {
-									"Content-Type" : "application/json", "X-HTTP-Method-Override" : "DELETE"
-								},
-							dataType: 'text',
-							success : function(result) {
-								if(result == "success") {
-									alert("답변글이 삭제됨");
-									location.href = "/admin/review/review_list";
-								}
-
-							},
-							error : function(xhr, status, error) {
-								console.error(error);
-								alert("에러가 발생됨");
+					if(!confirm(reply_id + "번 답변글을 삭제하시겠습니까?")){
+						return;
+					}
+					$.ajax({
+						url: '/admin/review/reply_delete/' + reply_id,
+						type: 'delete',
+						headers: {"Content-Type": "application/json", "X-HTTP-Method-Override": "DELETE"},
+						dataType: 'text',
+						success: function(result){
+							if(result == "success"){
+								alert("답변이 삭제되었습니다.");
+								location.href = "/admin/review/review_list";
 							}
-						});
+						},
+						error: function(xhr, status, error){
+							console.error(error);
+							alert("삭제에 실패했습니다.");
+						}
+					});
+				});
+
+				$("#btn_search_init").on("click", function(){
+					location.href = "/admin/review/review_list";
 				});
 			});
-
-
-	</script>
-	
-	
+		</script>
 	</th:block>
 	
-	
 	<th:block layout:fragment="script2">
-
 		<script>
 			displayStar();
 
-			// 평점을 별로 출력하는 함수.
-			function displayStar() {
+			function displayStar(){
 				const spanStars = document.querySelectorAll("span.star");
-
 				const totalStars = 5;
-
-				spanStars.forEach( span => {
-					const rev_rate = parseInt(span.textContent, 10); // 평점을 정수형으로 변환
-					if(!isNaN(rev_rate) && rev_rate > 0 && rev_rate <= totalStars) {
+				spanStars.forEach(span => {
+					const rev_rate = parseInt(span.textContent, 10);
+					if(!isNaN(rev_rate) && rev_rate > 0 && rev_rate <= totalStars){
 						span.textContent = "★".repeat(rev_rate) + "☆".repeat(totalStars - rev_rate);
-					}else {
-						span.textContent = "Invalid number";
+					}else{
+						span.textContent = "평점 없음";
 					}
 				});
 			}
-			// 답변 평점을 별로 출력하는 함수.
-			function displayStar2() {
+
+			function displayStar2(){
 				const spanStars = document.querySelectorAll("span.star2");
-
 				const totalStars = 5;
-
-				spanStars.forEach( span => {
-					const rev_rate = parseInt(span.textContent, 10); // 평점을 정수형으로 변환
-					if(!isNaN(rev_rate) && rev_rate > 0 && rev_rate <= totalStars) {
+				spanStars.forEach(span => {
+					const rev_rate = parseInt(span.textContent, 10);
+					if(!isNaN(rev_rate) && rev_rate > 0 && rev_rate <= totalStars){
 						span.textContent = "★".repeat(rev_rate) + "☆".repeat(totalStars - rev_rate);
-					}else {
-						span.textContent = "Invalid number";
+					}else{
+						span.textContent = "평점 없음";
 					}
 				});
 			}
 		</script>
-	
 	</th:block>
 
 </html>
-

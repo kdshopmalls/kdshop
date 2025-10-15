@@ -2,11 +2,10 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{admin/layouts/ad_layout}">
   <th:block layout:fragment="script1">
     <script>
-      // 날짜 설정 함수
       function setDateRange(range) {
-        const today = new Date(); // 날짜객체.
-        const startInput = document.getElementById("start_date"); // 시작날짜 태그를 참조
-        const endInput = document.getElementById("end_date"); // 종료날짜 태그를 참조
+        const today = new Date();
+        const startInput = document.getElementById("start_date");
+        const endInput = document.getElementById("end_date");
 
         let startDate, endDate;
 
@@ -43,12 +42,10 @@
             return;
         }
 
-        // 포맷팅하여 input에 값 설정
         startInput.value = startDate ? formatDate(startDate) : "";
         endInput.value = endDate ? formatDate(endDate) : "";
       }
 
-      // 날짜를 yyyy-MM-dd 형식으로 포맷
       function formatDate(date) {
         const year = date.getFullYear();
         const month = String(date.getMonth() + 1).padStart(2, "0");
@@ -57,7 +54,6 @@
       }
 
       function initializeSearchForm() {
-        // Get form elements by their IDs or names
         const searchType = document.querySelector('select[name="searchType"]');
         const keyword = document.querySelector('input[name="keyword"]');
         const period = document.querySelector('select[name="period"]');
@@ -65,17 +61,14 @@
         const endDate = document.getElementById("end_date");
         const paymentMethodRadios = document.querySelectorAll('input[name="pay_method"]');
         const orderStatusRadios = document.querySelectorAll('input[name="or_status"]');
+        const payStatusRadios = document.querySelectorAll('input[name="pay_status"]');
 
-        // Reset dropdowns to the default options
-        if (searchType) searchType.value = ""; // Default to "검색종류 선택"
-        if (period) period.value = "or_regdate"; // Default to "주문일"
-
-        // Clear text input fields
+        if (searchType) searchType.value = "";
+        if (period) period.value = "or_regdate";
         if (keyword) keyword.value = "";
         if (startDate) startDate.value = "";
         if (endDate) endDate.value = "";
 
-        // Reset radio buttons to default (first radio button is checked)
         if (paymentMethodRadios.length > 0) {
           paymentMethodRadios.forEach((radio, index) => {
             radio.checked = index === 0;
@@ -88,273 +81,642 @@
           });
         }
 
-        console.log("Search form initialized.");
+        if (payStatusRadios.length > 0) {
+          payStatusRadios.forEach((radio, index) => {
+            radio.checked = index === 0;
+          });
+        }
       }
     </script>
+    <style>
+      :root {
+        --primary-color: #4f46e5;
+        --primary-hover: #4338ca;
+        --success-color: #10b981;
+        --warning-color: #f59e0b;
+        --danger-color: #ef4444;
+        --gray-50: #f9fafb;
+        --gray-100: #f3f4f6;
+        --gray-200: #e5e7eb;
+        --gray-300: #d1d5db;
+        --gray-600: #4b5563;
+        --gray-700: #374151;
+        --gray-800: #1f2937;
+      }
+
+      .modern-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 24px;
+      }
+
+      .page-header {
+        background: linear-gradient(135deg, var(--primary-color) 0%, #6366f1 100%);
+        color: white;
+        padding: 32px;
+        border-radius: 16px;
+        margin-bottom: 32px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      }
+
+      .page-header h1 {
+        font-size: 28px;
+        font-weight: 700;
+        margin: 0 0 8px 0;
+      }
+
+      .page-header p {
+        opacity: 0.9;
+        margin: 0;
+      }
+
+      .search-card {
+        background: white;
+        border-radius: 16px;
+        padding: 32px;
+        margin-bottom: 24px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        border: 1px solid var(--gray-200);
+      }
+
+      .search-section {
+        margin-bottom: 24px;
+      }
+
+      .search-section:last-child {
+        margin-bottom: 0;
+      }
+
+      .search-label {
+        font-weight: 600;
+        color: var(--gray-700);
+        margin-bottom: 12px;
+        display: block;
+        font-size: 14px;
+      }
+
+      .form-control,
+      .form-select {
+        border: 2px solid var(--gray-200);
+        border-radius: 8px;
+        padding: 10px 14px;
+        font-size: 14px;
+        transition: all 0.2s;
+      }
+
+      .form-control:focus,
+      .form-select:focus {
+        border-color: var(--primary-color);
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+      }
+
+      .date-input-group {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .date-input-group input[type="date"] {
+        flex: 1;
+        border: 2px solid var(--gray-200);
+        border-radius: 8px;
+        padding: 10px 14px;
+        font-size: 14px;
+      }
+
+      .date-input-group span {
+        color: var(--gray-600);
+        font-weight: 500;
+      }
+
+      .btn-date-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 12px;
+      }
+
+      .btn-date {
+        padding: 8px 16px;
+        border: 2px solid var(--gray-200);
+        background: white;
+        color: var(--gray-700);
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .btn-date:hover {
+        border-color: var(--primary-color);
+        color: var(--primary-color);
+        background: #eef2ff;
+      }
+
+      .radio-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+      }
+
+      .radio-item {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+      }
+
+      .radio-item input[type="radio"] {
+        width: 18px;
+        height: 18px;
+        margin-right: 8px;
+        cursor: pointer;
+        accent-color: var(--primary-color);
+      }
+
+      .radio-item label {
+        cursor: pointer;
+        color: var(--gray-700);
+        font-size: 14px;
+        margin: 0;
+      }
+
+      .search-actions {
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+        margin-top: 32px;
+        padding-top: 24px;
+        border-top: 1px solid var(--gray-200);
+      }
+
+      .btn-primary-modern {
+        padding: 12px 32px;
+        background: var(--primary-color);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 14px;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .btn-primary-modern:hover {
+        background: var(--primary-hover);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      }
+
+      .btn-secondary-modern {
+        padding: 12px 32px;
+        background: white;
+        color: var(--gray-700);
+        border: 2px solid var(--gray-300);
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 14px;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .btn-secondary-modern:hover {
+        background: var(--gray-50);
+        border-color: var(--gray-400);
+      }
+
+      .table-card {
+        background: white;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        border: 1px solid var(--gray-200);
+      }
+
+      .table-modern {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      .table-modern thead {
+        background: var(--gray-50);
+      }
+
+      .table-modern th {
+        padding: 16px;
+        text-align: left;
+        font-weight: 600;
+        color: var(--gray-700);
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        border-bottom: 2px solid var(--gray-200);
+      }
+
+      .table-modern td {
+        padding: 16px;
+        border-bottom: 1px solid var(--gray-200);
+        color: var(--gray-700);
+        font-size: 14px;
+      }
+
+      .table-modern tbody tr {
+        transition: background 0.2s;
+      }
+
+      .table-modern tbody tr:hover {
+        background: var(--gray-50);
+      }
+
+      .order-link {
+        color: var(--primary-color);
+        font-weight: 600;
+        text-decoration: none;
+        transition: color 0.2s;
+      }
+
+      .order-link:hover {
+        color: var(--primary-hover);
+        text-decoration: underline;
+      }
+
+      .status-badge {
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-size: 12px;
+        font-weight: 600;
+        display: inline-block;
+      }
+
+      .status-pending {
+        background: #fef3c7;
+        color: #92400e;
+      }
+
+      .status-completed {
+        background: #d1fae5;
+        color: #065f46;
+      }
+
+      .status-shipping {
+        background: #dbeafe;
+        color: #1e40af;
+      }
+
+      .status-cancelled {
+        background: #fee2e2;
+        color: #991b1b;
+      }
+
+      .status-select {
+        padding: 6px 10px;
+        border: 2px solid var(--gray-200);
+        border-radius: 6px;
+        font-size: 13px;
+        margin-right: 8px;
+        transition: border-color 0.2s;
+      }
+
+      .status-select:focus {
+        border-color: var(--primary-color);
+        outline: none;
+      }
+
+      .btn-change {
+        padding: 6px 12px;
+        background: var(--primary-color);
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .btn-change:hover {
+        background: var(--primary-hover);
+      }
+
+      .btn-detail {
+        padding: 8px 16px;
+        background: white;
+        color: var(--primary-color);
+        border: 2px solid var(--primary-color);
+        border-radius: 6px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .btn-detail:hover {
+        background: var(--primary-color);
+        color: white;
+      }
+
+      .pagination-modern {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+        padding: 24px;
+      }
+
+      .page-link-modern {
+        padding: 8px 14px;
+        border: 2px solid var(--gray-200);
+        background: white;
+        color: var(--gray-700);
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 14px;
+        transition: all 0.2s;
+      }
+
+      .page-link-modern:hover {
+        border-color: var(--primary-color);
+        color: var(--primary-color);
+        background: #eef2ff;
+      }
+
+      .page-link-modern.active {
+        background: var(--primary-color);
+        color: white;
+        border-color: var(--primary-color);
+      }
+
+      .search-grid {
+        display: grid;
+        grid-template-columns: 120px 1fr;
+        gap: 24px;
+        align-items: start;
+      }
+
+      @media (max-width: 768px) {
+        .search-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .modern-container {
+          padding: 16px;
+        }
+
+        .page-header {
+          padding: 24px;
+        }
+
+        .search-card {
+          padding: 20px;
+        }
+      }
+    </style>
   </th:block>
 
   <th:block layout:fragment="content">
-    <div class="container mt-5">
-      <div class="row">
-        <div class="col">
-          <div class="card card-primary">
-            <div class="card-header">
-              <h3 class="card-title">주문 목록</h3>
-            </div>
-            <!-- /.card-header -->
-            <!-- list start -->
-            <div class="card-body">
-              <!-- search form start -->
-              <form action="/admin/order/order_list" method="get">
-                <div class="row">
-                  <div class="col-2">검색어</div>
-                  <div class="col-3">
-                    <select name="searchType" class="form-control">
-                      <option value="" th:selected="${''} == ${pageMaker.cri.searchType}">검색종류 선택</option>
-                      <option value="c" th:selected="${'c'} == ${pageMaker.cri.searchType}">주문번호</option>
-                      <option value="m" th:selected="${'m'} == ${pageMaker.cri.searchType}">회원아이디</option>
-                      <option value="o" th:selected="${'o'} == ${pageMaker.cri.searchType}">주문자명</option>
-                      <option value="p" th:selected="${'p'} == ${pageMaker.cri.searchType}">입금자명</option>
-                    </select>
-                  </div>
-                  <div class="col-7">
-                    <input type="text" name="keyword" class="form-control" th:value="${pageMaker.cri.keyword}" placeholder="검색어를 입력하세요." />
-                  </div>
-                </div>
+    <div class="modern-container">
+      <div class="page-header">
+        <h1>📦 주문 관리</h1>
+        <p>고객 주문 내역을 조회하고 관리할 수 있습니다</p>
+      </div>
 
-                <div class="row mt-3">
-                  <div class="col-2">날짜</div>
-                  <div class="col-2">
-                    <div class="form-group">
-                      <select class="form-control" name="period">
-                        <option value="or_regdate" th:selected="${'or_regdate'} == ${or_regdate}">주문일</option>
-                        <option value="pay_date" th:selected="${'pay_date'} == ${pay_date}">입금완료일</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="col-3">
-                    <input type="date" name="start_date" id="start_date" style="width: auto" th:value="${start_date}" />
-                    <input type="date" name="end_date" id="end_date" style="width: auto" th:value="${end_date}" />
-                  </div>
-                  <div class="col-5">
-                    <button type="button" class="btn btn-sm btn-outline-info" onclick="setDateRange('today')">오늘</button>
-                    <button type="button" class="btn btn-sm btn-outline-info" onclick="setDateRange('3days')">3일간</button>
-                    <button type="button" class="btn btn-sm btn-outline-info" onclick="setDateRange('week')">일주일</button>
-                    <button type="button" class="btn btn-sm btn-outline-info" onclick="setDateRange('month')">1개월</button>
-                    <button type="button" class="btn btn-sm btn-outline-info" onclick="setDateRange('3months')">3개월</button>
-                    <button type="button" class="btn btn-sm btn-outline-info" onclick="setDateRange('all')">전체</button>
-                  </div>
-                </div>
-                <div class="row mt-1">
-                  <div class="col-2">결제방법</div>
-                  <div class="col-10">
-                    <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="radio" name="pay_method" value="" th:checked="${''} == ${pay_method}" />
-                      <label class="form-check-label" for="inlineRadio1">전체</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="radio" name="pay_method" value="무통장" th:checked="${'무통장'} == ${pay_method}" />
-                      <label class="form-check-label" for="inlineRadio2">무통장</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="radio" name="pay_method" value="계좌이체" th:checked="${'계좌이체'} == ${pay_method}" />
-                      <label class="form-check-label" for="inlineRadio3">계좌이체</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="radio" name="pay_method" value="신용카드" th:checked="${'신용카드'} == ${pay_method}" />
-                      <label class="form-check-label" for="inlineRadio1">신용카드</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="radio" name="pay_method" value="kakaopay" th:checked="${'kakaopay'} == ${pay_method}" />
-                      <label class="form-check-label" for="inlineRadio2">카카오페이</label>
-                    </div>
+      <div class="search-card">
+        <form action="/admin/order/order_list" method="get">
+          <div class="search-section">
+            <div class="search-grid">
+              <label class="search-label">🔍 검색어</label>
+              <div style="display: flex; gap: 12px">
+                <select name="searchType" class="form-select" style="flex: 0 0 180px">
+                  <option value="" th:selected="${''} == ${pageMaker.cri.searchType}">검색 종류 선택</option>
+                  <option value="c" th:selected="${'c'} == ${pageMaker.cri.searchType}">주문번호</option>
+                  <option value="m" th:selected="${'m'} == ${pageMaker.cri.searchType}">회원아이디</option>
+                  <option value="o" th:selected="${'o'} == ${pageMaker.cri.searchType}">주문자명</option>
+                  <option value="p" th:selected="${'p'} == ${pageMaker.cri.searchType}">입금자명</option>
+                </select>
+                <input type="text" name="keyword" class="form-control" th:value="${pageMaker.cri.keyword}" placeholder="검색어를 입력하세요" style="flex: 1" />
+              </div>
+            </div>
+          </div>
+
+          <div class="search-section">
+            <div class="search-grid">
+              <label class="search-label">📅 조회기간</label>
+              <div>
+                <div style="display: flex; gap: 12px; align-items: center; margin-bottom: 12px">
+                  <select class="form-select" name="period" style="flex: 0 0 150px">
+                    <option value="or_regdate" th:selected="${'or_regdate'} == ${or_regdate}">주문일</option>
+                    <option value="pay_date" th:selected="${'pay_date'} == ${pay_date}">입금완료일</option>
+                  </select>
+                  <div class="date-input-group" style="flex: 1">
+                    <input type="date" name="start_date" id="start_date" th:value="${start_date}" />
+                    <span>~</span>
+                    <input type="date" name="end_date" id="end_date" th:value="${end_date}" />
                   </div>
                 </div>
-                <div class="row mt-3">
-                  <div class="col-2">주문상태</div>
-                  <div class="col-10">
-                    <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="radio" name="or_status" value="" checked th:checked="${''} == ${or_status}" />
-                      <label class="form-check-label" for="inlineRadio1">전체</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="radio" name="or_status" value="입금대기" th:checked="${'입금대기'} == ${or_status}" />
-                      <label class="form-check-label" for="inlineRadio2">입금대기</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="radio" name="or_status" value="입금완료" th:checked="${'입금완료'} == ${or_status}" />
-                      <label class="form-check-label" for="inlineRadio3">입금완료</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="radio" name="or_status" value="배송준비" th:checked="${'배송준비'} == ${or_status}" />
-                      <label class="form-check-label" for="inlineRadio1">배송준비</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="radio" name="or_status" value="배송중" th:checked="${'배송중'} == ${or_status}" />
-                      <label class="form-check-label" for="inlineRadio2">배송중</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="radio" name="or_status" value="배송완료" th:checked="${'배송완료'} == ${or_status}" />
-                      <label class="form-check-label" for="inlineRadio1">배송완료</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="radio" name="or_status" value="취소" th:checked="${'취소'} == ${or_status}" />
-                      <label class="form-check-label" for="inlineRadio2">취소</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="radio" name="or_status" value="환불" th:checked="${'환불'} == ${or_status}" />
-                      <label class="form-check-label" for="inlineRadio3">환불</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="radio" name="or_status" value="환불" th:checked="${'환불'} == ${or_status}" />
-                      <label class="form-check-label" for="inlineRadio1">반품</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="radio" name="or_status" value="교환" th:checked="${'교환'} == ${or_status}" />
-                      <label class="form-check-label" for="inlineRadio2">교환</label>
-                    </div>
-                  </div>
-                </div>
-                <div class="row mt-3">
-                  <div class="col-2">결제상태</div>
-                  <div class="col-10">
-                    <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="radio" name="pay_status" value="" checked th:checked="${''} == ${pay_status}" />
-                      <label class="form-check-label" for="inlineRadio1">전체</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="radio" name="pay_status" value="입금미납" th:checked="${'입금미납'} == ${pay_status}" />
-                      <label class="form-check-label" for="inlineRadio2">입금미납</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="radio" name="pay_status" value="입금완료" th:checked="${'입금완료'} == ${pay_status}" />
-                      <label class="form-check-label" for="inlineRadio3">입금완료</label>
-                    </div>
-                  </div>
-                </div>
-                <div class="row mt-3">
-                  <div class="col text-center">
-                    <button type="submit" class="btn btn-primary">검색</button>
-                    <button type="button" class="btn btn-outline-primary" id="btn_search_init">초기화</button>
-                  </div>
-                </div>
-              </form>
-              <div class="row mt-4">
-                <div class="col">
-                  <form name="frm_pro_list" id="frm_pro_list" method="post" action="/admin/product/pro_sel_delete_2">
-                    <table class="table table-bordered">
-                      <thead>
-                        <tr>
-                          <th style="width: 10%">주문날짜</th>
-                          <th style="width: 10%">주문번호</th>
-                          <th style="width: 40%">주문자</th>
-                          <th style="width: 10%">주문금액</th>
-                          <th style="width: 10%">결제방법</th>
-                          <th style="width: 10%">결제상태</th>
-                          <th style="width: 10%">주문상태</th>
-                          <th style="width: 10%">관리</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr th:each="order_info:${order_list}">
-                          <td>
-                            <!-- vo,dto 를 결과로 사용할 때는 dates, map으로 결과를 사용 할때는  temporals -->
-                            [[${#temporals.format(order_info.or_regdate, 'yyyy-MM-dd')}]]
-                          </td>
-                          <td>
-                            <a th:href="@{/admin/order/orderdetail_info(or_code=${order_info.or_code})}">[[${order_info.or_code}]]</a>
-                          </td>
-                          <td>[[${order_info.or_name}]]</td>
-                          <td>[[${#numbers.formatInteger(order_info.or_price, 3, 'COMMA') + '원'}]]</td>
-                          <td>[[${order_info.pay_method}]]</td>
-                          <td>
-                            [[${order_info.pay_status}]]
-                            <!--/*
-								<select name="pay_status">
-									<option th:selected= "${order_info.pay_status == '미결제'}">미결제</option>
-									<option th:selected= "${order_info.pay_status == '입금완료'}">입금완료</option>									
-								</select>
-								<button type="button" name="btn_pay_status_change" th:data-payment_id="${order_info.pay_id}">변경</button>
-							*/-->
-                          </td>
-                          <td>
-                            <select name="or_status">
-                              <option th:selected="${order_info.or_status == '입금대기'}">입금대기</option>
-                              <option th:selected="${order_info.or_status == '입금완료'}">입금완료</option>
-                              <option th:selected="${order_info.or_status == '배송준비'}">배송준비</option>
-                              <option th:selected="${order_info.or_status == '배송중'}">배송중</option>
-                              <option th:selected="${order_info.or_status == '배송완료'}">배송완료</option>
-                              <option th:selected="${order_info.or_status == '주문취소'}">주문취소</option>
-                            </select>
-                            <button type="button" name="btn_or_status_change" th:data-or_code="${order_info.or_code}">변경</button>
-                          </td>
-                          <td>
-                            <button type="button" class="btn btn-block btn-sm btn-outline-primary" th:data-or_code="${order_info.or_code}" name="btn_or_detail">상세보기</button>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </form>
-                  <!-- 페이징및검색 파라미터 정보 : 현재 목록상태를 작업(수정,삭제)을 하고 돌아왔을 때 유지. -->
-                  <form id="criteriaForm" action="/admin/order/order_list" method="get">
-                    <!-- 4개은 페이징,검색파라미터 -->
-                    <input type="hidden" name="page" th:value="${cri.page}" />
-                    <input type="hidden" name="perPageNum" th:value="${cri.perPageNum}" />
-                    <input type="hidden" name="searchType" th:value="${cri.searchType}" />
-                    <input type="hidden" name="keyword" th:value="${cri.keyword}" />
-                    <!--날짜검사-->
-                    <input type="hidden" name="period" th:value="${period}" />
-                    <input type="hidden" name="start_date" th:value="${start_date}" />
-                    <input type="hidden" name="end_date" th:value="${end_date}" />
-                    <!--결제방법파라미터-->
-                    <input type="hidden" name="pay_method" th:value="${pay_method}" />
-                    <!--주문상태-->
-                    <input type="hidden" name="or_status" th:value="${or_status}" />
-                    <!--결제상태-->
-                    <input type="hidden" name="pay_status" th:value="${pay_status}" />
-                  </form>
+                <div class="btn-date-group">
+                  <button type="button" class="btn-date" onclick="setDateRange('today')">오늘</button>
+                  <button type="button" class="btn-date" onclick="setDateRange('3days')">3일간</button>
+                  <button type="button" class="btn-date" onclick="setDateRange('week')">1주일</button>
+                  <button type="button" class="btn-date" onclick="setDateRange('month')">1개월</button>
+                  <button type="button" class="btn-date" onclick="setDateRange('3months')">3개월</button>
+                  <button type="button" class="btn-date" onclick="setDateRange('all')">전체</button>
                 </div>
               </div>
             </div>
+          </div>
 
-            <div class="card-footer clearfix">
-              <nav aria-label="Page navigation example">
-                <ul class="pagination">
-                  <!-- 이전표시여부 Previous  pageMaker.getPrev() -->
-                  <th:block th:if="${pageMaker.prev}">
-                    <li class="page-item"><a class="page-link movepage" th:href="${pageMaker.startPage - 1}">Previous</a></li>
-                  </th:block>
-                  <!--  페이지번호 출력.  1  2  3  4  5 -->
-                  <th:block th:each="num : ${#numbers.sequence(pageMaker.startPage, pageMaker.endPage)}">
-                    <li class="page-item" th:classappend="${pageMaker.cri.page == num ? 'active' : ''}">
-                      <a class="page-link movepage" th:href="${num}" th:text="${num}"></a>
-                    </li>
-                  </th:block>
-
-                  <!--  다음표시여부 Next -->
-                  <th:block th:if="${pageMaker.next}">
-                    <li class="page-item"><a class="page-link movepage" th:href="${pageMaker.endPage + 1}">Next</a></li>
-                  </th:block>
-                </ul>
-              </nav>
+          <div class="search-section">
+            <div class="search-grid">
+              <label class="search-label">💳 결제방법</label>
+              <div class="radio-group">
+                <div class="radio-item">
+                  <input type="radio" id="pay_all" name="pay_method" value="" th:checked="${''} == ${pay_method}" />
+                  <label for="pay_all">전체</label>
+                </div>
+                <div class="radio-item">
+                  <input type="radio" id="pay_1" name="pay_method" value="무통장" th:checked="${'무통장'} == ${pay_method}" />
+                  <label for="pay_1">무통장</label>
+                </div>
+                <div class="radio-item">
+                  <input type="radio" id="pay_2" name="pay_method" value="계좌이체" th:checked="${'계좌이체'} == ${pay_method}" />
+                  <label for="pay_2">계좌이체</label>
+                </div>
+                <div class="radio-item">
+                  <input type="radio" id="pay_3" name="pay_method" value="신용카드" th:checked="${'신용카드'} == ${pay_method}" />
+                  <label for="pay_3">신용카드</label>
+                </div>
+                <div class="radio-item">
+                  <input type="radio" id="pay_4" name="pay_method" value="kakaopay" th:checked="${'kakaopay'} == ${pay_method}" />
+                  <label for="pay_4">카카오페이</label>
+                </div>
+              </div>
             </div>
           </div>
+
+          <div class="search-section">
+            <div class="search-grid">
+              <label class="search-label">📋 주문상태</label>
+              <div class="radio-group">
+                <div class="radio-item">
+                  <input type="radio" id="or_all" name="or_status" value="" th:checked="${''} == ${or_status}" />
+                  <label for="or_all">전체</label>
+                </div>
+                <div class="radio-item">
+                  <input type="radio" id="or_1" name="or_status" value="입금대기" th:checked="${'입금대기'} == ${or_status}" />
+                  <label for="or_1">입금대기</label>
+                </div>
+                <div class="radio-item">
+                  <input type="radio" id="or_2" name="or_status" value="입금완료" th:checked="${'입금완료'} == ${or_status}" />
+                  <label for="or_2">입금완료</label>
+                </div>
+                <div class="radio-item">
+                  <input type="radio" id="or_3" name="or_status" value="배송준비" th:checked="${'배송준비'} == ${or_status}" />
+                  <label for="or_3">배송준비</label>
+                </div>
+                <div class="radio-item">
+                  <input type="radio" id="or_4" name="or_status" value="배송중" th:checked="${'배송중'} == ${or_status}" />
+                  <label for="or_4">배송중</label>
+                </div>
+                <div class="radio-item">
+                  <input type="radio" id="or_5" name="or_status" value="배송완료" th:checked="${'배송완료'} == ${or_status}" />
+                  <label for="or_5">배송완료</label>
+                </div>
+                <div class="radio-item">
+                  <input type="radio" id="or_6" name="or_status" value="취소" th:checked="${'취소'} == ${or_status}" />
+                  <label for="or_6">취소</label>
+                </div>
+                <div class="radio-item">
+                  <input type="radio" id="or_7" name="or_status" value="환불" th:checked="${'환불'} == ${or_status}" />
+                  <label for="or_7">환불</label>
+                </div>
+                <div class="radio-item">
+                  <input type="radio" id="or_8" name="or_status" value="반품" th:checked="${'반품'} == ${or_status}" />
+                  <label for="or_8">반품</label>
+                </div>
+                <div class="radio-item">
+                  <input type="radio" id="or_9" name="or_status" value="교환" th:checked="${'교환'} == ${or_status}" />
+                  <label for="or_9">교환</label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="search-section">
+            <div class="search-grid">
+              <label class="search-label">💰 결제상태</label>
+              <div class="radio-group">
+                <div class="radio-item">
+                  <input type="radio" id="pay_st_all" name="pay_status" value="" th:checked="${''} == ${pay_status}" />
+                  <label for="pay_st_all">전체</label>
+                </div>
+                <div class="radio-item">
+                  <input type="radio" id="pay_st_1" name="pay_status" value="입금미납" th:checked="${'입금미납'} == ${pay_status}" />
+                  <label for="pay_st_1">입금미납</label>
+                </div>
+                <div class="radio-item">
+                  <input type="radio" id="pay_st_2" name="pay_status" value="입금완료" th:checked="${'입금완료'} == ${pay_status}" />
+                  <label for="pay_st_2">입금완료</label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="search-actions">
+            <button type="submit" class="btn-primary-modern">검색</button>
+            <button type="button" class="btn-secondary-modern" id="btn_search_init">초기화</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="table-card">
+        <form name="frm_pro_list" id="frm_pro_list" method="post" action="/admin/product/pro_sel_delete_2">
+          <table class="table-modern">
+            <thead>
+              <tr>
+                <th style="width: 10%">주문날짜</th>
+                <th style="width: 12%">주문번호</th>
+                <th style="width: 10%">주문자</th>
+                <th style="width: 12%">주문금액</th>
+                <th style="width: 10%">결제방법</th>
+                <th style="width: 10%">결제상태</th>
+                <th style="width: 20%">주문상태</th>
+                <th style="width: 10%">관리</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="order_info:${order_list}">
+                <td>[[${#temporals.format(order_info.or_regdate, 'yyyy-MM-dd')}]]</td>
+                <td>
+                  <a class="order-link" th:href="@{/admin/order/orderdetail_info(or_code=${order_info.or_code})}"> [[${order_info.or_code}]] </a>
+                </td>
+                <td>[[${order_info.or_name}]]</td>
+                <td style="font-weight: 600">[[${#numbers.formatInteger(order_info.or_price, 3, 'COMMA') + '원'}]]</td>
+                <td>[[${order_info.pay_method}]]</td>
+                <td>
+                  <span class="status-badge" th:classappend="${order_info.pay_status == '입금완료' ? 'status-completed' : 'status-pending'}"> [[${order_info.pay_status}]] </span>
+                </td>
+                <td>
+                  <select name="or_status" class="status-select">
+                    <option th:selected="${order_info.or_status == '입금대기'}">입금대기</option>
+                    <option th:selected="${order_info.or_status == '입금완료'}">입금완료</option>
+                    <option th:selected="${order_info.or_status == '배송준비'}">배송준비</option>
+                    <option th:selected="${order_info.or_status == '배송중'}">배송중</option>
+                    <option th:selected="${order_info.or_status == '배송완료'}">배송완료</option>
+                    <option th:selected="${order_info.or_status == '주문취소'}">주문취소</option>
+                  </select>
+                  <button type="button" class="btn-change" name="btn_or_status_change" th:data-or_code="${order_info.or_code}">변경</button>
+                </td>
+                <td>
+                  <button type="button" class="btn-detail" th:data-or_code="${order_info.or_code}" name="btn_or_detail">상세보기</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </form>
+
+        <form id="criteriaForm" action="/admin/order/order_list" method="get">
+          <input type="hidden" name="page" th:value="${cri.page}" />
+          <input type="hidden" name="perPageNum" th:value="${cri.perPageNum}" />
+          <input type="hidden" name="searchType" th:value="${cri.searchType}" />
+          <input type="hidden" name="keyword" th:value="${cri.keyword}" />
+          <input type="hidden" name="period" th:value="${period}" />
+          <input type="hidden" name="start_date" th:value="${start_date}" />
+          <input type="hidden" name="end_date" th:value="${end_date}" />
+          <input type="hidden" name="pay_method" th:value="${pay_method}" />
+          <input type="hidden" name="or_status" th:value="${or_status}" />
+          <input type="hidden" name="pay_status" th:value="${pay_status}" />
+        </form>
+
+        <div class="pagination-modern">
+          <th:block th:if="${pageMaker.prev}">
+            <a class="page-link-modern" th:href="${pageMaker.startPage - 1}">← 이전</a>
+          </th:block>
+
+          <th:block th:each="num : ${#numbers.sequence(pageMaker.startPage, pageMaker.endPage)}">
+            <a class="page-link-modern" th:classappend="${pageMaker.cri.page == num ? 'active' : ''}" th:href="${num}" th:text="${num}"></a>
+          </th:block>
+
+          <th:block th:if="${pageMaker.next}">
+            <a class="page-link-modern" th:href="${pageMaker.endPage + 1}">다음 →</a>
+          </th:block>
         </div>
       </div>
     </div>
   </th:block>
+
   <th:block layout:fragment="script2">
     <script>
       $(document).ready(function () {
         let criteriaForm = $("#criteriaForm");
-        //페이지번호 클릭 이벤트 설정
-        $("a.movepage").on("click", function (e) {
+
+        $("a.page-link-modern").on("click", function (e) {
           e.preventDefault();
           criteriaForm.find("input[name='page']").val($(this).attr("href"));
           criteriaForm.submit();
         });
 
-        //변경 버튼 클릭시
         $("button[name='btn_or_status_change']").on("click", function () {
           let or_code = $(this).data("or_code");
           let or_status = $(this).prev("select[name='or_status']").val(); // 주문상태

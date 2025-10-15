@@ -2,255 +2,556 @@
 <html xmlns:th="http://www.thymeleaf.org">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>주문 상세 정보</title>
     <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
       body {
-        font-family: Arial, sans-serif;
-        margin: 20px;
-      }
-
-      .container-fluid {
-        max-width: 1200px;
-        margin: auto;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
         padding: 20px;
-        background-color: #f9f9f9;
-        border: 1px solid #ddd;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      }
-
-      .text-center {
-        text-align: center;
-      }
-
-      h3 {
-        margin-bottom: 20px;
         color: #333;
       }
 
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-bottom: 20px;
+      .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        background: #fff;
+        border-radius: 20px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        overflow: hidden;
       }
 
-      table thead {
-        background-color: #007bff;
+      .header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 30px 40px;
         color: white;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
       }
 
-      table th,
-      table td {
-        padding: 10px;
-        text-align: center;
-        border: 1px solid #ddd;
+      .header h1 {
+        font-size: 28px;
+        font-weight: 600;
       }
 
-      table th {
-        font-weight: bold;
+      .back-btn {
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        border: 2px solid rgba(255, 255, 255, 0.5);
+        padding: 10px 24px;
+        border-radius: 25px;
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
       }
 
-      table tbody tr:nth-child(even) {
-        background-color: #f2f2f2;
+      .back-btn:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
       }
 
-      table tbody tr:hover {
-        background-color: #e9ecef;
+      .content {
+        padding: 40px;
       }
 
-      img {
-        max-width: 100px;
-        height: auto;
-        border: 1px solid #ddd;
-        border-radius: 5px;
+      .section {
+        margin-bottom: 40px;
+        background: #f8f9fa;
+        border-radius: 16px;
+        padding: 30px;
+        transition: all 0.3s ease;
       }
 
-      p {
-        font-weight: bold;
+      .section:hover {
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+        transform: translateY(-2px);
+      }
+
+      .section-title {
+        font-size: 22px;
+        font-weight: 600;
+        color: #667eea;
+        margin-bottom: 25px;
+        padding-bottom: 15px;
+        border-bottom: 3px solid #667eea;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .section-title::before {
+        content: "";
+        width: 8px;
+        height: 8px;
+        background: #667eea;
+        border-radius: 50%;
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 0.5;
+          transform: scale(1.2);
+        }
+      }
+
+      /* 주문 내역 - 카드 레이아웃 */
+      .order-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 20px;
+      }
+
+      .order-card {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .order-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 4px;
+        height: 100%;
+        background: linear-gradient(to bottom, #667eea, #764ba2);
+      }
+
+      .order-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.2);
+      }
+
+      .order-card-image {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        border: 2px solid #f0f0f0;
+      }
+
+      .order-card-info {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .order-card-title {
+        font-weight: 600;
+        font-size: 18px;
+        color: #333;
+        margin-bottom: 5px;
+      }
+
+      .order-card-detail {
+        display: flex;
+        justify-content: space-between;
+        font-size: 14px;
+        color: #666;
+      }
+
+      .order-card-price {
+        font-size: 20px;
+        font-weight: 700;
+        color: #667eea;
+        margin: 10px 0;
+      }
+
+      .order-number {
+        background: #e8eaf6;
+        color: #667eea;
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        display: inline-block;
+        margin-bottom: 10px;
+      }
+
+      /* 정보 테이블 - 더 깔끔하게 */
+      .info-table {
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      }
+
+      .info-row {
+        display: grid;
+        grid-template-columns: 180px 1fr;
+        padding: 20px;
+        border-bottom: 1px solid #f0f0f0;
+        transition: background 0.2s ease;
+      }
+
+      .info-row:hover {
+        background: #f8f9fa;
+      }
+
+      .info-row:last-child {
+        border-bottom: none;
+      }
+
+      .info-label {
+        font-weight: 600;
         color: #555;
+        display: flex;
+        align-items: center;
       }
 
-      input[type="text"] {
-        width: 90px;
+      .info-value {
+        color: #333;
+        display: flex;
+        align-items: center;
       }
 
-      input.addr {
-        width: 150px;
+      /* 입력 필드 스타일 */
+      input[type="text"],
+      textarea {
+        width: 100%;
+        padding: 12px 16px;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        font-size: 14px;
+        transition: all 0.3s ease;
+        background: #fff;
+      }
+
+      input[type="text"]:focus,
+      textarea:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      }
+
+      textarea {
+        resize: vertical;
+        min-height: 100px;
+        font-family: inherit;
+      }
+
+      /* 버튼 스타일 */
+      .btn {
+        padding: 12px 24px;
+        border: none;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+      }
+
+      .btn-danger {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        color: white;
+        box-shadow: 0 4px 12px rgba(245, 87, 108, 0.3);
+      }
+
+      .btn-danger:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(245, 87, 108, 0.4);
+      }
+
+      .btn-secondary {
+        background: #f0f0f0;
+        color: #666;
+      }
+
+      .btn-secondary:hover {
+        background: #e0e0e0;
+      }
+
+      /* 상태 배지 */
+      .status-badge {
+        padding: 6px 16px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 600;
+        display: inline-block;
+      }
+
+      .status-complete {
+        background: #e8f5e9;
+        color: #2e7d32;
+      }
+
+      .status-pending {
+        background: #fff3e0;
+        color: #ef6c00;
+      }
+
+      /* 배송지 정보 편집 섹션 */
+      .edit-form {
+        display: grid;
+        gap: 20px;
+      }
+
+      .form-group {
+        display: grid;
+        grid-template-columns: 150px 1fr;
+        gap: 15px;
+        align-items: start;
+      }
+
+      .form-group label {
+        font-weight: 600;
+        color: #555;
+        padding-top: 12px;
+      }
+
+      .address-group {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .address-group input {
+        flex: 1;
+      }
+
+      .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-top: 20px;
+      }
+
+      /* 반응형 */
+      @media (max-width: 768px) {
+        .content {
+          padding: 20px;
+        }
+
+        .header {
+          flex-direction: column;
+          gap: 15px;
+          text-align: center;
+        }
+
+        .order-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .info-row,
+        .form-group {
+          grid-template-columns: 1fr;
+          gap: 8px;
+        }
+
+        .address-group {
+          flex-direction: column;
+        }
+      }
+
+      /* 로딩 애니메이션 */
+      @keyframes shimmer {
+        0% {
+          background-position: -1000px 0;
+        }
+        100% {
+          background-position: 1000px 0;
+        }
       }
     </style>
-    <!-- jQuery -->
-    <script src="/plugins/jquery/jquery.min.js"></script>
   </head>
   <body>
-    <div class="container-fluid">
-      <div class="row">
-        <div>
-          <a href="/admin/order/order_list">주문목록</a>
-        </div>
-        <div class="col text-center mb-3 mt-3">
-          <h3>주문내역</h3>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col">
-          <table>
-            <thead>
-              <tr>
-                <th scope="col" style="width: 10%">주문번호</th>
-                <th scope="col" style="width: 15%">상품이미지</th>
-                <th scope="col" style="width: 10%">상품이름</th>
-                <th scope="col" style="width: 10%">가격</th>
-                <th scope="col" style="width: 5%">수량</th>
-                <th scope="col" style="width: 10%">합계</th>
-                <th scope="col" style="width: 10%">관리</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr th:each="item : ${order_product_info}">
-                <td>[[${item.or_code}]]</td>
-                <td>
-                  <img th:src="${'/admin/order/image_display?dateFolderName=' + item.item_up_folder + '&fileName=s_' + item.item_img}" />
-                </td>
-                <td th:text="${item['item_name']}"></td>
-                <td th:text="${#numbers.formatInteger(item['dt_price'], 3, 'COMMA') + '원'}"></td>
-                <td th:text="${item['dt_amount']}"></td>
-                <td th:text="${#numbers.formatInteger(item['dt_price'] * item['dt_amount'], 3, 'COMMA') + '원'}"></td>
-                <td>
-                  <button type="button" name="btn_order_product_del" th:data-itemnum="${item['item_num']}" th:data-unitprice="${item['dt_price'] * item['dt_amount']}">삭제</button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col text-center mb-3 mt-3">
-          <h3>주문결제내역</h3>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col">
-          <table>
-            <thead>
-              <tr>
-                <th scope="col" style="width: 10%">주문번호</th>
-                <th scope="col" style="width: 20%">결제방식</th>
-                <th scope="col" style="width: 15%">결제금액</th>
-                <th scope="col" style="width: 10%">결제상태</th>
-                <th scope="col" style="width: 5%">결제일</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>[[${payment_info.or_code}]]</td>
-                <td>[[${payment_info.pay_method}]]</td>
-                <td>[[${#numbers.formatInteger(payment_info.pay_price, 3, 'COMMA') + '원'}]]</td>
-                <td>
-                  [[${payment_info.pay_status}]]
-                  <!--/* 
-                        <select id="pay_status">
-                            <option  th:selected= "${payment_info.pay_status == '입금완료'}" value="입금완료">입금완료</option>
-                            <option th:selected= "${payment_info.pay_status == '입금미납'}" value="입금미납">입금미납</option>
-                        </select>
-                        <button type="button" id="btn_payment_status" th:data-payment_id="${payment_info.pay_id}">변경</button>
-                        */-->
-                </td>
-                <td>[[${#dates.format(payment_info.pay_date, 'yyyy-MM-dd HH:mm:ss')}]]</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col text-center mb-3 mt-3">
-          <h3>관리자메모</h3>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col">
-          <textarea cols="80" rows="3" style="width: 100%" id="admin_message" th:text="${order_info.or_message}"></textarea>
-          <button type="button" id="btn_manage_message">관리자메모수정</button>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col text-center mb-3 mt-3">
-          <h3>주문자정보</h3>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col">
-          <table>
-            <thead>
-              <tr>
-                <th scope="col" style="width: 15%">이름</th>
-                <th scope="col" style="width: 20%">전화번호</th>
-                <th scope="col" style="width: 20%">기본주소</th>
-                <th scope="col" style="width: 20%">상세주소</th>
-                <th scope="col" style="width: 15%">우편번호</th>
-                <th scope="col" style="width: 10%">전자우편</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>[[${member_info.mb_name}]]</td>
-                <td>[[${member_info.mb_phone}]]</td>
-                <td>[[${member_info.mb_addr}]]</td>
-                <td>[[${member_info.mb_deaddr}]]</td>
-                <td>[[${member_info.mb_zipcode}]]</td>
-                <td>[[${member_info.mb_email}]]</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+    <div class="container">
+      <div class="header">
+        <h1>📦 주문 상세 정보</h1>
+        <a href="/admin/order/order_list" class="back-btn">← 주문 목록</a>
       </div>
 
-      <div class="row">
-        <div class="col text-center mb-3 mt-3">
-          <h3>배송지정보</h3>
+      <div class="content">
+        <!-- 주문 내역 -->
+        <div class="section">
+          <h2 class="section-title">🛍️ 주문 상품</h2>
+          <div class="order-grid">
+            <div class="order-card" th:each="item : ${order_product_info}">
+              <span class="order-number" th:text="'주문번호: ' + ${item.or_code}">주문번호: 12345</span>
+              <img class="order-card-image" th:src="${'/admin/order/image_display?dateFolderName=' + item.item_up_folder + '&fileName=s_' + item.item_img}" alt="상품 이미지" />
+              <div class="order-card-info">
+                <div class="order-card-title" th:text="${item['item_name']}">상품명</div>
+                <div class="order-card-detail">
+                  <span>단가</span>
+                  <strong th:text="${#numbers.formatInteger(item['dt_price'], 3, 'COMMA') + '원'}">50,000원</strong>
+                </div>
+                <div class="order-card-detail">
+                  <span>수량</span>
+                  <strong th:text="${item['dt_amount']}">2개</strong>
+                </div>
+                <div class="order-card-price" th:text="${#numbers.formatInteger(item['dt_price'] * item['dt_amount'], 3, 'COMMA') + '원'}">100,000원</div>
+                <button type="button" class="btn btn-danger" name="btn_order_product_del" th:data-itemnum="${item['item_num']}" th:data-unitprice="${item['dt_price'] * item['dt_amount']}">
+                  🗑️ 삭제
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="row">
-        <div class="col">
-          <table>
-            <thead>
-              <tr>
-                <th scope="col" style="width: 5%">이름</th>
-                <th scope="col" style="width: 20%">전화번호</th>
-                <th scope="col" style="width: 20%">기본주소</th>
-                <th scope="col" style="width: 20%">상세주소</th>
-                <th scope="col" style="width: 10%">우편번호</th>
-                <th scope="col" style="width: 10%">전자우편</th>
-                <th scope="col" style="width: 15%">비고</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><input type="text" name="or_name" id="or_name" th:value="${order_info.or_name}" /></td>
-                <td>
-                  <input type="text" name="or_tel" id="or_tel" th:value="${order_info.or_tel}" />
-                </td>
-                <td>
-                  <input type="text" name="or_addr_basic" id="sample2_address" class="addr" th:value="${order_info.or_addr_basic}" />
-                </td>
-                <td>
-                  <input type="text" name="or_addr_detail" id="sample2_detailAddress" class="addr" th:value="${order_info.or_addr_detail}" />
-                  <input type="hidden" id="sample2_extraAddress" placeholder="참고항목" />
-                </td>
-                <td>
-                  <input type="text" name="or_addr_zipcode" id="sample2_postcode" th:value="${order_info.or_addr_zipcode}" />
-                  <input type="button" onclick="sample2_execDaumPostcode()" value="우편번호 찾기" />
-                </td>
-                <td><input type="text" name="or_mail" id="or_mail" class="addr" th:value="${order_info.or_mail}" /></td>
-                <td><button type="button" id="btn_order_info_edit">정보수정</button></td>
-              </tr>
-            </tbody>
-          </table>
+
+        <!-- 결제 정보 -->
+        <div class="section">
+          <h2 class="section-title">💳 결제 정보</h2>
+          <div class="info-table">
+            <div class="info-row">
+              <div class="info-label">주문번호</div>
+              <div class="info-value">
+                <span class="order-number" th:text="${payment_info.or_code}">ORD20231201001</span>
+              </div>
+            </div>
+            <div class="info-row">
+              <div class="info-label">결제방식</div>
+              <div class="info-value" th:text="${payment_info.pay_method}">신용카드</div>
+            </div>
+            <div class="info-row">
+              <div class="info-label">결제금액</div>
+              <div class="info-value">
+                <strong style="font-size: 20px; color: #667eea" th:text="${#numbers.formatInteger(payment_info.pay_price, 3, 'COMMA') + '원'}">150,000원</strong>
+              </div>
+            </div>
+            <div class="info-row">
+              <div class="info-label">결제상태</div>
+              <div class="info-value">
+                <span class="status-badge status-complete" th:text="${payment_info.pay_status}">입금완료</span>
+              </div>
+            </div>
+            <div class="info-row">
+              <div class="info-label">결제일시</div>
+              <div class="info-value" th:text="${#dates.format(payment_info.pay_date, 'yyyy-MM-dd HH:mm:ss')}">2023-12-01 14:30:25</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 관리자 메모 -->
+        <div class="section">
+          <h2 class="section-title">📝 관리자 메모</h2>
+          <textarea id="admin_message" th:text="${order_info.or_message}" placeholder="주문 관련 메모를 입력하세요..."></textarea>
+          <div class="form-actions">
+            <button type="button" id="btn_manage_message" class="btn btn-primary">💾 메모 저장</button>
+          </div>
+        </div>
+
+        <!-- 주문자 정보 -->
+        <div class="section">
+          <h2 class="section-title">👤 주문자 정보</h2>
+          <div class="info-table">
+            <div class="info-row">
+              <div class="info-label">이름</div>
+              <div class="info-value" th:text="${member_info.mb_name}">홍길동</div>
+            </div>
+            <div class="info-row">
+              <div class="info-label">전화번호</div>
+              <div class="info-value" th:text="${member_info.mb_phone}">010-1234-5678</div>
+            </div>
+            <div class="info-row">
+              <div class="info-label">이메일</div>
+              <div class="info-value" th:text="${member_info.mb_email}">hong@example.com</div>
+            </div>
+            <div class="info-row">
+              <div class="info-label">주소</div>
+              <div class="info-value">
+                <div>
+                  <div th:text="${member_info.mb_addr}">서울시 강남구 테헤란로 123</div>
+                  <div th:text="${member_info.mb_deaddr}" style="color: #888; margin-top: 5px">상세주소</div>
+                  <div th:text="'우편번호: ' + ${member_info.mb_zipcode}" style="color: #888; margin-top: 5px">우편번호: 12345</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 배송지 정보 -->
+        <div class="section">
+          <h2 class="section-title">🚚 배송지 정보</h2>
+          <div class="edit-form">
+            <div class="form-group">
+              <label>이름</label>
+              <input type="text" name="or_name" id="or_name" th:value="${order_info.or_name}" placeholder="수령인 이름" />
+            </div>
+            <div class="form-group">
+              <label>전화번호</label>
+              <input type="text" name="or_tel" id="or_tel" th:value="${order_info.or_tel}" placeholder="010-0000-0000" />
+            </div>
+            <div class="form-group">
+              <label>이메일</label>
+              <input type="text" name="or_mail" id="or_mail" th:value="${order_info.or_mail}" placeholder="email@example.com" />
+            </div>
+            <div class="form-group">
+              <label>우편번호</label>
+              <div class="address-group">
+                <input type="text" name="or_addr_zipcode" id="sample2_postcode" th:value="${order_info.or_addr_zipcode}" placeholder="우편번호" readonly />
+                <button type="button" class="btn btn-secondary" onclick="sample2_execDaumPostcode()">🔍 우편번호 찾기</button>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>기본주소</label>
+              <input type="text" name="or_addr_basic" id="sample2_address" th:value="${order_info.or_addr_basic}" placeholder="기본주소" readonly />
+            </div>
+            <div class="form-group">
+              <label>상세주소</label>
+              <input type="text" name="or_addr_detail" id="sample2_detailAddress" th:value="${order_info.or_addr_detail}" placeholder="상세주소를 입력하세요" />
+              <input type="hidden" id="sample2_extraAddress" />
+            </div>
+            <div class="form-actions">
+              <button type="button" id="btn_order_info_edit" class="btn btn-primary">✅ 배송지 정보 수정</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
+
+    <!-- Daum 우편번호 레이어 -->
+    <div id="layer" style="display: none; position: fixed; overflow: hidden; z-index: 1000; -webkit-overflow-scrolling: touch">
+      <img
+        src="//t1.daumcdn.net/postcode/resource/images/close.png"
+        id="btnCloseLayer"
+        style="cursor: pointer; position: absolute; right: -3px; top: -3px; z-index: 1"
+        onclick="closeDaumPostcode()"
+        alt="닫기 버튼"
+      />
+    </div>
+
+    <!-- jQuery -->
+    <script src="/plugins/jquery/jquery.min.js"></script>
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
     <script th:inline="javascript">
       $(document).ready(function () {
-        // 주문상태 변경
+        // 관리자 메모 수정
         $("#btn_manage_message").on("click", function () {
           $.ajax({
             url: "/admin/order/admin_order_message",
@@ -265,25 +566,7 @@
           });
         });
 
-        // 결제상태 변경
-        $("#btn_payment_status").on("click", function () {
-          let pay_id = $(this).data("pay_id"); // 결제번호
-          let pay_status = $("#pay_status").val(); // 결제상태(입금미납, 입금완료)
-
-          $.ajax({
-            url: "/admin/order/payment_status",
-            data: { pay_id: pay_id, pay_status: pay_status },
-            type: "post",
-            dataType: "text",
-            success: function (result) {
-              if (result == "success") {
-                alert("결제상태가 변경되었습니다.");
-              }
-            },
-          });
-        });
-
-        // 배송지 정보수정  id="btn_ord_info_edit"
+        // 배송지 정보수정
         $("#btn_order_info_edit").on("click", function () {
           let orderinfo = {
             or_code : [[${order_info.or_code}]],
@@ -308,7 +591,7 @@
           });
         });
 
-        // 주문상품중 개별상품 삭제.  name="btn_ord_product_del"
+        // 주문상품 개별 삭제
         $("button[name='btn_order_product_del']").on("click", function () {
           let item_num = $(this).data("itemnum");
           let unitprice = $(this).data("unitprice");
@@ -329,77 +612,44 @@
           });
         });
       });
-    </script>
 
-    <!-- iOS에서는 position:fixed 버그가 있음, 적용하는 사이트에 맞게 position:absolute 등을 이용하여 top,left값 조정 필요 -->
-    <div id="layer" style="display: none; position: fixed; overflow: hidden; z-index: 1; -webkit-overflow-scrolling: touch">
-      <img
-        src="//t1.daumcdn.net/postcode/resource/images/close.png"
-        id="btnCloseLayer"
-        style="cursor: pointer; position: absolute; right: -3px; top: -3px; z-index: 1"
-        onclick="closeDaumPostcode()"
-        alt="닫기 버튼"
-      />
-    </div>
-
-    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-    <script>
       // 우편번호 찾기 화면을 넣을 element
       var element_layer = document.getElementById("layer");
 
       function closeDaumPostcode() {
-        // iframe을 넣은 element를 안보이게 한다.
         element_layer.style.display = "none";
       }
 
       function sample2_execDaumPostcode() {
         new daum.Postcode({
           oncomplete: function (data) {
-            // 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+            var addr = "";
+            var extraAddr = "";
 
-            // 각 주소의 노출 규칙에 따라 주소를 조합한다.
-            // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
-            var addr = ""; // 주소 변수
-            var extraAddr = ""; // 참고항목 변수
-
-            //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
             if (data.userSelectedType === "R") {
-              // 사용자가 도로명 주소를 선택했을 경우
               addr = data.roadAddress;
             } else {
-              // 사용자가 지번 주소를 선택했을 경우(J)
               addr = data.jibunAddress;
             }
 
-            // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
             if (data.userSelectedType === "R") {
-              // 법정동명이 있을 경우 추가한다. (법정리는 제외)
-              // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
               if (data.bname !== "" && /[동|로|가]$/g.test(data.bname)) {
                 extraAddr += data.bname;
               }
-              // 건물명이 있고, 공동주택일 경우 추가한다.
               if (data.buildingName !== "" && data.apartment === "Y") {
                 extraAddr += extraAddr !== "" ? ", " + data.buildingName : data.buildingName;
               }
-              // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
               if (extraAddr !== "") {
                 extraAddr = " (" + extraAddr + ")";
               }
-              // 조합된 참고항목을 해당 필드에 넣는다.
               document.getElementById("sample2_extraAddress").value = extraAddr;
             } else {
               document.getElementById("sample2_extraAddress").value = "";
             }
 
-            // 우편번호와 주소 정보를 해당 필드에 넣는다.
             document.getElementById("sample2_postcode").value = data.zonecode;
             document.getElementById("sample2_address").value = addr;
-            // 커서를 상세주소 필드로 이동한다.
             document.getElementById("sample2_detailAddress").focus();
-
-            // iframe을 넣은 element를 안보이게 한다.
-            // (autoClose:false 기능을 이용한다면, 아래 코드를 제거해야 화면에서 사라지지 않는다.)
             element_layer.style.display = "none";
           },
           width: "100%",
@@ -407,26 +657,18 @@
           maxSuggestItems: 5,
         }).embed(element_layer);
 
-        // iframe을 넣은 element를 보이게 한다.
         element_layer.style.display = "block";
-
-        // iframe을 넣은 element의 위치를 화면의 가운데로 이동시킨다.
         initLayerPosition();
       }
 
-      // 브라우저의 크기 변경에 따라 레이어를 가운데로 이동시키고자 하실때에는
-      // resize이벤트나, orientationchange이벤트를 이용하여 값이 변경될때마다 아래 함수를 실행 시켜 주시거나,
-      // 직접 element_layer의 top,left값을 수정해 주시면 됩니다.
       function initLayerPosition() {
-        var width = 300; //우편번호서비스가 들어갈 element의 width
-        var height = 400; //우편번호서비스가 들어갈 element의 height
-        var borderWidth = 5; //샘플에서 사용하는 border의 두께
+        var width = 300;
+        var height = 400;
+        var borderWidth = 5;
 
-        // 위에서 선언한 값들을 실제 element에 넣는다.
         element_layer.style.width = width + "px";
         element_layer.style.height = height + "px";
         element_layer.style.border = borderWidth + "px solid";
-        // 실행되는 순간의 화면 너비와 높이 값을 가져와서 중앙에 뜰 수 있도록 위치를 계산한다.
         element_layer.style.left = ((window.innerWidth || document.documentElement.clientWidth) - width) / 2 - borderWidth + "px";
         element_layer.style.top = ((window.innerHeight || document.documentElement.clientHeight) - height) / 2 - borderWidth + "px";
       }
