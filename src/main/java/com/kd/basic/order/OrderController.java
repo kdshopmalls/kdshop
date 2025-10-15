@@ -94,8 +94,8 @@ public class OrderController {
 		});
 		model.addAttribute("order_total_price", order_total_price);
 		//주문내역을 내용으로 메일보내기
-		EmailDTO dto = new EmailDTO("KDMail", "KDMail", or_mail, "주문내역", "주문내역");
-		emailService.sendMail("mail/orderConfirmation", dto, order_info,order_total_price); 
+		//EmailDTO dto = new EmailDTO("KDMail", "KDMail", or_mail, "주문내역", "주문내역");
+		//emailService.sendMail("mail/orderConfirmation", dto, order_info,order_total_price); 
 		model.addAttribute("order_total_price", order_total_price);
 	}
 	

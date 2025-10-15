@@ -2,33 +2,37 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/layout}">
   <th:block layout:fragment="script2">
     <script th:inline="javascript">
-      let status = [[${status}]]; // pwFail,idFail
+      let status = [[${status}]]; // pwFail, idFail
 
-      if(status == 'idFail') {
-      	alert("아이디를 확인하세요");
-      	document.getElementById("mb_id").focus();
-      }else if(status == 'pwFail') {
-      	alert("비밀번호를 확인하세요");
-      	document.getElementById("mb_pw").focus();
+      if (status === "idFail") {
+        alert("아이디를 확인하세요");
+        document.getElementById("mb_id").focus();
+      } else if (status === "pwFail") {
+        alert("비밀번호를 확인하세요");
+        document.getElementById("mb_pw").focus();
       }
     </script>
   </th:block>
+
   <th:block layout:fragment="content">
-    <h1 class="mt-3 mb-4 text-center">Login</h1>
-    <div class="row">
-      <div class="col">
+    <div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh">
+      <div class="card shadow-sm p-4" style="max-width: 400px; width: 100%">
+        <h2 class="text-center mb-4">로그인</h2>
         <form action="/member/login" method="post">
           <div class="mb-3">
-            <label for="mbsp_id" class="form-label">아이디</label>
-            <input type="text" class="form-control" id="mb_id" name="mb_id" placeholder="아이디를 입력" />
+            <label for="mb_id" class="form-label">아이디</label>
+            <div class="input-group">
+              <input type="text" class="form-control" id="mb_id" name="mb_id" placeholder="아이디를 입력" />
+            </div>
           </div>
           <div class="mb-3">
-            <label for="mbsp_password" class="form-label">비밀번호</label>
-            <input type="password" class="form-control" id="mb_pw" name="mb_pw" placeholder="비밀번호를 입력" />
+            <label for="mb_pw" class="form-label">비밀번호</label>
+            <div class="input-group">
+              <input type="password" class="form-control" id="mb_pw" name="mb_pw" placeholder="비밀번호를 입력" />
+            </div>
           </div>
-          <div class="mb-3 text-center">
-            <button type="submit" class="btn btn-primary">Login</button>
-            <a href="/member/lostpass" class="btn btn-primary">ID/PW Search</a>
+          <div class="d-grid mt-4">
+            <button type="submit" class="btn btn-primary">로그인</button>
           </div>
         </form>
       </div>
