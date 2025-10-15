@@ -17,6 +17,21 @@
         alert("비밀번호를 확인하세요");
       }
     </script>
+    <style>
+      /* 기존 CSS가 있다면 기존 코드에 추가해주세요 */
+
+      .logo {
+        white-space: nowrap; /* 줄바꿈을 방지 */
+        font-size: 24px; /* 글자 크기 조정 (선택사항) */
+        font-weight: bold; /* 글자 굵기 조정 (선택사항) */
+      }
+
+      .clearfix::after {
+        content: "";
+        display: block;
+        clear: both;
+      }
+    </style>
   </head>
   <body>
     <div class="main">
@@ -30,15 +45,13 @@
                     <span class="fa fa-user"></span>
                     <input type="text" name="ad_id" value="admin" placeholder="Username" required />
                   </p>
-                  <!-- JS because of IE support; better: placeholder="Username" -->
                   <p>
                     <span class="fa fa-lock"></span>
                     <input type="password" name="ad_pw" value="1234" placeholder="Password" required />
                   </p>
-                  <!-- JS because of IE support; better: placeholder="Password" -->
                   <div>
                     <span style="width: 48%; text-align: left; display: inline-block">
-                      <a class="small-text" href="#">Forgot password?</a>
+                      <p class="small-text">관리자 로그인</p>
                     </span>
                     <span style="width: 50%; text-align: right; display: inline-block">
                       <input type="submit" value="Sign In" />
@@ -52,7 +65,7 @@
             <!-- end login -->
 
             <div class="logo">
-              LOGO
+              KD BookStore Admin
               <div class="clearfix"></div>
             </div>
           </div>

@@ -1,11 +1,151 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/layout}">
+  <head>
+    <style>
+      /* 배경, 카드 그림자 및 테이블 스타일 */
+      body {
+        background-color: #f8f9fa;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      h3 {
+        font-weight: 700;
+        color: #343a40;
+      }
+
+      table.table {
+        background: #fff;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        overflow: hidden;
+      }
+
+      table.table thead {
+        background-color: #343a40;
+        color: white;
+      }
+
+      table.table tbody tr:hover {
+        background-color: #f1f3f5;
+        transition: background-color 0.3s ease;
+      }
+
+      /* 카드 스타일 개선 */
+      .card-info {
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
+        background-color: #ffffff;
+      }
+
+      .card-info .card-header {
+        background-color: #007bff;
+        color: white;
+        font-weight: 600;
+        border-top-left-radius: 12px;
+        border-top-right-radius: 12px;
+      }
+
+      /* 폼 입력 스타일 */
+      .form-control {
+        border-radius: 8px;
+        border: 1px solid #ced4da;
+        transition: border-color 0.3s ease;
+      }
+
+      .form-control:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.25);
+      }
+
+      /* 라디오 버튼 및 결제 방법 */
+      input[type="radio"] {
+        margin-left: 10px;
+        margin-right: 5px;
+        accent-color: #007bff;
+        cursor: pointer;
+      }
+
+      /* 버튼 스타일 */
+      .btn-primary {
+        background-color: #007bff;
+        border: none;
+        border-radius: 8px;
+        padding: 10px 20px;
+        font-weight: 600;
+        box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+        transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .btn-primary:hover {
+        background-color: #0056b3;
+        box-shadow: 0 6px 15px rgba(0, 86, 179, 0.5);
+      }
+
+      .btn-outline-primary {
+        border-radius: 8px;
+        padding: 7px 15px;
+        font-weight: 600;
+        transition: background-color 0.3s ease, color 0.3s ease;
+        white-space: nowrap;
+      }
+
+      .btn-outline-primary:hover {
+        background-color: #007bff;
+        color: white;
+        border-color: #007bff;
+      }
+
+      /* 테이블 이미지 */
+      table img {
+        border-radius: 10px;
+        object-fit: cover;
+      }
+
+      /* 푸터 총금액 강조 */
+      tfoot td {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #212529;
+        background-color: #e9ecef;
+        text-align: right;
+        padding-right: 20px;
+      }
+
+      /* 배송지 선택 라디오 및 텍스트 간격 */
+      #receive_info_1,
+      #receive_info_2 {
+        transform: scale(1.2);
+      }
+
+      #receive_info_1 + label,
+      #receive_info_2 + label {
+        margin-right: 15px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      /* 반응형: 모바일에서 넓은 버튼 */
+      @media (max-width: 576px) {
+        .btn-primary {
+          width: 100%;
+          font-size: 1.1rem;
+        }
+
+        .form-group.row > label {
+          margin-bottom: 0.5rem;
+        }
+      }
+    </style>
+  </head>
+
   <th:block layout:fragment="content">
     <div class="row">
-      <div class="col text-center mb-3 mt-3">
-        <h3>주문및결제</h3>
+      <div class="col text-center mb-4 mt-4">
+        <h3>주문 및 결제</h3>
       </div>
     </div>
+
     <div class="row">
       <div class="col">
         <table class="table">
@@ -23,7 +163,7 @@
             <tr th:each="item : ${orderDetails}">
               <td th:text="${item.item_num}"></td>
               <td>
-                <img style="width: 100px; height: 100px" th:src="${'/order/image_display?dateFolderName=' + item.item_up_folder + '&fileName=s_' + item.item_img}" />
+                <img style="width: 100px; height: 100px" th:src="${'/order/image_display?dateFolderName=' + item.item_up_folder + '&fileName=s_' + item.item_img}" alt="상품이미지" />
               </td>
               <td th:text="${item['item_name']}"></td>
               <td th:text="${#numbers.formatInteger(item['item_price'], 3, 'COMMA') + '원'}"></td>
@@ -33,7 +173,7 @@
           </tbody>
           <tfoot>
             <tr>
-              <td colspan="6" th:text="'총금액' + ${#numbers.formatInteger(order_total_price, 3, 'COMMA') + '원'}"></td>
+              <td colspan="6" th:text="'총금액 : ' + ${#numbers.formatInteger(order_total_price, 3, 'COMMA') + ' 원'}"></td>
             </tr>
           </tfoot>
         </table>
@@ -42,7 +182,7 @@
 
     <!-- 주문자, 배송지 정보 -->
     <form id="orderForm" method="post" action="/order/order_save">
-      <div class="row">
+      <div class="row mt-5">
         <div class="col">
           <div class="card card-info">
             <div class="card-header">
@@ -50,38 +190,34 @@
             </div>
 
             <div class="card-body">
-              <div class="form-group row mb-3">
-                <label for="mb_name" class="col-sm-2 col-form-label">이름</label>
+              <div class="form-group row mb-4">
+                <label for="or_name_1" class="col-sm-2 col-form-label">이름</label>
                 <div class="col-sm-4">
                   <input type="hidden" id="or_addr_zipcode_2" th:value="${memberDTO.mb_zipcode}" />
                   <input type="hidden" id="or_addr_basic_2" th:value="${memberDTO.mb_addr}" />
                   <input type="hidden" id="or_addr_detail_2" th:value="${memberDTO.mb_deaddr}" />
-
-                  <!-- 전체주문금액 -->
                   <input type="hidden" name="or_price" th:value="${order_total_price}" />
-
-                  <!-- 결제방식 -->
                   <input type="hidden" id="p_method" name="p_method" />
-
                   <input type="text" class="form-control" id="or_name_1" th:value="${memberDTO.mb_name}" />
                 </div>
               </div>
-              <div class="form-group row mb-3">
-                <label for="mb_phone" class="col-sm-2 col-form-label">연락처</label>
+              <div class="form-group row mb-4">
+                <label for="or_tel_1" class="col-sm-2 col-form-label">연락처</label>
                 <div class="col-sm-4">
                   <input type="text" class="form-control" id="or_tel_1" th:value="${memberDTO.mb_phone}" />
                 </div>
               </div>
-              <div class="form-group row mb-3">
-                <label for="mb_email_1" class="col-sm-2 col-form-label">이메일주소</label>
+              <div class="form-group row mb-4">
+                <label for="or_mail_1" class="col-sm-2 col-form-label">전자우편</label>
                 <div class="col-sm-4">
-                  <input type="text" class="form-control" id="or_mail_1" th:value="${memberDTO.mb_email}" />
+                  <input type="email" class="form-control" id="or_mail_1" th:value="${memberDTO.mb_email}" />
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+
       <div class="row mt-5">
         <div class="col">
           <div class="card card-info">
@@ -90,48 +226,50 @@
             </div>
 
             <div class="card-body">
-              <div class="form-group row mb-3">
-                <label for="mb_id" class="col-sm-2 col-form-label">배송지선택</label>
-                <div class="col">
-                  <input type="radio" id="receive_info_1" name="receive_info" checked />기본주소(주문자정보와 동일) <input type="radio" id="receive_info_2" name="receive_info" />새로운 주소
+              <div class="form-group row mb-4 align-items-center">
+                <label class="col-sm-2 col-form-label">배송지선택</label>
+                <div class="col-sm-10 d-flex align-items-center gap-4">
+                  <input type="radio" id="receive_info_1" name="receive_info" checked />
+                  <label for="receive_info_1" class="mb-0">기본주소 (주문자정보와 동일)</label>
+
+                  <input type="radio" id="receive_info_2" name="receive_info" />
+                  <label for="receive_info_2" class="mb-0">새로운 주소</label>
                 </div>
               </div>
 
-              <div class="form-group row mb-3">
-                <label for="mb_id" class="col-sm-2 col-form-label">수령인</label>
-                <div class="col">
+              <div class="form-group row mb-4">
+                <label for="or_name_2" class="col-sm-2 col-form-label">수령인</label>
+                <div class="col-sm-10 col-md-4">
                   <input type="text" class="form-control" id="or_name_2" name="or_name" th:value="${memberDTO.mb_name}" />
                 </div>
               </div>
-              <div class="form-group row mb-3">
-                <label for="mb_phone_2" class="col-sm-2 col-form-label">연락처</label>
-                <div class="col">
+              <div class="form-group row mb-4">
+                <label for="or_tel_2" class="col-sm-2 col-form-label">연락처</label>
+                <div class="col-sm-10 col-md-4">
                   <input type="text" class="form-control" id="or_tel_2" name="or_tel" th:value="${memberDTO.mb_phone}" />
                 </div>
               </div>
-
-              <div class="form-group row mb-3">
-                <label for="mb_email_2" class="col-sm-2 col-form-label">전자우편</label>
-                <div class="col">
-                  <input type="text" class="form-control" id="or_mail_2" name="or_mail" th:value="${memberDTO.mb_email}" />
+              <div class="form-group row mb-4">
+                <label for="or_mail_2" class="col-sm-2 col-form-label">전자우편</label>
+                <div class="col-sm-10 col-md-4">
+                  <input type="email" class="form-control" id="or_mail_2" name="or_mail" th:value="${memberDTO.mb_email}" />
                 </div>
               </div>
 
-              <div class="form-group row mb-3">
-                <label for="mb_zipcode" class="col-sm-2 col-form-label">우편번호</label>
-                <div class="col-sm-4">
-                  <input type="text" class="form-control" id="sample2_postcode" name="or_addr_zipcode" th:value="${memberDTO.mb_zipcode}" />
-                </div>
-                <div class="col-sm-4">
-                  <button type="button" class="btn btn-outline-primary" onclick="sample2_execDaumPostcode()">우편번호</button>
+              <div class="form-group row mb-4">
+                <label for="sample2_postcode" class="col-sm-2 col-form-label">우편번호</label>
+                <div class="col-sm-6 d-flex gap-2 align-items-center">
+                  <input type="text" class="form-control" id="sample2_postcode" name="or_addr_zipcode" th:value="${memberDTO.mb_zipcode}" readonly style="max-width: 150px" />
+                  <button type="button" class="btn btn-outline-primary" onclick="sample2_execDaumPostcode()">우편번호 찾기</button>
                 </div>
               </div>
-              <div class="form-group row mb-3">
-                <label for="mb_addr" class="col-sm-2 col-form-label">기본주소</label>
+
+              <div class="form-group row mb-4">
+                <label for="sample2_address" class="col-sm-2 col-form-label">기본주소</label>
                 <div class="col-sm-4">
-                  <input type="text" class="form-control" id="sample2_address" name="or_addr_basic" th:value="${memberDTO.mb_addr}" />
+                  <input type="text" class="form-control" id="sample2_address" name="or_addr_basic" th:value="${memberDTO.mb_addr}" readonly />
                 </div>
-                <label for="mb_deaddr" class="col-sm-2 col-form-label">나머지 주소</label>
+                <label for="sample2_detailAddress" class="col-sm-2 col-form-label">상세주소</label>
                 <div class="col-sm-4">
                   <input type="text" class="form-control" id="sample2_detailAddress" name="or_addr_detail" th:value="${memberDTO.mb_deaddr}" />
                   <input type="hidden" id="sample2_extraAddress" placeholder="참고항목" />
@@ -142,8 +280,8 @@
         </div>
       </div>
 
-      <!-- 결제 선택-->
-      <div class="row mt-5">
+      <!-- 결제 선택 -->
+      <div class="row mt-5 mb-5">
         <div class="col">
           <div class="card card-info">
             <div class="card-header">
@@ -151,28 +289,36 @@
             </div>
 
             <div class="card-body">
-              <div class="form-group row mb-3">
-                <label for="mbsp_id" class="col-sm-2 col-form-label">결제방식</label>
-                <div class="col">
-                  <input type="radio" id="payment_method_1" name="payment_method" value="kakaopay" checked />카카오 페이(ajax)
-                  <input type="radio" id="payment_method_2" name="payment_method" value="account_transfer" />계좌이체(form)
+              <div class="form-group row mb-4 align-items-center">
+                <label class="col-sm-2 col-form-label">결제방식</label>
+                <div class="col-sm-10 d-flex align-items-center gap-4 flex-wrap">
+                  <input type="radio" id="payment_method_1" name="payment_method" value="kakaopay" checked />
+                  <label for="payment_method_1" class="mb-0">카카오 페이</label>
+
+                  <input type="radio" id="payment_method_2" name="payment_method" value="account_transfer" />
+                  <label for="payment_method_2" class="mb-0">계좌이체</label>
                 </div>
               </div>
-              <div class="form-group row mb-3" id="account_transfer" style="display: none">
+
+              <div class="form-group row mb-4" id="account_transfer" style="display: none">
                 <label class="col-sm-2 col-form-label">입금계좌</label>
-                <div class="col">
-                  <select name="account_transfer">
+                <div class="col-sm-10 col-md-6 d-flex gap-3 align-items-center flex-wrap">
+                  <select name="account_transfer" class="form-select" style="min-width: 220px">
                     <option value="">입금은행을 선택하세요.</option>
-                    <option value="KEB하나은행">KEB하나은행(123-123-123)</option>
-                    <option value="신한은행">신한은행(456-789-123)</option>
-                    <option value="국민은행">국민은행(789-456-123)</option>
-                    <option value="SC제일은행">SC제일은행(123-789-456)</option>
+                    <option value="KEB하나은행">하나은행</option>
+                    <option value="신한은행">신한은행</option>
+                    <option value="국민은행">국민은행</option>
+                    <option value="SC제일은행">제일은행</option>
                   </select>
-                  보내는 사람 : <input type="text" name="sender" />
+                  <label class="mb-0 fw-semibold">보내는 사람 :</label>
+                  <input type="text" name="sender" class="form-control" style="max-width: 200px" />
                 </div>
               </div>
-              <div class="form-group row mt-3">
-                <button type="button" class="btn btn-primary" id="btn_order_payment">주문및결제하기</button>
+
+              <div class="form-group row mt-4">
+                <div class="col text-center">
+                  <button type="button" class="btn btn-primary btn-lg" id="btn_order_payment">주문 및 결제하기</button>
+                </div>
               </div>
             </div>
           </div>
