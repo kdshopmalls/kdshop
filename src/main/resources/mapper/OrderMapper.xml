@@ -47,4 +47,46 @@
 		where 
 			ot.or_code=#{or_code}
 	</select>
+	
+	<!-- 사용자별 주문 목록 조회 -->
+<select id="getOrderListByMemberId" resultType="com.kd.basic.common.dto.OrderDTO" parameterType="String">
+    select 
+        or_code,
+        mb_id,
+        or_name,
+        or_addr_zipcode,
+        or_addr_basic,
+        or_addr_detail,
+        or_tel,
+        or_mail,
+        or_price,
+        or_status,
+        or_regdate,
+        or_message
+    from 
+        order_list
+    where 
+        mb_id = #{mb_id}
+    order by 
+        or_regdate desc
+</select>
+
+<!-- 주문 상세 정보 조회 -->
+<select id="getOrderDetailsByOrCode" resultType="map" parameterType="Integer">
+    select 
+        od.or_code,
+        od.item_num,
+        od.dt_amount,
+        od.dt_price,
+        p.item_name,
+        p.item_up_folder,
+        p.item_img,
+        (od.dt_amount * od.dt_price) as dt_total_price
+    from 
+        order_details od
+    inner join 
+        item_list p on od.item_num = p.item_num
+    where 
+        od.or_code = #{or_code}
+</select>
 </mapper>

@@ -68,4 +68,14 @@ public class OrderService {
 		public List<Map<String,Object>> getOrderInfoByOrd_code(Integer or_code){
 			return orderMapper.getOrderByOr_code(or_code);
 		}
+		
+		// 사용자별 주문 목록 조회
+		public List<OrderDTO> getOrderListByMemberId(String mb_id) {
+		    return orderMapper.getOrderListByMemberId(mb_id);
+		}
+
+		// 주문 상세 정보 조회
+		public List<Map<String, Object>> getOrderDetailsByOrCode(Integer or_code) {
+		    return orderMapper.getOrderDetailsByOrCode(or_code);
+		}
 }

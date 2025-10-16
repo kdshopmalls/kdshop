@@ -104,5 +104,33 @@ public class OrderController {
 		
 		return FileUtils.getFile(uploadPath + File.separator + dateFolderName, fileName);
 	}
+	
+	// 주문 목록 페이지
+	@GetMapping("/order_list")
+	public void order_list(HttpSession session, Model model) throws Exception {
+	    String mb_id = ((MemberDTO) session.getAttribute("login_auth")).getMb_id();
+	    
+	    List<OrderDTO> orderList = orderService.getOrderListByMemberId(mb_id);
+	    model.addAttribute("orderList", orderList);
+	}
+
+	// 주문 상세 페이지
+	@GetMapping("/order_detail")
+	public void order_detail(Integer or_code, Model model) throws Exception {
+	    // 주문 기본 정보
+	    List<Map<String, Object>> orderInfo = orderService.getOrderInfoByOrd_code(or_code);
+	    model.addAttribute("order_info", orderInfo);
+	    
+	    // 주문 상세 상품 정보
+	    List<Map<String, Object>> orderDetails = orderService.getOrderDetailsByOrCode(or_code);
+	    model.addAttribute("orderDetails", orderDetails);
+	    
+	    // 주문 총액 계산
+	    int order_total_price = 0;
+	    for(Map<String, Object> detail : orderDetails) {
+	        order_total_price += (int) detail.get("dt_total_price");
+	    }
+	    model.addAttribute("order_total_price", order_total_price);
+	}
 
 }

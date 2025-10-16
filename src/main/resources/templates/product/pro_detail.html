@@ -20,6 +20,24 @@
           <div class="review-actions">
             {{authControlView mb_id rev_code}}
           </div>
+
+          <!-- 관리자 답변 영역 - 답변이 있고, reply_id가 존재할 때만 표시 -->
+          {{#if replies}}
+            {{#each replies}}
+              {{#if reply_id}}
+              <div class="admin-reply-box">
+                <div class="admin-reply-header">
+                  <span class="admin-badge">관리자</span>
+                  <span class="reply-manager-id">{{manager_id}}</span>
+                  <span class="reply-date" >{{reply_date}}</span>
+                </div>
+                <div class="admin-reply-content">
+                  <p>{{reply_text}}</p>
+                </div>
+              </div>
+              {{/if}}
+            {{/each}}
+          {{/if}}
         </div>
         {{/each}}
       </div>
@@ -513,6 +531,99 @@
         .btn-group .btn {
           padding: 12px 25px;
           font-size: 14px;
+        }
+      }
+
+      /* ========== 관리자 답변 스타일 ========== */
+      .admin-reply-box {
+        background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+        border-left: 4px solid #667eea;
+        border-radius: 12px;
+        padding: 20px;
+        margin-top: 15px;
+        margin-left: 30px;
+        box-shadow: 0 3px 10px rgba(102, 126, 234, 0.15);
+        position: relative;
+        animation: fadeIn 0.5s ease-in;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .admin-reply-box::before {
+        content: "↳";
+        position: absolute;
+        left: -25px;
+        top: 20px;
+        font-size: 24px;
+        color: #667eea;
+        font-weight: bold;
+      }
+
+      .admin-reply-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 12px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid rgba(102, 126, 234, 0.2);
+      }
+
+      .admin-badge {
+        background: linear-gradient(45deg, #667eea, #764ba2);
+        color: white;
+        padding: 4px 12px;
+        border-radius: 15px;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+      }
+
+      .reply-manager-id {
+        font-weight: 600;
+        color: #495057;
+        font-size: 14px;
+      }
+
+      .reply-date {
+        color: #6c757d;
+        font-size: 12px;
+        margin-left: auto;
+      }
+
+      .admin-reply-content {
+        background: white;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+      }
+
+      .admin-reply-content p {
+        margin: 0;
+        color: #2c3e50;
+        line-height: 1.7;
+        font-size: 14px;
+      }
+
+      /* 반응형 - 모바일 */
+      @media (max-width: 768px) {
+        .admin-reply-box {
+          margin-left: 15px;
+          padding: 15px;
+        }
+
+        .admin-reply-box::before {
+          left: -15px;
+          font-size: 18px;
         }
       }
     </style>
