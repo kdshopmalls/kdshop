@@ -1,59 +1,89 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kd.basic.review.ReviewMapper">
-<select id="rev_list" resultType="com.kd.basic.common.dto.ReviewDTO" parameterType="map">
-	select 
-		rev_code,
-		mb_id,
-		item_num,
-		rev_content,
-		rev_rate,
-		rev_date 
-	from review_list 
-	where item_num = #{item_num}
-	order by rev_date  desc 
-	limit #{cri.pageStart},#{cri.perPageNum}
+
+<!-- resultMap 추가 - 답변 포함 -->
+<resultMap id="review_with_replies_map" type="com.kd.basic.common.dto.ReviewDTO">
+    <!-- review 테이블 구성 -->
+    <id property="rev_code" column="rev_code"/>
+    <result property="mb_id" column="mb_id"/>
+    <result property="item_num" column="item_num"/>
+    <result property="rev_content" column="rev_content"/>
+    <result property="rev_rate" column="rev_rate"/>
+    <result property="rev_date" column="rev_date"/>
+    
+    <!-- review_response 테이블 구성 (리스트 형식) -->
+    <collection property="replies" ofType="com.kd.basic.common.dto.ReviewReplyDTO">
+        <id property="reply_id" column="reply_id"/>
+        <result property="rev_code" column="rev_code"/>
+        <result property="manager_id" column="manager_id"/>
+        <result property="reply_text" column="reply_text"/>
+        <result property="reply_date" column="reply_date"/>
+    </collection>
+</resultMap>
+
+<!-- 리뷰 목록 조회 - 답변 포함 -->
+<select id="rev_list" resultMap="review_with_replies_map" parameterType="map">
+    select
+        rt.rev_code,
+        rt.mb_id,
+        rt.item_num,
+        rt.rev_content,
+        rt.rev_rate,
+        rt.rev_date,
+        rrt.reply_id,
+        rrt.manager_id,
+        rrt.reply_text,
+        rrt.reply_date
+    from review_list rt
+    left outer join review_response rrt
+    on rt.rev_code = rrt.rev_code
+    where rt.item_num = #{item_num}
+    order by rt.rev_date desc
+    limit #{cri.pageStart},#{cri.perPageNum}
 </select>
 
 <select id="getReviewCount" resultType="int" parameterType="Integer">
-	select count(*) from review_list 
-	where item_num = #{item_num};
+    select count(*) from review_list
+    where item_num = #{item_num}
 </select>
 
-<insert id="review_save"  parameterType="com.kd.basic.common.dto.ReviewDTO">
-	insert into review_list (mb_id, item_num, rev_content, rev_rate)
-	values 
-	(#{mb_id}, #{item_num},#{rev_content},#{rev_rate})
+<insert id="review_save" parameterType="com.kd.basic.common.dto.ReviewDTO">
+    insert into review_list (mb_id, item_num, rev_content, rev_rate)
+    values
+    (#{mb_id}, #{item_num}, #{rev_content}, #{rev_rate})
 </insert>
 
 <delete id="review_delete" parameterType="Integer">
-
-	delete from
-	 	review_list 
-	where
-		rev_code = #{rev_code} 	
+    delete from review_list
+    where rev_code = #{rev_code}
 </delete>
-	<select id="review_info" resultType="com.kd.basic.common.dto.ReviewDTO" parameterType="Integer">
-		select 
-			rev_code,
-			mb_id,
-			item_num,
-			rev_content,
-			rev_rate,
-			rev_date 
-		from 
-			review_list  
-		where 
-			rev_code= #{rev_code}
-	
-	</select>
-	<update id="review_modify" parameterType="com.kd.basic.common.dto.ReviewDTO">
-		update 
-			review_list  set
-			rev_content = #{rev_content},
-			rev_rate = #{rev_rate},
-			rev_date = now()
-		where 
-			rev_code=#{rev_code} 
-	</update>
+
+<!-- 리뷰 상세 조회 - 답변 포함 -->
+<select id="review_info" resultMap="review_with_replies_map" parameterType="Integer">
+    select
+        rt.rev_code,
+        rt.mb_id,
+        rt.item_num,
+        rt.rev_content,
+        rt.rev_rate,
+        rt.rev_date,
+        rrt.reply_id,
+        rrt.manager_id,
+        rrt.reply_text,
+        rrt.reply_date
+    from review_list rt
+    left outer join review_response rrt
+    on rt.rev_code = rrt.rev_code
+    where rt.rev_code = #{rev_code}
+</select>
+
+<update id="review_modify" parameterType="com.kd.basic.common.dto.ReviewDTO">
+    update review_list set
+        rev_content = #{rev_content},
+        rev_rate = #{rev_rate},
+        rev_date = now()
+    where rev_code = #{rev_code}
+</update>
+
 </mapper>

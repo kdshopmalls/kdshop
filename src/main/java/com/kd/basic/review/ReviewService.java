@@ -7,7 +7,9 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.kd.basic.admin.review.AdminReviewMapper;
 import com.kd.basic.common.dto.ReviewDTO;
+import com.kd.basic.common.dto.ReviewReplyDTO;
 import com.kd.basic.common.utils.PageMaker;
 import com.kd.basic.common.utils.SearchCriteria;
 import com.kd.basic.product.ProductMapper;
@@ -19,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 public class ReviewService {
 	private final ReviewMapper reviewMapper;
 	private final ProductMapper productMapper;
+	private final AdminReviewMapper adminReviewMapper;
 	
 	public Map<String, Object> getReiviewList(Integer item_num, int page){
 	 Map<String, Object> map =new HashMap<>();
@@ -26,6 +29,7 @@ public class ReviewService {
 	 cri.setPage(page);
 	 
 	 List<ReviewDTO> rev_list = reviewMapper.rev_list(item_num, cri);
+	 
 		
 		PageMaker pageMaker= new PageMaker();
 		pageMaker.setCri(cri);

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <title>주문 목록</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Noto Sans KR", sans-serif;
+        background-color: #f5f5f5;
+        padding: 20px;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        background-color: white;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      /* ✅ 제목과 홈으로 버튼을 같은 줄에 배치 */
+      .header {
+        display: flex;
+        justify-content: space-between; /* 제목 왼쪽, 버튼 오른쪽 */
+        align-items: center;
+        margin-bottom: 30px;
+        border-bottom: 2px solid #333;
+        padding-bottom: 15px;
+      }
+
+      h1 {
+        font-size: 28px;
+        color: #333;
+      }
+
+      /* ✅ 홈으로 버튼 스타일 */
+      .btn-home {
+        text-decoration: none;
+        color: #333;
+        font-weight: bold;
+        font-size: 14px;
+        padding: 6px 12px;
+        border: 1px solid #333;
+        border-radius: 5px;
+        transition: background-color 0.3s, color 0.3s;
+      }
+
+      .btn-home:hover {
+        background-color: #333;
+        color: white;
+      }
+
+      .order-item {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+        transition: box-shadow 0.3s;
+      }
+
+      .order-item:hover {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .order-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #eee;
+      }
+
+      .order-date {
+        font-size: 14px;
+        color: #666;
+      }
+
+      .order-code {
+        font-weight: bold;
+        color: #333;
+        font-size: 16px;
+      }
+
+      .order-status {
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-size: 14px;
+        font-weight: bold;
+      }
+
+      .status-complete {
+        background-color: #e8f5e9;
+        color: #2e7d32;
+      }
+
+      .status-pending {
+        background-color: #fff3e0;
+        color: #e65100;
+      }
+
+      .status-waiting {
+        background-color: #fce4ec;
+        color: #c2185b;
+      }
+
+      .order-info {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+        margin-bottom: 15px;
+      }
+
+      .info-item {
+        display: flex;
+        align-items: center;
+      }
+
+      .info-label {
+        font-weight: bold;
+        color: #666;
+        min-width: 100px;
+        font-size: 14px;
+      }
+
+      .info-value {
+        color: #333;
+        font-size: 14px;
+      }
+
+      .order-price {
+        font-size: 20px;
+        font-weight: bold;
+        color: #d32f2f;
+        text-align: right;
+        margin-top: 10px;
+      }
+
+      .empty-order {
+        text-align: center;
+        padding: 60px 20px;
+        color: #999;
+      }
+
+      .empty-order i {
+        font-size: 60px;
+        margin-bottom: 20px;
+      }
+
+      .empty-order p {
+        font-size: 16px;
+        margin-bottom: 20px;
+      }
+
+      .btn-shopping {
+        display: inline-block;
+        padding: 12px 30px;
+        background-color: #4caf50;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        font-size: 16px;
+      }
+
+      .btn-shopping:hover {
+        background-color: #45a049;
+      }
+
+      .order-footer {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 10px;
+        margin-top: 15px;
+        padding-top: 15px;
+        border-top: 1px solid #eee;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- ✅ 제목 + 홈으로 버튼 -->
+      <div class="header">
+        <h1>주문 목록</h1>
+        <a href="/" class="btn-home">홈으로</a>
+      </div>
+
+      <!-- 주문 내역이 있을 때 -->
+      <div th:if="${orderList != null and #lists.size(orderList) > 0}">
+        <div class="order-item" th:each="order : ${orderList}">
+          <div class="order-header">
+            <div>
+              <span class="order-date" th:text="${#dates.format(order.or_regdate, 'yyyy-MM-dd HH:mm')}"></span>
+              <span class="order-code"> | 주문번호: <span th:text="${order.or_code}"></span></span>
+            </div>
+            <span
+              class="order-status"
+              th:classappend="${order.or_status == '입금완료'} ? 'status-complete' : 
+                                         (${order.or_status == '입금미납'} ? 'status-pending' : 'status-waiting')"
+              th:text="${order.or_status}"
+            ></span>
+          </div>
+
+          <div class="order-info">
+            <div class="info-item">
+              <span class="info-label">주문자:</span>
+              <span class="info-value" th:text="${order.or_name}"></span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">연락처:</span>
+              <span class="info-value" th:text="${order.or_tel}"></span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">이메일:</span>
+              <span class="info-value" th:text="${order.or_mail}"></span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">배송지:</span>
+              <span class="info-value" th:text="${order.or_addr_basic + ' ' + order.or_addr_detail}"></span>
+            </div>
+          </div>
+
+          <div class="order-footer">
+            <div class="order-price">
+              결제금액:
+              <span th:text="${#numbers.formatInteger(order.or_price, 0, 'COMMA')}"></span>원
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 주문 내역이 없을 때 -->
+      <div class="empty-order" th:if="${orderList == null or #lists.size(orderList) == 0}">
+        <p>주문 내역이 없습니다.</p>
+      </div>
+    </div>
+  </body>
+</html>

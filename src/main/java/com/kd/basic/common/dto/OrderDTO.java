@@ -10,7 +10,7 @@ import lombok.ToString;
 @Setter
 @Getter
 public class OrderDTO {
-	// 소문자 CTRL + SHIFT + Y
+
 	private Integer or_code; // auto_increment
 	private String mb_id;
 	private String or_name;

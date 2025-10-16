@@ -14,4 +14,10 @@ public interface OrderMapper {
 	void order_detail_insert(@Param("or_code") Integer or_code,@Param("mb_id") String mb_id);
 	//현재 주문내역 
 	List<Map<String, Object>> getOrderByOr_code(Integer or_code);
+	
+	// 사용자별 주문 목록 조회
+	List<OrderDTO> getOrderListByMemberId(String mb_id);
+
+	// 주문 상세 정보 조회 (주문번호로)
+	List<Map<String, Object>> getOrderDetailsByOrCode(Integer or_code);
 }
