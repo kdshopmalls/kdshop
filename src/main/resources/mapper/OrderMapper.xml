@@ -89,4 +89,16 @@
     where 
         od.or_code = #{or_code}
 </select>
+
+<select id="findOrderById" resultType="com.kd.basic.common.dto.OrderDTO">
+
+	select
+		*
+	from 
+		order_list
+	where 
+        od.or_code = #{or_code}
+
+</select>
+
 </mapper>

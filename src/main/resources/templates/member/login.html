@@ -11,6 +11,11 @@
         alert("비밀번호를 확인하세요");
         document.getElementById("mb_pw").focus();
       }
+      
+   	// REST API
+	function fnClick() {
+		location.href = [[${location}]]
+	};
     </script>
   </th:block>
 
@@ -34,6 +39,13 @@
           <div class="d-grid mt-4">
             <button type="submit" class="btn btn-primary">로그인</button>
           </div>
+          <div class="mb-3  text-center">
+			<button type="submit" class="btn btn-primary">Login</button>
+			<a href="/member/lostpass" class="btn btn-primary">ID/PW Search</a>
+			<a href="javascript:void(0)"  th:onclick="javascript:fnClick();" style="cursor: pointer;">
+				<img src="/image/sns/kakao_login_medium_wide.png">
+			</a>
+		  </div>
         </form>
       </div>
     </div>

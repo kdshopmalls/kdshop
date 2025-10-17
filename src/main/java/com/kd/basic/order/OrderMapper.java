@@ -20,4 +20,7 @@ public interface OrderMapper {
 
 	// 주문 상세 정보 조회 (주문번호로)
 	List<Map<String, Object>> getOrderDetailsByOrCode(Integer or_code);
+	
+	// 챗봇 주문코드 배송조회.
+	OrderDTO findOrderById(@Param("or_code") int or_code);
 }
