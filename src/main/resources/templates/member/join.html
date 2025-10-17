@@ -12,98 +12,98 @@
                 </div>
               </div>
 
-              <form action="/member/join" method="post">
+              <form id="joinForm" action="/member/join" method="post">
                 <div class="row gy-3 gy-md-4 overflow-hidden">
                   <!-- 아이디 -->
                   <div class="col-12 mb-3 d-flex flex-column align-items-center">
-                    <label for="user_id" class="form-label text-center">아이디</label>
+                    <label for="mbsp_id" class="form-label text-center">아이디</label>
                     <div class="d-flex w-75">
-                      <input type="text" class="form-control flex-grow-1 me-2" name="user_id" id="user_id" placeholder="ID" required />
-                      <button class="btn btn-primary flex-shrink-0" type="button" id="idCheck" style="white-space: nowrap">아이디 확인</button>
+                      <input type="text" class="form-control flex-grow-1 me-2" name="mb_id" id="mbsp_id" placeholder="ID" required />
+                      <button class="btn btn-primary flex-shrink-0" type="button" id="btnIDCheck" style="white-space: nowrap">아이디 확인</button>
                     </div>
                   </div>
 
                   <!-- 비밀번호 -->
                   <div class="col-12 d-flex flex-column align-items-center">
-                    <label for="user_pw" class="form-label">비밀번호</label>
-                    <input type="password" class="form-control w-75 mx-auto" name="user_pw" id="user_pw" placeholder="PW" required />
+                    <label for="mb_pw" class="form-label">비밀번호</label>
+                    <input type="password" class="form-control w-75 mx-auto" name="mb_pw" id="mb_pw" placeholder="PW" required />
                   </div>
 
                   <!-- 비밀번호 확인 -->
                   <div class="col-12 d-flex flex-column align-items-center">
                     <label for="pw_confirm" class="form-label">비밀번호 확인</label>
-                    <input type="password" class="form-control w-75 mx-auto" name="pw_confirm" id="pw_confirm" placeholder="PW 확인" required />
+                    <input type="password" class="form-control w-75 mx-auto" id="pw_confirm" placeholder="PW 확인" required />
                   </div>
 
                   <!-- 이름 -->
                   <div class="col-12 d-flex flex-column align-items-center">
-                    <label for="user_name" class="form-label">이름</label>
-                    <input type="text" class="form-control w-75 mx-auto" name="user_name" id="user_name" placeholder="가나다" required />
+                    <label for="mb_name" class="form-label">이름</label>
+                    <input type="text" class="form-control w-75 mx-auto" name="mb_name" id="mb_name" placeholder="가나다" required />
                   </div>
 
                   <!-- 닉네임 -->
                   <div class="col-12 d-flex flex-column align-items-center">
-                    <label for="user_nick" class="form-label">닉네임</label>
-                    <input type="text" class="form-control w-75 mx-auto" name="user_nick" id="user_nick" placeholder="닉네임" required />
+                    <label for="mb_nick" class="form-label">닉네임</label>
+                    <input type="text" class="form-control w-75 mx-auto" name="mb_nick" id="mb_nick" placeholder="닉네임" required />
                   </div>
 
                   <!-- 이메일 -->
                   <div class="col-12 mb-3 d-flex flex-column align-items-center">
-                    <label for="user_email" class="form-label text-center">E-mail</label>
+                    <label for="mbsp_email" class="form-label text-center">E-mail</label>
                     <div class="d-flex w-75">
-                      <input type="email" class="form-control flex-grow-1 me-2" name="user_email" id="user_email" placeholder="abc@example.com" required />
-                      <button class="btn btn-primary flex-shrink-0" type="button" style="white-space: nowrap">인증요청</button>
+                      <input type="email" class="form-control flex-grow-1 me-2" name="mb_email" id="mbsp_email" placeholder="abc@example.com" required />
+                      <button class="btn btn-primary flex-shrink-0" type="button" id="btnMailAuthcode" style="white-space: nowrap">인증요청</button>
                     </div>
                   </div>
 
                   <!-- 인증코드 -->
                   <div class="col-12 mb-3 d-flex flex-column align-items-center">
-                    <label for="auth_code" class="form-label text-center">인증코드</label>
+                    <label for="u_authcode" class="form-label text-center">인증코드</label>
                     <div class="d-flex w-75">
-                      <input type="text" class="form-control flex-grow-1 me-2" name="auth_code" id="auth_code" placeholder="인증코드를 입력하세요" required />
-                      <button class="btn btn-primary flex-shrink-0" type="button" style="white-space: nowrap">인증확인</button>
+                      <input type="text" class="form-control flex-grow-1 me-2" id="u_authcode" placeholder="인증코드를 입력하세요" />
+                      <button class="btn btn-primary flex-shrink-0" type="button" id="btnConfirmAuth" style="white-space: nowrap">인증확인</button>
                     </div>
                   </div>
 
                   <!-- 우편번호 -->
                   <div class="col-12 mb-3 d-flex flex-column align-items-center">
-                    <label for="user_zipc" class="form-label text-center">우편번호</label>
+                    <label for="mb_zipcode" class="form-label text-center">우편번호</label>
                     <div class="d-flex w-75">
-                      <input type="text" class="form-control flex-grow-1 me-2" name="user_zipc" id="sample2_postcode" placeholder="우편번호" required />
+                      <input type="text" class="form-control flex-grow-1 me-2" name="mb_zipcode" id="sample2_postcode" placeholder="우편번호" required />
                       <button class="btn btn-primary flex-shrink-0" onclick="sample2_execDaumPostcode()" type="button" style="white-space: nowrap">검색</button>
                     </div>
                   </div>
 
                   <!-- 기본주소 -->
                   <div class="col-12 d-flex flex-column align-items-center">
-                    <label for="user_addr" class="form-label">기본주소</label>
-                    <input type="text" class="form-control w-75 mx-auto" name="user_addr" id="sample2_address" placeholder="기본 주소" required />
+                    <label for="mb_addr" class="form-label">기본주소</label>
+                    <input type="text" class="form-control w-75 mx-auto" name="mb_addr" id="sample2_address" placeholder="기본 주소" required />
                   </div>
 
                   <!-- 상세주소 -->
                   <div class="col-12 d-flex flex-column align-items-center">
-                    <label for="user_addrdet" class="form-label">상세주소</label>
-                    <input type="text" class="form-control w-75 mx-auto" name="user_addrdet" id="sample2_detailAddress" placeholder="상세 주소" />
+                    <label for="mb_deaddr" class="form-label">상세주소</label>
+                    <input type="text" class="form-control w-75 mx-auto" name="mb_deaddr" id="sample2_detailAddress" placeholder="상세 주소" required />
                     <input type="hidden" id="sample2_extraAddress" placeholder="참고항목" />
                   </div>
 
                   <!-- 연락처 -->
                   <div class="col-12 d-flex flex-column align-items-center">
-                    <label for="user_phone" class="form-label">연락처</label>
-                    <input type="tel" class="form-control w-75 mx-auto" name="user_phone" id="user_phone" placeholder="010-1234-5678" required />
+                    <label for="mb_phone" class="form-label">연락처</label>
+                    <input type="tel" class="form-control w-75 mx-auto" name="mb_phone" id="mb_phone" placeholder="010-1234-5678" required />
                   </div>
 
                   <!-- 메일 수신 동의 -->
                   <div class="col-12 d-flex justify-content-center align-items-center">
-                    <input type="checkbox" class="form-check-input" name="mail_rec" id="mail_rec" value="Y" />
+                    <input type="checkbox" class="form-check-input" id="mb_receive_check" />
+                    <input type="hidden" name="mb_receive" id="mb_receive" value="N" />
                     <span class="ms-2">메일 수신 동의</span>
                   </div>
 
                   <!-- 가입 / 취소 버튼 -->
-                  <!-- 가입 / 취소 버튼 -->
                   <div class="col-12">
                     <div class="d-flex justify-content-center gap-3">
-                      <button class="btn btn-primary px-4" type="submit">가입</button>
+                      <button class="btn btn-primary px-4" type="button" id="btnJoin">가입</button>
                       <button class="btn btn-secondary px-4" type="reset">취소</button>
                     </div>
                   </div>
@@ -128,11 +128,13 @@
 
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <script>
+      // 다음 우편번호 API 스크립트
       var element_layer = document.getElementById("layer");
 
       function closeDaumPostcode() {
         element_layer.style.display = "none";
       }
+
       function sample2_execDaumPostcode() {
         new daum.Postcode({
           oncomplete: function (data) {
@@ -160,6 +162,7 @@
         element_layer.style.display = "block";
         initLayerPosition();
       }
+
       function initLayerPosition() {
         var width = 300;
         var height = 400;
@@ -171,39 +174,119 @@
         element_layer.style.top = ((window.innerHeight || document.documentElement.clientHeight) - height) / 2 - borderWidth + "px";
       }
     </script>
+
+    <!-- 회원가입 폼 검증 스크립트 -->
     <script>
       $(document).ready(function () {
-        let id_check = false; // 아이디 중복확인 체크했는지 확인하는 변수
+        // 전역변수
+        let id_check = false; // 아이디 중복체크 여부를 확인하는 변수
+        let email_auth = false; // 이메일 인증여부를 확인하는 변수
 
-        $("#idCheck").on("click", function () {
-          // 아이디 중복확인 클릭 id="idCheck"
+        // 메일 수신 동의 체크박스 처리
+        $("#mb_receive_check").on("change", function () {
+          if ($(this).is(":checked")) {
+            $("#mb_receive").val("Y");
+          } else {
+            $("#mb_receive").val("N");
+          }
+        });
 
-          let userId = $("#user_id");
-          // input 태그 id="user_id"
+        // 아이디 중복체크 클릭설정. id="btnIDCheck"
+        $("#btnIDCheck").on("click", function () {
+          // <input type='text' id='mbsp_id'>
+          let mbsp_id = $("#mbsp_id");
 
-          if (userId.val() == "") {
+          if (mbsp_id.val() == "") {
             alert("아이디를 입력하세요");
             return;
           }
 
           $.ajax({
-            url: "/member/idCheck", // 컨트롤러의 주소
+            url: "/member/idCheck",
             type: "get",
-            data: { userId: userId.val() },
+            data: { mbsp_id: mbsp_id.val() },
             dataType: "text",
             success: function (result) {
               if (result == "yes") {
-                alert("사용 가능한 아이디");
+                alert("사용가능");
                 id_check = true;
               } else {
-                alert("사용할 수 없는 아이디");
-                userId.val("");
-                userId.focus();
+                alert("사용불가능");
+                mbsp_id.val("");
+                mbsp_id.focus();
               }
             },
           });
         });
-      }); // ready end
+
+        // 메일인증요청. id="btnMailAuthcode" id="mbsp_email"
+        $("#btnMailAuthcode").on("click", function () {
+          if ($("#mbsp_email").val() == "") {
+            alert("메일을 입력하세요.");
+            return;
+          }
+
+          $.ajax({
+            url: "/email/authcode",
+            type: "get",
+            data: { receiverMail: $("#mbsp_email").val(), type: "authcode" },
+            dataType: "text",
+            success: function (result) {
+              if (result == "success") {
+                alert("메일로 인증코드가 발급되었습니다.");
+              }
+            },
+          });
+        });
+
+        // 인증확인. id="btnConfirmAuth"
+        $("#btnConfirmAuth").on("click", function () {
+          // id="u_authcode"
+          if ($("#u_authcode").val() == "") {
+            alert("인증코드를 입력하세요.");
+            return;
+          }
+
+          $.ajax({
+            url: "/email/confirm_authcode",
+            type: "get",
+            data: { authcode: $("#u_authcode").val() },
+            dataType: "text",
+            success: function (result) {
+              if (result == "success") {
+                alert("인증이 확인되었습니다.");
+                email_auth = true;
+              } else if (result == "fail") {
+                alert("인증코드가 틀립니다. \n다시 확인 또는 인증코드 재발급해주세요.");
+              }
+            },
+          });
+        });
+
+        // 회원가입. id="btnJoin"
+        $("#btnJoin").on("click", function () {
+          // 클라이언트 유효성검사(Validation)
+          // id="joinForm"
+          let joinForm = $("#joinForm"); // <form>태그 참조
+
+          // 입력한 데이타 체크작업.
+
+          // 아이디 중복체크여부
+          if (id_check == false) {
+            alert("아이디 중복확인바랍니다.");
+            return;
+          }
+
+          // 메일인증 확인여부
+          if (email_auth == false) {
+            alert("메일 인증확인바랍니다.");
+            return;
+          }
+
+          // return;
+          joinForm.submit();
+        });
+      });
     </script>
   </th:block>
 </html>

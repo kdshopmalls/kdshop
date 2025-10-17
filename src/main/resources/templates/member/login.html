@@ -2,50 +2,160 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/layout}">
   <th:block layout:fragment="script2">
     <script th:inline="javascript">
-      let status = [[${status}]]; // pwFail, idFail
+           let status = [[${status}]]; // pwFail, idFail
 
-      if (status === "idFail") {
-        alert("아이디를 확인하세요");
-        document.getElementById("mb_id").focus();
-      } else if (status === "pwFail") {
-        alert("비밀번호를 확인하세요");
-        document.getElementById("mb_pw").focus();
-      }
-      
-   	// REST API
-	function fnClick() {
-		location.href = [[${location}]]
-	};
+           if (status === "idFail") {
+             alert("아이디를 확인하세요");
+             document.getElementById("mb_id").focus();
+           } else if (status === "pwFail") {
+             alert("비밀번호를 확인하세요");
+             document.getElementById("mb_pw").focus();
+           }
+
+        	// REST API
+      function fnClick() {
+      	location.href = [[${location}]]
+      };
     </script>
   </th:block>
 
   <th:block layout:fragment="content">
-    <div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh">
-      <div class="card shadow-sm p-4" style="max-width: 400px; width: 100%">
-        <h2 class="text-center mb-4">로그인</h2>
+    <style>
+      .login-container {
+        min-height: 80vh;
+        background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+      }
+
+      .login-card {
+        max-width: 420px;
+        width: 100%;
+        background: #ffffff;
+        border-radius: 12px;
+        border: 1px solid #e0e0e0;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      }
+
+      .login-title {
+        color: #2c2c2c;
+        font-size: 28px;
+        font-weight: 600;
+        letter-spacing: -0.5px;
+      }
+
+      .form-label {
+        color: #4a4a4a;
+        font-size: 14px;
+        font-weight: 500;
+        margin-bottom: 8px;
+      }
+
+      .form-control {
+        height: 48px;
+        border: 1px solid #d4d4d4;
+        border-radius: 8px;
+        padding: 12px 16px;
+        font-size: 15px;
+        transition: all 0.2s ease;
+        background-color: #fafafa;
+      }
+
+      .form-control:focus {
+        background-color: #ffffff;
+        border-color: #666666;
+        box-shadow: 0 0 0 3px rgba(102, 102, 102, 0.1);
+        outline: none;
+      }
+
+      .form-control::placeholder {
+        color: #b0b0b0;
+      }
+
+      .btn-login {
+        height: 52px;
+        background: linear-gradient(135deg, #4a4a4a 0%, #2c2c2c 100%);
+        border: none;
+        border-radius: 8px;
+        color: #ffffff;
+        font-size: 16px;
+        font-weight: 600;
+        letter-spacing: 0.3px;
+        transition: all 0.3s ease;
+      }
+
+      .btn-login:hover {
+        background: linear-gradient(135deg, #5a5a5a 0%, #3c3c3c 100%);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
+
+      .btn-login:active {
+        transform: translateY(0);
+      }
+
+      .kakao-login-btn {
+        display: inline-block;
+        margin-top: 16px;
+        transition: all 0.2s ease;
+      }
+
+      .kakao-login-btn img {
+        width: 100%;
+        max-width: 320px;
+        height: auto;
+        border-radius: 6px;
+      }
+
+      .kakao-login-btn:hover {
+        transform: translateY(-2px);
+        opacity: 0.9;
+      }
+
+      .divider {
+        margin: 24px 0;
+        text-align: center;
+        position: relative;
+      }
+
+      .divider::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: #e0e0e0;
+      }
+
+      .divider span {
+        background: #ffffff;
+        padding: 0 16px;
+        position: relative;
+        color: #999999;
+        font-size: 13px;
+      }
+    </style>
+
+    <div class="container d-flex justify-content-center align-items-center login-container">
+      <div class="login-card p-5">
+        <h2 class="text-center mb-4 login-title">로그인</h2>
         <form action="/member/login" method="post">
           <div class="mb-3">
             <label for="mb_id" class="form-label">아이디</label>
-            <div class="input-group">
-              <input type="text" class="form-control" id="mb_id" name="mb_id" placeholder="아이디를 입력" />
-            </div>
+            <input type="text" class="form-control" id="mb_id" name="mb_id" placeholder="아이디를 입력하세요" />
           </div>
           <div class="mb-3">
             <label for="mb_pw" class="form-label">비밀번호</label>
-            <div class="input-group">
-              <input type="password" class="form-control" id="mb_pw" name="mb_pw" placeholder="비밀번호를 입력" />
-            </div>
+            <input type="password" class="form-control" id="mb_pw" name="mb_pw" placeholder="비밀번호를 입력하세요" />
           </div>
           <div class="d-grid mt-4">
-            <button type="submit" class="btn btn-primary">로그인</button>
+            <button type="submit" class="btn btn-login">로그인</button>
           </div>
-          <div class="mb-3  text-center">
-			<button type="submit" class="btn btn-primary">Login</button>
-			<a href="/member/lostpass" class="btn btn-primary">ID/PW Search</a>
-			<a href="javascript:void(0)"  th:onclick="javascript:fnClick();" style="cursor: pointer;">
-				<img src="/image/sns/kakao_login_medium_wide.png">
-			</a>
-		  </div>
+
+          <div class="text-center">
+            <a href="javascript:void(0)" th:onclick="javascript:fnClick();" class="kakao-login-btn">
+              <img src="/image/sns/kakao_login_medium_wide.png" alt="카카오 로그인" />
+            </a>
+          </div>
         </form>
       </div>
     </div>
