@@ -1,27 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kd.basic.admin.product.AdProductMapper">
-<insert id="pro_insert"  parameterType="com.kd.basic.admin.product.AdProductMapper">
-	insert into item_list( 
-	cate_code,
-	item_name,
-	item_price,
-	item_discount,
-	item_publisher,
-	item_content,
-	item_up_folder,
-	item_img,
-	item_amount
-	)values(
-	#{cate_code},
-	#{item_name},
-	#{item_price},
-	#{item_discount},
-	#{item_publisher},
-	#{item_content},
-	#{item_up_folder},
-	#{item_img},
-	#{item_amount} );
+<insert id="pro_insert"  parameterType="com.kd.basic.common.dto.ProductDTO">
+    insert into item_list(
+        cate_code,
+        item_name,
+        item_price,
+        item_discount,
+        item_publisher,
+        item_content,
+        item_up_folder,
+        item_img,
+        item_amount,
+        item_buy
+    )values(
+        #{cate_code},
+        #{item_name},
+        #{item_price},
+        #{item_discount},
+        #{item_publisher},
+        #{item_content},
+        #{item_up_folder},
+        #{item_img},
+        #{item_amount},
+        #{item_buy}
+    )
 </insert>
 
 <select id="pro_list" resultType="com.kd.basic.common.dto.ProductDTO" parameterType="com.kd.basic.common.utils.SearchCriteria">
