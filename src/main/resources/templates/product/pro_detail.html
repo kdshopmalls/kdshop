@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/layout}">
+  <th:block layout:fragment="script1">
+    <script src="https://code.jquery.com/ui/1.14.1/jquery-ui.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+    <script id="templateReview" type="text/x-handlebars-template">
+      <div class="review-list">
+        {{#each .}}
+        <div class="review-item">
+          <div class="review-header">
+            <div class="review-info">
+              <span class="reviewer-id">{{auth_id mb_id}}</span>
+              <span class="review-date">{{rev_date}}</span>
+            </div>
+            <div class="review-rating">{{displayStar rev_rate}}</div>
+          </div>
+          <div class="review-content">
+            <p>{{rev_content}}</p>
+          </div>
+          <div class="review-actions">
+            {{authControlView mb_id rev_code}}
+          </div>
+
+          <!-- 관리자 답변 영역 - 답변이 있고, reply_id가 존재할 때만 표시 -->
+          {{#if replies}}
+            {{#each replies}}
+              {{#if reply_id}}
+              <div class="admin-reply-box">
+                <div class="admin-reply-header">
+                  <span class="admin-badge">관리자</span>
+                  <span class="reply-manager-id">{{manager_id}}</span>
+                  <span class="reply-date" >{{reply_date}}</span>
+                </div>
+                <div class="admin-reply-content">
+                  <p>{{reply_text}}</p>
+                </div>
+              </div>
+              {{/if}}
+            {{/each}}
+          {{/if}}
+        </div>
+        {{/each}}
+      </div>
+    </script>
+    <script th:inline="javascript">
+      //핸들바 사용자 정의 함수
+
+      Handlebars.registerHelper("displayStar", function (rating) {
+        rating = parseInt(rating, 10);
+        const maxStars = 5;
+        const fullStar = "★";
+        const emptyStar = "☆";
+        return fullStar.repeat(rating) + emptyStar.repeat(maxStars - rating);
+      });
+
+      Handlebars.registerHelper("auth_id", function (mb_id) {
+        return mb_id.substring(0, 4) + "*".repeat(5);
+      });
+
+      Handlebars.registerHelper("authControlView", function (ms_id, rev_code) {
+        let memberVo = [[${session.login_auth}]];
+        let loginId = "";
+        if (memberVo !== null) {
+          loginId = [[${session.login_auth == null? '' : session.login_auth.mb_id}]];
+        }
+        console.log("아이디", loginId);
+        let str = "";
+        if (memberVo !== null && loginId == ms_id) {
+          str += `<button type="button" name="delete" class="btn btn-outline-danger btn-sm review-btn" data-rev_code="${rev_code}">삭제</button>`;
+          str += `<button type="button" name="edit" class="btn btn-outline-primary btn-sm review-btn" data-rev_code="${rev_code}">수정</button>`;
+          return new Handlebars.SafeString(str);
+        } else {
+          return str;
+        }
+      });
+    </script>
+    <script>
+      $(document).ready(function () {
+        $("#tabs").tabs();
+      });
+    </script>
+  </th:block>
+  <th:block layout:fragment="css">
+    <style>
+      /* 메인 컨테이너 */
+      .product-main-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      /* 제목 스타일 */
+      .product-title {
+        color: #2c3e50;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 30px;
+        font-size: 2.5rem;
+        background: linear-gradient(135deg, #667eea 0%, #495057 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      /* 상품 정보 카드 */
+      .product-info-card {
+        background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        margin-bottom: 40px;
+      }
+
+      .product-info-card:hover {
+        box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
+      }
+
+      /* 상품 이미지 */
+      .product-image-wrapper {
+        position: relative;
+        overflow: hidden;
+        border-radius: 15px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+      }
+
+      .product-image-wrapper img {
+        width: 100%;
+        height: 280px;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+      }
+
+      .product-image-wrapper:hover img {
+        opacity: 0.9;
+      }
+
+      /* 상품 상세 정보 */
+      .product-details h5 {
+        color: #2c3e50;
+        font-weight: 700;
+        font-size: 1.8rem;
+        margin-bottom: 25px;
+        border-bottom: 3px solid #667eea;
+        padding-bottom: 10px;
+      }
+
+      .product-detail-row {
+        margin-bottom: 18px;
+        padding: 12px 15px;
+        background: white;
+        border-radius: 10px;
+        border-left: 4px solid #667eea;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+      }
+
+      .product-detail-row:hover {
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+      }
+
+      .product-detail-row strong {
+        color: #495057;
+        font-weight: 600;
+      }
+
+      /* 할인율 배지 */
+      .discount-badge {
+        background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+        color: white;
+        padding: 6px 18px;
+        border-radius: 25px;
+        font-weight: bold;
+        display: inline-block;
+        margin-left: 10px;
+        box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+      }
+
+      /* 가격 강조 */
+      .price-highlight {
+        color: #e74c3c;
+        font-weight: bold;
+        font-size: 1.4rem;
+        margin-left: 10px;
+      }
+
+      /* 수량 입력 */
+      #cart_amount {
+        border: 2px solid #667eea;
+        border-radius: 10px;
+        padding: 10px 15px;
+        width: 90px;
+        text-align: center;
+        font-weight: bold;
+        font-size: 16px;
+        transition: all 0.3s ease;
+      }
+
+      #cart_amount:focus {
+        outline: none;
+        border-color: #764ba2;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+      }
+
+      /* 버튼 스타일 */
+      .btn-group .btn {
+        border-radius: 30px;
+        padding: 14px 35px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        transition: all 0.3s ease;
+        border: none;
+        margin: 0 5px;
+      }
+
+      #btn_cart_add {
+        background: linear-gradient(45deg, #667eea, #764ba2);
+        color: white;
+      }
+
+      #btn_cart_add:hover {
+        background: linear-gradient(45deg, #764ba2, #667eea);
+        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+      }
+
+      #btn_buy_add {
+        background: linear-gradient(45deg, #f093fb, #f5576c);
+        color: white;
+      }
+
+      #btn_buy_add:hover {
+        background: linear-gradient(45deg, #f5576c, #f093fb);
+        box-shadow: 0 8px 20px rgba(245, 87, 108, 0.4);
+      }
+
+      /* 탭 스타일 */
+      #tabs {
+        margin-top: 40px;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+      }
+
+      .ui-tabs-nav {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        padding: 0;
+        display: flex;
+      }
+
+      .ui-tabs-nav li {
+        border: none;
+        background: transparent;
+        flex: 1;
+      }
+
+      .ui-tabs-nav li a {
+        color: rgba(255, 255, 255, 0.8);
+        background: transparent;
+        border: none;
+        padding: 18px 30px;
+        font-weight: 600;
+        font-size: 16px;
+        transition: all 0.3s ease;
+        text-align: center;
+        display: block;
+      }
+
+      .ui-tabs-nav li.ui-tabs-active a {
+        background: rgba(255, 255, 255, 0.3);
+        color: white;
+        font-size: 18px;
+      }
+
+      .ui-tabs-nav li a:hover {
+        background: rgba(255, 255, 255, 0.15);
+        color: white;
+      }
+
+      .ui-tabs-panel {
+        background: white;
+        padding: 35px;
+        min-height: 300px;
+      }
+
+      /* 별점 스타일 - 신규 작성 */
+      p#star_rev_rate {
+        text-align: center;
+        margin: 15px 0;
+      }
+
+      p#star_rev_rate a.rev_rate {
+        font-size: 32px;
+        text-decoration: none;
+        color: #ddd;
+        margin: 0 4px;
+        transition: all 0.3s ease;
+        display: inline-block;
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+      }
+
+      p#star_rev_rate a.rev_rate:hover {
+        color: #ffd700;
+        transform: scale(1.1);
+      }
+
+      p#star_rev_rate a.rev_rate.on {
+        color: #ffd700;
+        text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+      }
+
+      /* 별점 스타일 - 수정 */
+      p#star_rev_rate2 a.rev_rate {
+        font-size: 26px;
+        text-decoration: none;
+        color: #ddd;
+        margin: 0 3px;
+        transition: all 0.3s ease;
+        display: inline-block;
+      }
+
+      p#star_rev_rate2 a.rev_rate:hover {
+        color: #ffd700;
+        transform: scale(1.2);
+      }
+
+      p#star_rev_rate2 a.rev_rate.on {
+        color: #ffd700;
+      }
+
+      /* 리뷰 작성 섹션 */
+      .review-write-section {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border-radius: 15px;
+        padding: 25px;
+        margin-bottom: 30px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+      }
+
+      #rev_content {
+        border: 2px solid #e9ecef;
+        border-radius: 12px;
+        padding: 15px;
+        font-size: 15px;
+        transition: all 0.3s ease;
+        resize: vertical;
+      }
+
+      #rev_content:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.15);
+        outline: none;
+      }
+
+      #btn_rev_save {
+        background: linear-gradient(45deg, #28a745, #20c997);
+        border: none;
+        border-radius: 30px;
+        padding: 12px 28px;
+        color: white;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+      }
+
+      #btn_rev_save:hover {
+        background: linear-gradient(45deg, #20c997, #28a745);
+        box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+      }
+
+      /* 리뷰 목록 */
+      .review-list {
+        margin-top: 25px;
+      }
+
+      .review-item {
+        background: white;
+        border-radius: 15px;
+        padding: 25px;
+        margin-bottom: 20px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        transition: all 0.4s ease;
+        border-left: 5px solid #667eea;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .review-item::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .review-item:hover::before {
+        opacity: 1;
+      }
+
+      .review-item:hover {
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+      }
+
+      .review-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+        padding-bottom: 12px;
+        border-bottom: 2px solid #e9ecef;
+        position: relative;
+        z-index: 1;
+      }
+
+      .review-info {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .reviewer-id {
+        font-weight: 700;
+        color: #495057;
+        font-size: 15px;
+        margin-bottom: 5px;
+      }
+
+      .review-date {
+        color: #6c757d;
+        font-size: 13px;
+      }
+
+      .review-rating {
+        font-size: 20px;
+        color: #ffd700;
+        text-shadow: 0 2px 4px rgba(255, 215, 0, 0.3);
+      }
+
+      .review-content {
+        position: relative;
+        z-index: 1;
+      }
+
+      .review-content p {
+        margin: 0;
+        color: #495057;
+        line-height: 1.8;
+        font-size: 15px;
+      }
+
+      .review-actions {
+        margin-top: 18px;
+        text-align: right;
+        position: relative;
+        z-index: 1;
+      }
+
+      .review-btn {
+        margin-left: 8px;
+        border-radius: 25px;
+        padding: 6px 20px;
+        font-size: 13px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+
+      .review-btn:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
+
+      /* 페이징 */
+      .pagination {
+        justify-content: center;
+        margin-top: 35px;
+      }
+
+      .page-item .page-link {
+        border-radius: 10px;
+        margin: 0 4px;
+        border: 2px solid #e9ecef;
+        color: #667eea;
+        transition: all 0.3s ease;
+        padding: 10px 18px;
+        font-weight: 600;
+      }
+
+      .page-item .page-link:hover {
+        background: linear-gradient(45deg, #667eea, #764ba2);
+        color: white;
+        border-color: #667eea;
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+      }
+
+      .page-item.active .page-link {
+        background: linear-gradient(45deg, #667eea, #764ba2);
+        border-color: #667eea;
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+      }
+
+      /* 반응형 디자인 */
+      @media (max-width: 768px) {
+        .product-main-container {
+          padding: 10px;
+        }
+
+        .product-title {
+          font-size: 2rem;
+        }
+
+        .product-info-card {
+          padding: 20px;
+        }
+
+        .product-details h5 {
+          font-size: 1.5rem;
+        }
+
+        .ui-tabs-nav li a {
+          padding: 14px 20px;
+          font-size: 14px;
+        }
+
+        .ui-tabs-panel {
+          padding: 20px;
+        }
+
+        .btn-group .btn {
+          padding: 12px 25px;
+          font-size: 14px;
+        }
+      }
+
+      /* ========== 관리자 답변 스타일 ========== */
+      .admin-reply-box {
+        background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+        border-left: 4px solid #667eea;
+        border-radius: 12px;
+        padding: 20px;
+        margin-top: 15px;
+        margin-left: 30px;
+        box-shadow: 0 3px 10px rgba(102, 126, 234, 0.15);
+        position: relative;
+        animation: fadeIn 0.5s ease-in;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .admin-reply-box::before {
+        content: "↳";
+        position: absolute;
+        left: -25px;
+        top: 20px;
+        font-size: 24px;
+        color: #667eea;
+        font-weight: bold;
+      }
+
+      .admin-reply-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 12px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid rgba(102, 126, 234, 0.2);
+      }
+
+      .admin-badge {
+        background: linear-gradient(45deg, #667eea, #764ba2);
+        color: white;
+        padding: 4px 12px;
+        border-radius: 15px;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+      }
+
+      .reply-manager-id {
+        font-weight: 600;
+        color: #495057;
+        font-size: 14px;
+      }
+
+      .reply-date {
+        color: #6c757d;
+        font-size: 12px;
+        margin-left: auto;
+      }
+
+      .admin-reply-content {
+        background: white;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+      }
+
+      .admin-reply-content p {
+        margin: 0;
+        color: #2c3e50;
+        line-height: 1.7;
+        font-size: 14px;
+      }
+
+      /* 반응형 - 모바일 */
+      @media (max-width: 768px) {
+        .admin-reply-box {
+          margin-left: 15px;
+          padding: 15px;
+        }
+
+        .admin-reply-box::before {
+          left: -15px;
+          font-size: 18px;
+        }
+      }
+    </style>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.14.1/themes/base/jquery-ui.css" />
+  </th:block>
+  <th:block layout:fragment="content">
+    <div class="product-main-container">
+      <h3 class="product-title">상품상세</h3>
+      <div class="row">
+        <div class="col text-center mb-3 mt-3">
+          <h3 th:utext="${cate_name}"></h3>
+        </div>
+      </div>
+      <div class="product-info-card">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+          <div class="col-6">
+            <div class="product-image-wrapper">
+              <img style="width: 100%; height: 280px" th:src="${'/product/image_display?dateFolderName=' + productDTO.item_up_folder + '&fileName=' + productDTO.item_img}" />
+            </div>
+          </div>
+          <div class="col-6 product-details">
+            <h5 th:text="${productDTO.item_name}"></h5>
+            <div class="product-detail-row"><strong>할인율</strong> <span class="discount-badge" th:text="${productDTO.item_discount}"></span></div>
+            <div class="product-detail-row"><strong>판매가격</strong> <span class="price-highlight">[[${#numbers.formatInteger(productDTO.item_price, 3, 'COMMA') + ' 원'}]]</span></div>
+            <div class="product-detail-row"><strong>제조사</strong> <span th:text="${productDTO.item_publisher}"></span></div>
+            <div class="product-detail-row"><strong>수량</strong> <input type="number" value="1" id="cart_amount" /></div>
+            <div class="d-flex justify-content-between align-items-center mt-5">
+              <div class="btn-group">
+                <button type="button" class="btn btn-outline-primary" id="btn_cart_add">Cart</button>
+                <button type="button" class="btn btn-outline-primary" id="btn_buy_add">Buy</button>
+              </div>
+              <small class="text-body-secondary">상품후기 : <span id="review_count" th:text="${productDTO.item_review}"></span></small>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row mt-5">
+        <div id="tabs">
+          <ul>
+            <li><a href="#tabs-1">상세정보</a></li>
+            <li><a href="#tabs-2">리뷰</a></li>
+          </ul>
+          <div id="tabs-1">
+            <p>상세내용</p>
+            <p th:utext="${productDTO.item_content}"></p>
+          </div>
+          <div id="tabs-2">
+            <div class="review-write-section">
+              <div class="row mt-3 mb-3">
+                <div class="col-8">
+                  <textarea class="form-control" id="rev_content" rows="3" placeholder="상품 후기를 작성해주세요..."></textarea>
+                </div>
+                <div class="col-4 d-flex flex-column justify-content-between">
+                  <div>
+                    <p id="star_rev_rate">
+                      <a class="rev_rate" href="#">☆</a>
+                      <a class="rev_rate" href="#">☆</a>
+                      <a class="rev_rate" href="#">☆</a>
+                      <a class="rev_rate" href="#">☆</a>
+                      <a class="rev_rate" href="#">☆</a>
+                    </p>
+                    <small style="display: block; text-align: center; color: #6c757d; margin-bottom: 15px">별평점</small>
+                  </div>
+                  <div>
+                    <button type="button" class="btn btn-primary w-100" id="btn_rev_save" th:data-item_num="${productDTO.item_num}">후기 작성하기</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col" id="reviewList"></div>
+            </div>
+            <div class="row">
+              <div class="col" id="reviewPaging"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </th:block>
+  <th:block layout:fragment="script2">
+    <script>
+      $(document).ready(function () {
+        //장바구니 버튼 클릭 btn_cart_add
+        $("button#btn_cart_add").on("click", function () {
+          $.ajax({
+            url: "/cart/cart_add",
+            type: "post",
+            data: { item_num: [[${productDTO.item_num}]], cart_amount: $("#cart_amount").val() },
+            dataType: "text",
+            success: function (result) {
+              if (result == "success") {
+                alert("장바구니에 등록됨");
+                if (confirm("장바구니로 이동하시겠습니까?")) {
+                  location.href = "/cart/cart_list";
+                }
+              }
+            },
+          });
+        });
+        //구매하기 버튼 클릭 btn_buy_add
+        $("button#btn_buy_add").on("click", function () {
+          let cart_amount = $("#cart_amount").val();
+          let url = `/order/order_info?item_num=[[${productDTO.item_num}]]&cart_amount:${cart_amount}&type=buy`;
+          location.href = url;
+        });
+        //상품후기 관련 작업코드
+        let item_num = [[${productDTO.item_num}]];
+        let reviewPage = 1;
+        let url = "/review/rev_list/" + item_num + "/" + reviewPage;
+        getPage(url);
+        function getPage(url) {
+          $.getJSON(url, function (data) {
+            $("#rev_content").val("");
+            $("p#star_rev_rate a.rev_rate").removeClass("on");
+            fn_dusplay_review(data.rev_list, $("div#reviewList"), $("#templateReview"));
+            fn_dusplay_reviewPaging(data.pageMaker, $("div#reviewPaging"));
+          });
+        }
+        //댓글목록 작업함수
+        function fn_dusplay_review(reviewList, target, template) {
+          let templateObj = Handlebars.compile(template.html());
+          let reviewHTML = templateObj(reviewList);
+          target.empty();
+          target.append(reviewHTML);
+        }
+        //페이징 작업함수
+        function fn_dusplay_reviewPaging(pageData, target) {
+          let pageStr = '<nav aria-label="Page navigation example">';
+          pageStr += '<ul class="pagination">';
+          if (pageData.prev) {
+            pageStr += `<li class="page-item"><a class="page-link" href="${pageData.startPage - 1}">Previous</a></li>`;
+          }
+          for (let i = pageData.startPage; i <= pageData.endPage; i++) {
+            let curPageClass = pageData.cri.page == i ? "active" : "";
+            pageStr += `<li class="page-item ${curPageClass}"><a class="page-link" href="${i}">${i}</a></li>`;
+          }
+          if (pageData.next) {
+            pageStr += `<li class="page-item"><a class="page-link" href="${pageData.endPage + 1}">Next</a></li>`;
+          }
+          pageStr += "</ul></nav>";
+          target.empty();
+          target.append(pageStr);
+        }
+
+        //별을 클릭시 css효과작업
+        $("p#star_rev_rate a.rev_rate").on("click", function (e) {
+          e.preventDefault();
+          $(this).parent().children().removeClass("on");
+          $(this).addClass("on").prevAll("a").addClass("on");
+        });
+
+        //별을 클릭시 css효과작업 :후기 수정하기
+        $("div#reviewList").on("click", "p#star_rev_rate2 a.rev_rate", function (e) {
+          e.preventDefault();
+          $(this).parent().children().removeClass("on");
+          $(this).addClass("on").prevAll("a").addClass("on");
+        });
+
+        //상품후기  id="btn_rev_save"
+        $("button#btn_rev_save").on("click", function () {
+          let item_num = $(this).data("item_num");
+          let rev_content = $("#rev_content").val();
+
+          let rev_rate = 0;
+          $("p#star_rev_rate a.rev_rate").each(function () {
+            if ($(this).hasClass("on")) {
+              rev_rate += 1;
+            }
+          });
+          if (rev_content.trim() === "") {
+            alert("후기를 작성해주세요");
+            return;
+          }
+          if (rev_rate == 0) {
+            alert("별 평점을 클릭하세요");
+            return;
+          }
+          let review_data = { item_num: item_num, rev_content: rev_content, rev_rate: rev_rate };
+          $.ajax({
+            url: "/review/review_save",
+            type: "post",
+            headers: {
+              "Content-Type": "application/json",
+              "X-HTTP-Method-Override": "POST",
+            },
+            data: JSON.stringify(review_data),
+            dataType: "text",
+            success: function (data) {
+              if (data > 0) {
+                alert("상품후기 등록됨");
+                $("span#review_count").html(data);
+                reviewPage = 1;
+                getPage(url);
+              }
+            },
+            error: function (xhr, status, error) {
+              console.error("후기등록실패: ", status, error);
+              alert("후기등록 중 오류가 발생했습니다");
+            },
+          });
+        });
+        //사품후기 삭제버튼
+        $("div#reviewList").on("click", "button[name='delete']", function () {
+          let rev_code = $(this).data("rev_code");
+          if (!confirm("상품후기를 삭제하겠습니까?")) return;
+
+          $.ajax({
+            url: "/review/review_delete/" + rev_code,
+            type: "delete",
+            headers: {
+              "X-HTTP-Method-Override": "DELETE",
+            },
+            dataType: "text",
+            success: function (result) {
+              if (result == "success") {
+                alert("상품후기 삭제됨");
+                getPage(url);
+              }
+            },
+          });
+        });
+        //상품후기 페이지 번호 클릭
+        $("div#reviewPaging").on("click", "nav li a", function (e) {
+          e.preventDefault();
+          reviewPage = $(this).attr("href");
+          console.log("후기페이지번호", reviewPage);
+          url = "/review/rev_list/" + item_num + "/" + reviewPage;
+          getPage(url);
+        });
+
+        //상품 후기 수정 버튼
+        $("div#reviewList").on("click", "button[name='edit']", function () {
+          let rev_code = $(this).data("rev_code");
+          let cur_item = $(this).closest(".review-item");
+
+          $.ajax({
+            url: "/review/review_info/" + rev_code,
+            type: "get",
+            dataType: "json",
+            success: function (result) {
+              console.log("수정데이터", result);
+
+              let tempStr = '<div class="review-edit-mode">';
+              tempStr += '<div class="review-header">';
+              tempStr += '<div class="review-info">';
+              tempStr += '<span class="reviewer-id">' + result.mb_id + '</span>';
+              tempStr += '<span class="review-date">' + result.rev_date + '</span>';
+              tempStr += '</div>';
+              tempStr += '</div>';
+              tempStr += '<div class="review-content">';
+              tempStr += '<textarea class="form-control" name="rev_content" rows="3" style="margin-bottom: 15px;">' + result.rev_content + '</textarea>';
+              tempStr += '<div class="text-center mb-3">';
+              tempStr += '<p id="star_rev_rate2">';
+              for (let i = 1; i <= 5; i++) {
+                if (i <= result.rev_rate) {
+                  tempStr += '<a class="rev_rate on" href="#">☆</a>';
+                } else {
+                  tempStr += '<a class="rev_rate" href="#">☆</a>';
+                }
+              }
+              tempStr += '</p>';
+              tempStr += '</div>';
+              tempStr += '</div>';
+              tempStr += '<div class="review-actions">';
+              tempStr += '<button type="button" name="update" class="btn btn-sm btn-success" data-rev_code="' + result.rev_code + '">저장</button> ';
+              tempStr += '<button type="button" name="cancel" class="btn btn-sm btn-secondary" data-rev_code="' + result.rev_code + '">취소</button>';
+              tempStr += '</div>';
+              tempStr += '</div>';
+
+              cur_item.html(tempStr);
+            },
+          });
+        });
+
+        //편집모드에서 저장버튼 클릭
+        $("div#reviewList").on("click", "button[name='update']", function () {
+          let rev_code = $(this).data("rev_code");
+          let cur_item = $(this).closest(".review-item");
+
+          let rev_content = cur_item.find("textarea[name='rev_content']").val();
+          let rev_rate = 0;
+
+          // 수정 모드의 별점 계산
+          cur_item.find("p#star_rev_rate2 a.rev_rate").each(function () {
+            if ($(this).hasClass("on")) {
+              rev_rate += 1;
+            }
+          });
+
+          if (rev_content.trim() === "") {
+            alert("후기 내용을 입력해주세요");
+            return;
+          }
+
+          if (rev_rate == 0) {
+            alert("별 평점을 선택해주세요");
+            return;
+          }
+
+          $.ajax({
+            url: "/review/review_modify",
+            type: "put",
+            headers: {
+              "Content-Type": "application/json",
+              "X-HTTP-Method-Override": "PUT",
+            },
+            data: JSON.stringify({ rev_code: rev_code, rev_rate: rev_rate, rev_content: rev_content }),
+            dataType: "text",
+            success: function (result) {
+              if (result == "success") {
+                alert("상품후기가 수정되었습니다");
+                getPage(url);
+              } else {
+                alert("후기 수정에 실패했습니다");
+              }
+            },
+            error: function (xhr, status, error) {
+              console.error("후기수정실패: ", status, error);
+              alert("후기 수정 중 오류가 발생했습니다");
+            }
+          });
+        });
+        //편집모드에서 취소버튼 클릭
+        $("div#reviewList").on("click", "button[name='cancel']", function () {
+          if (confirm("수정을 취소하시겠습니까?")) {
+            getPage(url);
+          }
+        });
+      });
+    </script>
+  </th:block>
+</html>

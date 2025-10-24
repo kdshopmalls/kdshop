@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layouts/ad_layout}">
+<th:block layout:fragment="script1">
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
+    
+    * {
+      font-family: 'Noto Sans KR', sans-serif;
+    }
+    
+    body {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+    }
+    
+    .category-container {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 24px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      overflow: hidden;
+      animation: fadeInUp 0.6s ease-out;
+    }
+    
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .category-header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 30px;
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .category-header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+      animation: pulse 4s ease-in-out infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 0.5; }
+      50% { transform: scale(1.1); opacity: 0.3; }
+    }
+    
+    .category-header h3 {
+      font-size: 28px;
+      font-weight: 700;
+      margin: 0;
+      position: relative;
+      z-index: 1;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    }
+    
+    .category-section {
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+    }
+    
+    .category-section:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+      border-color: #667eea;
+    }
+    
+    .category-label {
+      font-size: 16px;
+      font-weight: 600;
+      color: #4a5568;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .category-label::before {
+      content: '';
+      width: 4px;
+      height: 20px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 2px;
+    }
+    
+    .form-select {
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 12px;
+      font-size: 14px;
+      transition: all 0.3s ease;
+      background: #f7fafc;
+    }
+    
+    .form-select:focus {
+      border-color: #667eea;
+      box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+      background: white;
+      outline: none;
+    }
+    
+    .form-select option {
+      padding: 12px;
+      transition: all 0.2s ease;
+    }
+    
+    .form-select option:hover {
+      background: #667eea;
+      color: white;
+    }
+    
+    .arrow-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    .btn-arrow {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      border: 2px solid #e2e8f0;
+      background: white;
+      color: #667eea;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    
+    .btn-arrow:hover {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border-color: transparent;
+      transform: scale(1.1);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    }
+    
+    .btn-arrow:active {
+      transform: scale(0.95);
+    }
+    
+    .btn-save {
+      background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 14px 28px;
+      font-size: 15px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(72, 187, 120, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .btn-save::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+    
+    .btn-save:hover::before {
+      width: 300px;
+      height: 300px;
+    }
+    
+    .btn-save:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(72, 187, 120, 0.4);
+    }
+    
+    .action-buttons {
+      display: flex;
+      gap: 10px;
+    }
+    
+    .btn-action {
+      flex: 1;
+      border: none;
+      border-radius: 10px;
+      padding: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .btn-action::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      transform: translate(-50%, -50%);
+      transition: width 0.4s, height 0.4s;
+    }
+    
+    .btn-action:hover::after {
+      width: 200px;
+      height: 200px;
+    }
+    
+    .btn-add {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    }
+    
+    .btn-add:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(102, 126, 234, 0.4);
+    }
+    
+    .btn-edit {
+      background: linear-gradient(135deg, #f6ad55 0%, #ed8936 100%);
+      color: white;
+      box-shadow: 0 4px 12px rgba(246, 173, 85, 0.3);
+    }
+    
+    .btn-edit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(246, 173, 85, 0.4);
+    }
+    
+    .btn-delete {
+      background: linear-gradient(135deg, #fc8181 0%, #f56565 100%);
+      color: white;
+      box-shadow: 0 4px 12px rgba(252, 129, 129, 0.3);
+    }
+    
+    .btn-delete:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(252, 129, 129, 0.4);
+    }
+    
+    .modal-content {
+      border: none;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+    }
+    
+    .modal-header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 24px 28px;
+      border: none;
+    }
+    
+    .modal-title {
+      font-size: 22px;
+      font-weight: 700;
+    }
+    
+    .btn-close {
+      background: white;
+      opacity: 1;
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-close:hover {
+      transform: rotate(90deg);
+      background: #f7fafc;
+    }
+    
+    .modal-body {
+      padding: 28px;
+    }
+    
+    .form-label {
+      font-weight: 600;
+      color: #4a5568;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+    
+    .form-control {
+      border: 2px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+    
+    .form-control:focus {
+      border-color: #667eea;
+      box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+      outline: none;
+    }
+    
+    .modal-footer {
+      padding: 20px 28px;
+      border: none;
+      background: #f7fafc;
+    }
+    
+    .modal-footer .btn {
+      border-radius: 10px;
+      padding: 10px 24px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    
+    .modal-footer .btn-secondary {
+      background: #cbd5e0;
+      border: none;
+      color: #4a5568;
+    }
+    
+    .modal-footer .btn-secondary:hover {
+      background: #a0aec0;
+      transform: translateY(-2px);
+    }
+    
+    .modal-footer .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border: none;
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    }
+    
+    .modal-footer .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(102, 126, 234, 0.4);
+    }
+    
+    @media (max-width: 768px) {
+      .category-section {
+        margin-bottom: 20px;
+      }
+      
+      .action-buttons {
+        flex-direction: column;
+      }
+    }
+  </style>
+</th:block>
+
+<th:block layout:fragment="content">
+  <div class="container mt-5 mb-5">
+    <div class="row">
+      <div class="col">
+        <div class="category-container">
+          <div class="category-header">
+            <h3>📁 카테고리 관리</h3>
+          </div>
+          <div class="p-4">
+            <div class="row g-4">
+              <!-- 1차 카테고리 -->
+              <div class="col-lg-6">
+                <div class="category-section">
+                  <div class="category-label">1차 카테고리</div>
+                  <div class="d-flex align-items-stretch gap-3">
+                    <select name="first_category" id="sel-main" class="form-select" size="10" style="flex: 1;">
+                      <option th:each="categoryDTO : ${firstCategoryList}" 
+                              th:text="${categoryDTO.cate_name}" 
+                              th:value="${categoryDTO.cate_code}">
+                        카테고리 A
+                      </option>
+                    </select>
+                    <div class="arrow-buttons">
+                      <button type="button" class="btn-arrow btn-up">▲</button>
+                      <button type="button" class="btn-arrow btn-down">▼</button>
+                    </div>
+                  </div>
+                  <button type="button" id="save-first-category" class="btn-save w-100 mt-3">💾 1차 카테고리 저장</button>
+                  <div class="action-buttons mt-3">
+                    <button type="button" id="add-first-category" class="btn-action btn-add">➕ 등록</button>
+                    <button type="button" id="edit-first-category" class="btn-action btn-edit">✏️ 수정</button>
+                    <button type="button" id="delete-first-category" class="btn-action btn-delete">🗑️ 삭제</button>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- 2차 카테고리 -->
+              <div class="col-lg-6">
+                <div class="category-section">
+                  <div class="category-label">2차 카테고리</div>
+                  <div class="d-flex align-items-stretch gap-3">
+                    <select name="second_category" id="sel-sub" class="form-select" size="10" style="flex: 1;">
+                    </select>
+                    <div class="arrow-buttons">
+                      <button type="button" class="btn-arrow btn-up">▲</button>
+                      <button type="button" class="btn-arrow btn-down">▼</button>
+                    </div>
+                  </div>
+                  <button type="button" id="save-second-category" class="btn-save w-100 mt-3">💾 2차 카테고리 저장</button>
+                  <div class="action-buttons mt-3">
+                    <button type="button" id="add-second-category" class="btn-action btn-add">➕ 등록</button>
+                    <button type="button" id="edit-second-category" class="btn-action btn-edit">✏️ 수정</button>
+                    <button type="button" id="delete-second-category" class="btn-action btn-delete">🗑️ 삭제</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1차 카테고리 등록/수정 모달 -->
+  <div class="modal fade" id="firstCategoryModal" tabindex="-1" aria-labelledby="firstCategoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="firstCategoryModalLabel">1차 카테고리 등록</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="닫기"></button>
+        </div>
+        <div class="modal-body">
+          <form id="firstCategoryForm">
+            <div class="mb-3">
+              <label for="categoryName" class="form-label">카테고리명</label>
+              <input type="hidden" id="categoryCode">
+              <input type="text" class="form-control" id="categoryName" name="categoryName" placeholder="카테고리명을 입력하세요" required>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+          <button type="button" id="btn_add_category" class="btn btn-primary">등록</button>
+          <button type="button" id="btn_edit_category" class="btn btn-primary" style="display: none;">수정</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2차 카테고리 등록/수정 모달 -->
+  <div class="modal fade" id="secondCategoryModal" tabindex="-1" aria-labelledby="secondCategoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="secondCategoryModalLabel">2차 카테고리 등록</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="닫기"></button>
+        </div>
+        <div class="modal-body">
+          <form id="categoryForm">
+            <div class="mb-3">
+              <label for="selMainCategory" class="form-label">1차 카테고리 선택</label>
+              <select class="form-select" id="selMainCategory" name="firstCategory">
+                <option value="">-- 1차 카테고리 선택 --</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="secondCategoryName" class="form-label">2차 카테고리명</label>
+              <input type="hidden" id="secondCategoryCode">
+              <input type="text" class="form-control" id="secondCategoryName" name="secondCategoryName" placeholder="2차 카테고리명을 입력하세요" required>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+          <button type="button" id="btn_add_secondCategory" class="btn btn-primary">등록</button>
+          <button type="button" id="btn_edit_secondCategory" class="btn btn-primary" style="display: none;">수정</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</th:block>
+
+<th:block layout:fragment="script2">
+<script>
+$(function() {
+  // 1차 카테고리 클릭 이벤트 (2차 카테고리 불러오기)
+  $("select[name='first_category']").on("click", function() {
+    let current = $(this);
+    let firstCategoryCode = current.val();
+    $.ajax({
+      url: '/admin/category/secondCategoryList/' + firstCategoryCode,
+      type: 'get',
+      dataType: 'json',
+      success: function(data) {
+        let subCategoryStr = "";
+        for(let i=0; i<data.length; i++) {
+          subCategoryStr += `<option value="${data[i].cate_code}">${data[i].cate_name}</option>`;
+        }
+        $("select[name='second_category']").empty();
+        $("select[name='second_category']").append(subCategoryStr);
+      }
+    });
+  });
+
+  // 이동 함수
+  function moveUp($select) {
+    $select.find('option:selected').each(function() {
+      var $prev = $(this).prev('option');
+      if ($prev.length) {
+        $(this).insertBefore($prev);
+      }
+    });
+  }
+  
+  function moveDown($select) {
+    $($select.find('option:selected').get().reverse()).each(function() {
+      var $next = $(this).next('option');
+      if ($next.length) {
+        $(this).insertAfter($next);
+      }
+    });
+  }
+  
+  // 버튼 이벤트
+  $('.btn-up').on('click', function() {
+    var $select = $(this).closest('.category-section').find('select');
+    moveUp($select);
+  });
+  
+  $('.btn-down').on('click', function() {
+    var $select = $(this).closest('.category-section').find('select');
+    moveDown($select);
+  });
+
+  // 1차카테고리 정렬저장
+  $('#save-first-category').on('click', function() {
+    let orderArr = [];
+    $('#sel-main option').each(function() {
+      orderArr.push($(this).val());
+    });
+
+    $.ajax({
+      url: '/admin/category/categorySort',
+      type: 'post',
+      data: {orderArr : orderArr},
+      dataType: 'text',
+      success : function(result) {
+        if(result == "success") {
+          alert("1차카테고리 정렬됨");
+        }
+      },
+      error : function(xhr, status, error) {
+        alert("에러 발생: " + error);
+      }
+    });
+  });
+
+  // 2차카테고리 정렬저장
+  $('#save-second-category').on('click', function() {
+    let orderArr = [];
+    $('#sel-sub option').each(function() {
+      orderArr.push($(this).val());
+    });
+    
+    $.ajax({
+      url: '/admin/category/categorySort',
+      type: 'post',
+      data: {orderArr : orderArr},
+      dataType: 'text',
+      success : function(result) {
+        if(result == "success") {
+          alert("2차카테고리 정렬됨");
+        }
+      },
+      error : function(xhr, status, error) {
+        alert("에러 발생: " + error);
+      }
+    });
+  });
+
+  const myModal = new bootstrap.Modal('#firstCategoryModal', {
+    keyboard: false
+  });
+
+  // 1차카테고리 등록 모달
+  $("button#add-first-category").on("click", function() {
+    $("#firstCategoryModalLabel").html("1차 카테고리 등록");
+    $("#categoryName").val("");
+    $("#btn_add_category").show();
+    $("#btn_edit_category").hide();
+    myModal.show();
+  });
+
+  // 1차카테고리 등록
+  $("button#btn_add_category").on("click", function() {
+    let categoryName = $("#categoryName").val().trim();
+    if (categoryName === "") {
+      alert("카테고리명을 입력해주세요.");
+      return;
+    }
+
+    $.ajax({
+      url: "/admin/category/addFirstCategory",
+      type: "POST",
+      data: { cate_name: categoryName },
+      dataType: "text",
+      success: function(result) {
+        if (result == "success") {
+          $("#firstCategoryModal").modal("hide");
+          $("#categoryName").val("");
+          alert("1차카테고리가 등록되었습니다.");
+          location.href = "/admin/category/categorymenu";
+        } else {
+          alert("등록은 되었지만 서버에서 응답 코드가 누락되었습니다.");
+        }
+      },
+      error: function(xhr, status, error) {
+        alert("등록 중 오류 발생: " + error);
+      }
+    });
+  });
+
+  // 1차카테고리 수정 모달
+  $("button#edit-first-category").on("click", function() {
+    if ($("#sel-main option:selected").length === 0) {
+      alert("1차 카테고리를 선택하세요.");
+      return;
+    }
+
+    $("#categoryName").val($("#sel-main option:selected").text());
+    $("#categoryCode").val($("#sel-main option:selected").val());
+    $("#firstCategoryModalLabel").html("1차 카테고리 수정");
+    $("#btn_add_category").hide();
+    $("#btn_edit_category").show();
+    myModal.show();
+  });
+
+  // 1차카테고리 수정
+  $("#btn_edit_category").on("click", function() {
+    $.ajax({
+      url: "/admin/category/editFirstCategory",
+      type: "POST",
+      data: { cate_code : $("#categoryCode").val(),  cate_name: $("#categoryName").val() },
+      dataType: "text",
+      success: function(result) {
+        if (result == "success") {
+          $("#firstCategoryModal").modal("hide");
+          $("#categoryName").val("");
+          alert("카테고리가 수정되었습니다.");
+          location.href = "/admin/category/categorymenu";
+        } else {
+          alert("등록은 되었지만 서버에서 응답 코드가 누락되었습니다.");
+        }
+      },
+      error: function(xhr, status, error) {
+        alert("등록 중 오류 발생: " + error);
+      }
+    });
+  });
+
+  // 2차 카테고리 작업
+  const myModal2 = new bootstrap.Modal('#secondCategoryModal', {
+    keyboard: false
+  });
+
+  // 2차 카테고리 등록 모달
+  $("#add-second-category").on("click", function() {
+    $.ajax({
+      url: '/admin/category/firstCategoryList',
+      type: 'get',
+      dataType: 'json',
+      success: function(data) {
+        let firstCategoryStr = "";
+        for(let i=0; i<data.length; i++) {
+          firstCategoryStr += `<option value="${data[i].cate_code}">${data[i].cate_name}</option>`;
+        }
+        $("select#selMainCategory").empty();
+        $("select#selMainCategory").append("<option value=''>1차카테고리 선택</option>");
+        $("select#selMainCategory").append(firstCategoryStr);
+        $("#secondCategoryName").val("");
+        $("#secondCategoryModalLabel").html("2차 카테고리 등록");
+        $("#btn_add_secondCategory").show();
+        $("#btn_edit_secondCategory").hide();
+      }
+    });
+    myModal2.show();
+  });
+
+  // 2차 카테고리 등록
+  $("button#btn_add_secondCategory").on("click", function() {
+    let selMainCategory = $("#selMainCategory");
+    if(selMainCategory.val() == "") {
+      alert("1차카테고리명을 선택하세요.");
+      return;
+    }
+
+    let secondCategoryName = $("#secondCategoryName").val().trim();
+    if (secondCategoryName === "") {
+      alert("2차카테고리명을 입력해주세요.");
+      return;
+    }
+
+    $.ajax({
+      url: "/admin/category/addSecondCategory", 
+      type: "POST",
+      data: { cate_prtcode : $("#selMainCategory").val(), cate_name: $("#secondCategoryName").val() },
+      dataType: "text",
+      success: function(result) {
+        if (result == "success") {
+          $("#secondCategoryModal").modal("hide");
+          $("#secondCategoryName").val("");
+          alert("2차 카테고리가 등록되었습니다.");
+          location.href = "/admin/category/categorymenu";
+        } else {
+          alert("등록은 되었지만 서버에서 응답 코드가 누락되었습니다.");
+        }
+      },
+      error: function(xhr, status, error) {
+        alert("등록 중 오류 발생: " + error);
+      }
+    });
+  });
+
+  // 2차카테고리 수정 모달
+  $("#edit-second-category").on("click", function() {
+    let firstCateCode = $("#sel-main option:selected").val();
+    let secondCateCode = $("#sel-sub option:selected").val();
+    let secondCateName = $("#sel-sub option:selected").html();
+
+    if ($("#sel-sub option:selected").length === 0) {
+      alert("1차, 2차 카테고리를 선택하세요.");
+      return;
+    }
+
+    $.ajax({
+      url: '/admin/category/firstCategoryList',
+      type: 'get',
+      dataType: 'json',
+      success: function(data) {
+        let firstCategoryStr = "";
+        for(let i=0; i<data.length; i++) {
+          firstCategoryStr += `<option value="${data[i].cate_code}" ${firstCateCode == data[i].cate_code ? 'selected' : ''} >${data[i].cate_name}</option>`;
+        }
+
+        $("#secondCategoryModalLabel").html("2차카테고리 수정");
+        $("select#selMainCategory").empty();
+        $("select#selMainCategory").append("<option value=''>1차카테고리 선택</option>");
+        $("select#selMainCategory").append(firstCategoryStr);
+        $("#secondCategoryCode").val(secondCateCode);
+        $("#secondCategoryName").val(secondCateName);
+        $("#btn_add_secondCategory").hide();
+        $("#btn_edit_secondCategory").show();
+        myModal2.show();
+      }
+    });
+  });
+
+  // 2차 카테고리 수정
+  $("#btn_edit_secondCategory").on("click", function() {
+    $.ajax({
+      url: "/admin/category/editSecondCategory",
+      type: "POST",
+      data: { cate_code : $("#secondCategoryCode").val(),  cate_name: $("#secondCategoryName").val(), cate_prtcode :  $("#selMainCategory").val()},
+      dataType: "text",
+      success: function(result) {
+        if (result == "success") {
+          $("#secondCategoryModal").modal("hide");
+          $("#secondCategoryName").val("");
+          $("#secondCategoryCode").val("");
+          alert("2차카테고리가 수정되었습니다.");
+          location.href = "/admin/category/categorymenu";
+        } else {
+          alert("등록은 되었지만 서버에서 응답 코드가 누락되었습니다.");
+        }
+      },
+      error: function(xhr, status, error) {
+        alert("등록 중 오류 발생: " + error);
+      }
+    });
+  });
+
+  // 1차 카테고리 삭제
+  $("button#delete-first-category").on("click", function() {
+    if($("select#sel-main option:selected").length == 0) {
+      alert("1차 카테고리 선택하세요.");
+      return;    
+    }
+
+    let cate_code = $("select#sel-main option:selected").val();
+
+    $.ajax({
+      url: '/admin/category/deleteCategory',
+      type: 'post',
+      data: {cate_code : cate_code},
+      dataType: 'text',
+      success : function(result) {
+        if(result == "success") {
+          alert("1차 카테고리 삭제됨");
+          location.href = "/admin/category/categorymenu";
+        }
+      },
+      error: function(xhr, status, error) {
+        alert("삭제 중 오류 발생: " + error);
+      }
+    });
+  });
+
+  // 2차 카테고리 삭제
+  $("button#delete-second-category").on("click", function() {
+    if($("select#sel-sub option:selected").length == 0) {
+      alert("2차 카테고리 선택하세요.");
+      return;    
+    }
+
+    let cate_code = $("select#sel-sub option:selected").val();
+
+    $.ajax({
+      url: '/admin/category/deleteCategory',
+      type: 'post',
+      data: {cate_code : cate_code},
+      dataType: 'text',
+      success : function(result) {
+        if(result == "success") {
+          alert("2차 카테고리 삭제됨");
+          location.href = "/admin/category/categorymenu";
+        }
+      },
+      error: function(xhr, status, error) {
+        alert("삭제 중 오류 발생: " + error);
+      }
+    });
+  });
+});
+</script>
+</th:block>
+</html>

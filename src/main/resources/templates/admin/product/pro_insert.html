@@ -1,169 +1,479 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="~{admin/layouts/ad_layout}">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{admin/layouts/ad_layout}">
   <th:block layout:fragment="script1">
-		<script src="/ckeditor/ckeditor.js"></script>
-	</th:block>
-<th:block layout:fragment="content">
-    <div class="container mt-5">
-  <div class="row justify-content-center">
-    <div class="col-md-10"> <!-- 좌우 여백, 가운데 정렬 -->
-      <div class="card border-primary shadow-sm">
-        <div class="card-header bg-primary text-white">
-          <h3 class="card-title mb-0">상품 등록</h3>
+    <script src="/ckeditor/ckeditor.js"></script>
+  </th:block>
+  <th:block layout:fragment="content">
+    <style>
+      .product-form-container {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 40px 0;
+      }
+
+      .form-section {
+        background: white;
+        border-radius: 16px;
+        padding: 30px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+        transition: transform 0.2s, box-shadow 0.2s;
+      }
+
+      .form-section:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .section-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #2d3748;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 3px solid #667eea;
+        display: flex;
+        align-items: center;
+      }
+
+      .section-icon {
+        width: 24px;
+        height: 24px;
+        margin-right: 10px;
+        color: #667eea;
+      }
+
+      .main-header {
+        background: white;
+        border-radius: 16px;
+        padding: 30px;
+        margin-bottom: 30px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+      }
+
+      .main-header h2 {
+        color: #2d3748;
+        font-weight: 700;
+        margin: 0;
+        display: flex;
+        align-items: center;
+      }
+
+      .form-label {
+        font-weight: 600;
+        color: #4a5568;
+        margin-bottom: 8px;
+        font-size: 14px;
+      }
+
+      .form-control,
+      .form-select {
+        border: 2px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 12px 16px;
+        transition: all 0.3s;
+      }
+
+      .form-control:focus,
+      .form-select:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      }
+
+      .image-upload-area {
+        border: 3px dashed #cbd5e0;
+        border-radius: 12px;
+        padding: 30px;
+        text-align: center;
+        background: #f7fafc;
+        transition: all 0.3s;
+        cursor: pointer;
+      }
+
+      .image-upload-area:hover {
+        border-color: #667eea;
+        background: #edf2f7;
+      }
+
+      .image-upload-area.dragover {
+        border-color: #667eea;
+        background: #e6f0ff;
+      }
+
+      #img_preview {
+        width: 100%;
+        max-width: 300px;
+        height: 300px;
+        object-fit: cover;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        margin-top: 20px;
+        display: none;
+      }
+
+      #img_preview.show {
+        display: block;
+      }
+
+      .upload-icon {
+        font-size: 48px;
+        color: #a0aec0;
+        margin-bottom: 10px;
+      }
+
+      .radio-card {
+        border: 2px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 15px 20px;
+        transition: all 0.3s;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+      }
+
+      .radio-card:hover {
+        border-color: #667eea;
+        background: #f7fafc;
+      }
+
+      .radio-card input[type="radio"]:checked ~ .radio-label {
+        color: #667eea;
+        font-weight: 600;
+      }
+
+      .radio-card input[type="radio"]:checked {
+        accent-color: #667eea;
+      }
+
+      .submit-section {
+        background: white;
+        border-radius: 16px;
+        padding: 25px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+        text-align: center;
+      }
+
+      .btn-submit {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        border-radius: 10px;
+        padding: 15px 50px;
+        font-size: 16px;
+        font-weight: 600;
+        color: white;
+        transition: all 0.3s;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+      }
+
+      .btn-submit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+      }
+
+      .input-group-text {
+        background: #667eea;
+        color: white;
+        border: none;
+        font-weight: 600;
+      }
+
+      .required-mark {
+        color: #f56565;
+        margin-left: 4px;
+      }
+
+      .helper-text {
+        font-size: 12px;
+        color: #718096;
+        margin-top: 5px;
+      }
+    </style>
+
+    <div class="product-form-container">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-lg-10">
+            <!-- 헤더 -->
+            <div class="main-header">
+              <h2>
+                <svg class="section-icon" style="width: 32px; height: 32px; margin-right: 15px" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                </svg>
+                새로운 상품 등록
+              </h2>
+              <p style="color: #718096; margin: 10px 0 0 47px; font-size: 14px">상품 정보를 입력하고 등록해주세요</p>
+            </div>
+
+            <!-- form start -->
+            <form action="/admin/product/pro_insert" method="post" enctype="multipart/form-data">
+              <!-- 카테고리 섹션 -->
+              <div class="form-section">
+                <div class="section-title">
+                  <svg class="section-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
+                    />
+                  </svg>
+                  카테고리 선택
+                </div>
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label">1차 카테고리<span class="required-mark">*</span></label>
+                    <select class="form-select" name="cate_prt_code" id="btn_firstCategory" required>
+                      <option selected value="">1차 카테고리를 선택하세요</option>
+                      <option th:each="category : ${fristCategoryList}" th:value="${category.cate_code}" th:text="${category.cate_name}"></option>
+                    </select>
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label">2차 카테고리<span class="required-mark">*</span></label>
+                    <select class="form-select" name="cate_code" id="btn_secondCategory" required>
+                      <option selected value="">먼저 1차 카테고리를 선택하세요</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 기본 정보 섹션 -->
+              <div class="form-section">
+                <div class="section-title">
+                  <svg class="section-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  기본 정보
+                </div>
+
+                <div class="mb-3">
+                  <label for="item_name" class="form-label">상품명<span class="required-mark">*</span></label>
+                  <input type="text" class="form-control" id="item_name" name="item_name" placeholder="예: 스마트폰 갤럭시 S24" required />
+                </div>
+
+                <div class="row">
+                  <div class="col-md-4 mb-3">
+                    <label for="item_price" class="form-label">가격<span class="required-mark">*</span></label>
+                    <div class="input-group">
+                      <input type="text" class="form-control" id="item_price" name="item_price" placeholder="100000" required />
+                      <span class="input-group-text">원</span>
+                    </div>
+                  </div>
+
+                  <div class="col-md-4 mb-3">
+                    <label for="item_discount" class="form-label">할인율</label>
+                    <div class="input-group">
+                      <input type="text" class="form-control" id="item_discount" name="item_discount" placeholder="10" />
+                      <span class="input-group-text">%</span>
+                    </div>
+                  </div>
+
+                  <div class="col-md-4 mb-3">
+                    <label for="item_amount" class="form-label">수량<span class="required-mark">*</span></label>
+                    <div class="input-group">
+                      <input type="number" class="form-control" id="item_amount" name="item_amount" placeholder="100" required />
+                      <span class="input-group-text">개</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <label for="item_publisher" class="form-label">제조사<span class="required-mark">*</span></label>
+                  <input type="text" class="form-control" id="item_publisher" name="item_publisher" placeholder="예: 삼성전자" required />
+                </div>
+              </div>
+
+              <!-- 상품 설명 섹션 -->
+              <div class="form-section">
+                <div class="section-title">
+                  <svg class="section-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" />
+                  </svg>
+                  상품 설명
+                </div>
+                <textarea class="form-control" id="item_content" name="item_content" rows="4" placeholder="상품에 대한 자세한 설명을 입력하세요"></textarea>
+                <div class="helper-text">상품의 특징, 사양, 사용 방법 등을 자세히 작성해주세요</div>
+              </div>
+
+              <!-- 이미지 업로드 섹션 -->
+              <div class="form-section">
+                <div class="section-title">
+                  <svg class="section-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                    />
+                  </svg>
+                  상품 이미지
+                </div>
+
+                <div class="image-upload-area" id="upload-area">
+                  <input class="form-control d-none" type="file" id="item_img_upload" name="item_img_upload" accept="image/*" />
+                  <label for="item_img_upload" style="cursor: pointer; width: 100%">
+                    <div class="upload-icon">📸</div>
+                    <p style="color: #4a5568; font-weight: 600; margin-bottom: 5px">이미지를 선택하거나 드래그하세요</p>
+                    <p class="helper-text">JPG, PNG, GIF 파일을 업로드할 수 있습니다</p>
+                  </label>
+                </div>
+
+                <div class="text-center">
+                  <img id="img_preview" />
+                </div>
+              </div>
+
+              <!-- 판매 설정 섹션 -->
+              <div class="form-section">
+                <div class="section-title">
+                  <svg class="section-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                  판매 여부
+                </div>
+
+                <div class="row">
+                  <div class="col-md-6 mb-2">
+                    <label class="radio-card">
+                      <input class="form-check-input me-2" type="radio" name="item_buy" id="item_buy1" value="Y" checked />
+                      <span class="radio-label">
+                        <strong>판매함</strong>
+                        <div class="helper-text">고객이 구매할 수 있습니다</div>
+                      </span>
+                    </label>
+                  </div>
+                  <div class="col-md-6 mb-2">
+                    <label class="radio-card">
+                      <input class="form-check-input me-2" type="radio" name="item_buy" id="item_buy2" value="N" />
+                      <span class="radio-label">
+                        <strong>판매안함</strong>
+                        <div class="helper-text">상품을 숨김 처리합니다</div>
+                      </span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 제출 버튼 -->
+              <div class="submit-section">
+                <button type="submit" class="btn btn-submit">
+                  <svg style="width: 20px; height: 20px; display: inline-block; margin-right: 8px" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                  상품 등록하기
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
-        <!-- form start -->
-        <form action="/admin/product/pro_insert" method="post" enctype="multipart/form-data">
-          <div class="card-body">
-
-            <!-- 카테고리 -->
-            <div class="mb-3">
-              <label class="form-label">1차카테고리</label>
-              <select class="form-select" name="cate_prt_code" id="btn_firstCategory">
-                <option selected>1차카테고리 선택</option>
-                <option th:each="category : ${fristCategoryList}" 
-		                th:value="${category.cate_code}" 
-		                th:text="${category.cate_name}"></option>
-              </select>
-            </div>
-            <div class="mb-3">
-              <label class="form-label">2차카테고리</label>
-              <select class="form-select" name="cate_code" id="btn_secondCategory">
-                <option selected>2차카테고리 선택</option>
-              </select>
-            </div>
-
-            <!-- 상품명 -->
-            <div class="mb-3">
-              <label for="pro_name" class="form-label">상품명</label>
-              <input type="text" class="form-control" id="item_name" name="item_name" placeholder="상품명 입력">
-            </div>
-
-            <!-- 가격 -->
-            <div class="mb-3">
-              <label for="pro_price" class="form-label">가격</label>
-              <input type="text" class="form-control" id="item_price" name="item_price" placeholder="가격 입력">
-            </div>
-
-            <!-- 할인율 -->
-            <div class="mb-3">
-              <label for="pro_discount" class="form-label">할인율</label>
-              <input type="text" class="form-control" id="item_discount" name="item_discount" placeholder="할인율 입력">
-            </div>
-
-            <!-- 제조사 -->
-            <div class="mb-3">
-              <label for="pro_publisher" class="form-label">제조사</label>
-              <input type="text" class="form-control" id="item_publisher" name="item_publisher" placeholder="제조사 입력">
-            </div>
-
-            <!-- 상품 설명 -->
-            <div class="mb-3">
-              <label for="pro_content" class="form-label">상품설명</label>
-              <textarea class="form-control" id="item_content" name="item_content" rows="4" placeholder="상품설명 입력"></textarea>
-            </div>
-
-            <!-- 상품 이미지 업로드 -->
-            <div class="mb-3">
-              <label for="pro_img_upload" class="form-label">상품이미지</label>
-              <input class="form-control" type="file" id="item_img_upload" name="item_img_upload">
-            </div>
-
-            <!-- 이미지 미리보기 -->
-            <div class="mb-3">
-              <label class="form-label">미리보기 이미지</label>
-              <div>
-                <img id="img_preview" style="width: 200px; height: 200px; object-fit: cover; border:1px solid #ccc;">
-              </div>
-            </div>
-
-            <!-- 수량 -->
-            <div class="mb-3">
-              <label for="pro_amount" class="form-label">수량</label>
-              <input type="number" class="form-control" id="item_amount" name="item_amount" placeholder="수량 입력">
-            </div>
-
-            <!-- 판매여부 -->
-            <div class="mb-3">
-              <label class="form-label">판매여부</label>
-              <div>
-                <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="item_buy" id="item_buy1" value="Y" checked>
-                  <label class="form-check-label" for="pro_buy1">판매함</label>
-                </div>
-                <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="item_buy" id="item_buy2" value="N">
-                  <label class="form-check-label" for="pro_buy2">판매안함</label>
-                </div>
-              </div>
-            </div>
-
-          </div>
-          <!-- /.card-body -->
-
-          <div class="card-footer text-end">
-            <button type="submit" class="btn btn-primary">Submit</button>
-          </div>
-        </form>
       </div>
     </div>
-  </div>
-</div>
-	  <script>
-		// ckeditor 설정
-		var ckeditor_config = {
-	             resize_enabled : false,
-	             enterMode : CKEDITOR.ENTER_BR,
-	             shiftEnterMode : CKEDITOR.ENTER_P,
-	             toolbarCanCollapse : true,
-	             removePlugins : "elementspath", 
-	             //업로드 탭기능추가 속성. CKEditor에서 파일업로드해서 서버로 전송클릭하면 , 이 주소가 동작된다.
-	             filebrowserUploadUrl: '/admin/product/imageupload'
-	     }
-	
-		 // id="content" 인 textarea태그에 ckeditor_config변수가 가지고 있는 설정정보를 적용하겠다.
-		 CKEDITOR.replace("item_content", ckeditor_config);
 
-	</script>
+    <script>
+      // ckeditor 설정
+      var ckeditor_config = {
+        resize_enabled: false,
+        enterMode: CKEDITOR.ENTER_BR,
+        shiftEnterMode: CKEDITOR.ENTER_P,
+        toolbarCanCollapse: true,
+        removePlugins: "elementspath",
+        filebrowserUploadUrl: "/admin/product/imageupload",
+      };
 
-</th:block>
-<th:block layout:fragment="script2">
-  <script>
-    $(document).ready(function(){
-      //1차 카테고리 클릭 이벤트 설정 
-      $("#btn_firstCategory").on("change",function(){
-        //console.log("1차 카테고리 선택");
-        let firstCategoryCode = $("#btn_firstCategory").val();
-         let url="/admin/category/secondCategoryList/" + firstCategoryCode; 
+      CKEDITOR.replace("item_content", ckeditor_config);
+    </script>
+  </th:block>
 
-         $.getJSON(url,function(data){
-          //console.log(data);
-          //btn_secondCategory
-          let btn_secondCategory=$("#btn_secondCategory");
+  <th:block layout:fragment="script2">
+    <script>
+      $(document).ready(function () {
+        // 1차 카테고리 변경 이벤트
+        $("#btn_firstCategory").on("change", function () {
+          let firstCategoryCode = $("#btn_firstCategory").val();
+          let url = "/admin/category/secondCategoryList/" + firstCategoryCode;
 
-          let optionStr = "";
-          for(let i=0; i<data.length;i++){
-            optionStr += `<option value='${data[i].cate_code}'>${data[i].cate_name}</option> `;
+          $.getJSON(url, function (data) {
+            let btn_secondCategory = $("#btn_secondCategory");
+            let optionStr = "";
+
+            for (let i = 0; i < data.length; i++) {
+              optionStr += `<option value='${data[i].cate_code}'>${data[i].cate_name}</option>`;
+            }
+
+            btn_secondCategory.find("option").remove();
+            btn_secondCategory.append("<option value=''>2차 카테고리를 선택하세요</option>");
+            btn_secondCategory.append(optionStr);
+          });
+        });
+
+        // 이미지 업로드 미리보기
+        $("#item_img_upload").on("change", function (e) {
+          let file = e.target.files[0];
+          if (file) {
+            let reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = function (e) {
+              $("#img_preview").attr("src", e.target.result).addClass("show");
+            };
           }
-          btn_secondCategory.find("option").remove();
-          btn_secondCategory.append("<option >2차카테고리 선택</option>");
-          btn_secondCategory.append(optionStr);
-         });
-      });
-      $("#item_img_upload").on("change",function(e){
-        let file =e.target.files[0];
-        let reader = new FileReader();
+        });
 
-        reader.readAsDataURL(file);
+        // 드래그 앤 드롭 기능
+        const uploadArea = document.getElementById("upload-area");
+        const fileInput = document.getElementById("item_img_upload");
 
-        reader.onload = function(e){
-          $("#img_preview").attr("src", e.target.result);
+        ["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
+          uploadArea.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+          e.preventDefault();
+          e.stopPropagation();
         }
-        
+
+        ["dragenter", "dragover"].forEach((eventName) => {
+          uploadArea.addEventListener(
+            eventName,
+            () => {
+              uploadArea.classList.add("dragover");
+            },
+            false
+          );
+        });
+
+        ["dragleave", "drop"].forEach((eventName) => {
+          uploadArea.addEventListener(
+            eventName,
+            () => {
+              uploadArea.classList.remove("dragover");
+            },
+            false
+          );
+        });
+
+        uploadArea.addEventListener(
+          "drop",
+          function (e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            fileInput.files = files;
+
+            if (files.length > 0) {
+              const file = files[0];
+              const reader = new FileReader();
+              reader.readAsDataURL(file);
+              reader.onload = function (e) {
+                $("#img_preview").attr("src", e.target.result).addClass("show");
+              };
+            }
+          },
+          false
+        );
       });
-      
-    });
-  </script>
-</th:block>
+    </script>
+  </th:block>
 </html>

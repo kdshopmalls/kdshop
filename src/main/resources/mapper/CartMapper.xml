@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kd.basic.cart.CartMapper">
+	<insert id="cart_add" parameterType="com.kd.basic.cart.CartDTO">
+		insert into
+			cart(item_num, mb_id, cart_amount)
+		values
+			(#{item_num},#{mb_id},#{cart_amount})
+		on duplicate key
+			update cart_amount = cart_amount + 	#{cart_amount}	
+	</insert>
+	
+	<select id="cart_list" resultType="Map" parameterType="string">
+		
+		select 
+			p.item_num, p.item_name,p.item_price, p.item_up_folder, p.item_img, c.cart_amount,
+			c.cart_amount * p.item_price as unitprice  
+		from 
+			cart c 
+		inner join 
+			item_list p
+		on 
+			c.item_num = p.item_num
+		where c.mb_id = #{mb_id}
+	</select>
+	<select id="getCartTotal" resultType="Integer" parameterType="String">
+		select 
+			sum(c.cart_amount * p.item_price) as totalprice 
+		from 
+			cart c inner join item_list p
+		on 
+			c.item_num = p.item_num
+		where c.mb_id = #{mb_id}
+	</select>
+	<delete id="cart_empty" parameterType="String">
+		delete  from cart
+		where mb_id = #{mb_id}
+	</delete>
+	<delete id="cart_sel_delete" parameterType="map">
+		delete from
+			cart
+		where 
+			mb_id = #{mb_id}
+		and 
+			item_num	in 
+			<foreach collection="item_num_arr" item="item" open="(" separator="," close=")">
+			 #{item}
+			</foreach>	
+	
+	</delete>
+	<update id="cart_quantity_change" parameterType="com.kd.basic.cart.CartDTO">
+		update cart 
+			set cart_amount= #{cart_amount}
+		where mb_id = #{mb_id} and item_num=#{item_num}
+	</update>
+</mapper>

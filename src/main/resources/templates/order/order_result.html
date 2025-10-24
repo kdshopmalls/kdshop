@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/layout}">
+  <head>
+    <style>
+      /* 기본 색상 테마 */
+      :root {
+        --main-color: #4a90e2;
+        --accent-color: #ffd700;
+        --light-gray: #f8f9fa;
+        --table-header: #343a40;
+        --table-row-even: #ffffff;
+        --table-row-odd: #f1f3f5;
+      }
+
+      body {
+        font-family: "Segoe UI", sans-serif;
+        background-color: #f5f8ff;
+      }
+
+      /* 주문 메시지 */
+      .order-message {
+        animation: fadeSlideDown 1s ease-out;
+        background-color: var(--main-color);
+        color: white;
+        padding: 1rem 1.5rem;
+        border-radius: 10px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        display: inline-block;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      /* 테이블 스타일 */
+      .table {
+        border-collapse: collapse;
+        background-color: white;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+      }
+
+      .table th {
+        background-color: var(--table-header);
+        color: white;
+        text-align: center;
+        vertical-align: middle;
+      }
+
+      .table td {
+        vertical-align: middle;
+        text-align: center;
+      }
+
+      tbody tr:nth-child(even) {
+        background-color: var(--table-row-even);
+      }
+
+      tbody tr:nth-child(odd) {
+        background-color: var(--table-row-odd);
+      }
+
+      /* 이미지 호버 효과 */
+      td img {
+        transition: transform 0.3s ease;
+        border-radius: 5px;
+      }
+
+      td img:hover {
+        transform: scale(1.1);
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+      }
+
+      /* 총금액 강조 */
+      tfoot td {
+        background-color: var(--accent-color);
+        font-size: 1.3rem;
+        font-weight: bold;
+        color: #333;
+        padding: 1rem;
+        border-top: 2px solid #ccc;
+        border-radius: 0 0 10px 10px;
+      }
+
+      /* 애니메이션 */
+      @keyframes fadeSlideDown {
+        0% {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes rowFadeIn {
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+
+      tbody tr {
+        opacity: 0;
+        transform: translateY(10px);
+        animation: rowFadeIn 0.6s forwards;
+      }
+
+      tbody tr:nth-child(1) {
+        animation-delay: 0.2s;
+      }
+      tbody tr:nth-child(2) {
+        animation-delay: 0.4s;
+      }
+      tbody tr:nth-child(3) {
+        animation-delay: 0.6s;
+      }
+      tbody tr:nth-child(4) {
+        animation-delay: 0.8s;
+      }
+
+      @keyframes fadeIn {
+        to {
+          opacity: 1;
+        }
+      }
+
+      tfoot tr {
+        opacity: 0;
+        animation: fadeIn 1s 1s forwards;
+      }
+    </style>
+  </head>
+
+  <th:block layout:fragment="content">
+    <div class="row">
+      <div class="col text-center mb-3 mt-3">
+        <h3 class="order-message">✅ 주문이 접수되었습니다.</h3>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th scope="col" style="width: 5%">주문번호</th>
+              <th scope="col" style="width: 25%">상품이미지</th>
+              <th scope="col" style="width: 15%">상품이름</th>
+              <th scope="col" style="width: 10%">가격</th>
+              <th scope="col" style="width: 5%">수량</th>
+              <th scope="col" style="width: 10%">합계</th>
+              <th scope="col" style="width: 15%">주문상태</th>
+              <th scope="col" style="width: 15%">배송상태</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="item : ${order_info}">
+              <td th:text="${item.or_code}"></td>
+              <td>
+                <img style="width: 100px; height: 100px" th:src="${'/order/image_display?dateFolderName=' + item.item_up_folder + '&fileName=s_' + item.item_img}" />
+              </td>
+              <td th:text="${item['item_name']}"></td>
+              <td th:text="${#numbers.formatInteger(item['dt_price'], 3, 'COMMA') + ' 원'}"></td>
+              <td th:text="${item['dt_amount']}"></td>
+              <td th:text="${#numbers.formatInteger(item['dt_price'] * item['dt_amount'], 3, 'COMMA') + ' 원'}"></td>
+              <td th:text="${item.pay_status}"></td>
+              <td>상품준비중</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td style="text-align: center" colspan="8" th:attr="data-total=${order_total_price}" th:text="'총금액 : ' + ${#numbers.formatInteger(order_total_price, 3, 'COMMA') + ' 원'}"></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  </th:block>
+
+  <!-- 총금액 숫자 증가 효과 -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const totalElement = document.querySelector("tfoot tr td");
+      if (!totalElement || totalElement.dataset.animated === "true") return;
+
+      const total = parseInt(totalElement.dataset.total);
+      let current = 0;
+      const step = total / 50;
+
+      totalElement.dataset.animated = "true"; // 이미 실행되었음을 표시
+
+      const interval = setInterval(() => {
+        current += step;
+        if (current >= total) {
+          current = total;
+          clearInterval(interval);
+        }
+        totalElement.textContent = `총금액 : ${Math.floor(current).toLocaleString()} 원`;
+      }, 20);
+    });
+  </script>
+</html>

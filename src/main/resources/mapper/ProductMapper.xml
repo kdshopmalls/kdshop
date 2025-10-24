@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kd.basic.product.ProductMapper">
+	<select id="getProductListBysecondCategory" resultType="com.kd.basic.common.dto.ProductDTO">
+		select 
+			item_num,
+			cate_code,
+			item_name,
+			item_price,
+			item_discount,
+			item_publisher,
+			item_content,
+			item_up_folder,
+			item_img,
+			item_amount,
+			item_buy,
+			item_review,
+			item_DATE,
+			item_UPDATEDATE  
+		from item_list
+			where cate_code = #{cate_code}
+			and item_buy = 'Y'
+		limit #{cri.pageStart},#{cri.perPageNum}
+	</select>
+		<select id="getProductListCountBysecondCategory" resultType="int">
+		select count(*) 
+		from item_list 
+		where cate_code = #{cate_code}
+		and item_buy = 'Y'
+	</select>
+		<select id="mainList" resultType="com.kd.basic.common.dto.ProductDTO">
+		select 
+			i.item_num,
+			i.cate_code,
+			i.item_name,
+			i.item_price,
+			i.item_discount,
+			i.item_publisher,
+			i.item_content,
+			i.item_up_folder,
+			i.item_img,
+			i.item_amount,
+			i.item_buy,
+			i.item_review,
+			i.item_DATE,
+			i.item_UPDATEDATE,
+			c.cate_name 
+		from 
+			item_list i 
+		inner join 
+			category c 
+ 	 	on i.cate_code = c.cate_code
+			where item_buy = 'Y'
+			order by item_num desc
+		limit 0,6
+	</select>
+	<select id="pro_detail" resultType="com.kd.basic.common.dto.ProductDTO" parameterType="Integer">
+		select 
+			item_num,
+			cate_code,
+			item_name,
+			item_price,
+			item_discount,
+			item_publisher,
+			item_content,
+			item_up_folder,
+			item_img,
+			item_amount,
+			item_review
+		from item_list 
+		where item_num = #{item_num}
+	</select>
+	<update id="review_count_update" parameterType="Integer">
+		update
+			item_list
+		set	
+		 	item_review =item_review+1
+		where item_num = #{item_num} 
+	
+	</update>
+	
+	<select id="getProductReviewCountByItem_num" resultType="int">
+		select 
+			item_review
+			from item_list 
+		where item_num = #{item_num} 
+	
+	</select>
+</mapper>

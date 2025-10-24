@@ -2,6 +2,7 @@ package com.kd.basic.admin.product;
 
 import java.util.List;
 
+import com.kd.basic.common.dto.ProductDTO;
 import com.kd.basic.common.utils.SearchCriteria;
 
 public interface AdProductMapper {
@@ -10,4 +11,8 @@ public interface AdProductMapper {
 	
 	List<ProductDTO> pro_list(SearchCriteria cri);
 	
+	int getTotalCount(SearchCriteria cri);
+	
+	ProductDTO pro_modify(Integer item_num);
+	void pro_update_ok(ProductDTO dto); 
 }

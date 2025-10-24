@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.kd.basic.common.dto.ProductDTO;
 import com.kd.basic.common.utils.SearchCriteria;
 
 import lombok.RequiredArgsConstructor;
@@ -20,5 +21,17 @@ public class AdProductService {
 	
 	public List<ProductDTO> pro_list(SearchCriteria cri){
 		return adProductMapper.pro_list(cri);
+	}
+	
+	public int getTotalCount(SearchCriteria cri) {
+		return adProductMapper.getTotalCount(cri);
+	}
+	
+	public ProductDTO pro_modify(Integer item_num) {
+		return	adProductMapper.pro_modify(item_num);
+	}
+	
+	public void pro_update_ok(ProductDTO dto) {
+		adProductMapper.pro_update_ok(dto);
 	}
 }

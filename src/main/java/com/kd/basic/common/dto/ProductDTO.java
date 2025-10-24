@@ -1,4 +1,4 @@
-package com.kd.basic.admin.product;
+package com.kd.basic.common.dto;
 
 import java.util.Date;
 
@@ -12,6 +12,7 @@ import lombok.ToString;
 public class ProductDTO {
 	private Integer  item_num;
 	private Integer cate_code; //카테고리 코드
+	private String cate_name;
     private String  item_name;
     private int item_price;
     private int item_discount; //할인율

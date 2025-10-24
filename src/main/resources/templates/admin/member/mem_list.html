@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{admin/layouts/ad_layout}">
+  <th:block layout:fragment="script">
+    <script src="/ckeditor/ckeditor.js"></script>
+  </th:block>
+
+  <th:block layout:fragment="content">
+    <style>
+      .member-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 2rem;
+        border-radius: 15px;
+        color: white;
+        margin-bottom: 2rem;
+        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+      }
+
+      .member-header h3 {
+        font-weight: 700;
+        margin: 0;
+        font-size: 1.8rem;
+      }
+
+      .member-header p {
+        margin: 0.5rem 0 0 0;
+        opacity: 0.9;
+      }
+
+      .search-card {
+        background: white;
+        border-radius: 15px;
+        padding: 1.5rem;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        margin-bottom: 2rem;
+        border: none;
+      }
+
+      .search-card .form-control {
+        border: 2px solid #e0e7ff;
+        border-radius: 10px;
+        padding: 0.75rem 1rem;
+        transition: all 0.3s ease;
+      }
+
+      .search-card .form-control:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.15);
+      }
+
+      .search-card .btn-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        border-radius: 10px;
+        padding: 0.75rem 2rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+
+      .search-card .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+      }
+
+      .table-card {
+        background: white;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
+        border: none;
+      }
+
+      .table {
+        margin-bottom: 0;
+      }
+
+      .table thead th {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        letter-spacing: 0.5px;
+        border: none;
+        padding: 1rem;
+      }
+
+      .table tbody tr {
+        transition: all 0.3s ease;
+      }
+
+      .table tbody tr:hover {
+        background-color: #f8f9ff;
+        transform: scale(1.01);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+      }
+
+      .table tbody td {
+        padding: 1rem;
+        vertical-align: middle;
+        border-color: #e0e7ff;
+      }
+
+      .member-id {
+        font-weight: 600;
+        color: #667eea;
+      }
+
+      .member-point {
+        background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+        color: #2d3436;
+        padding: 0.4rem 0.8rem;
+        border-radius: 20px;
+        font-weight: 600;
+        display: inline-block;
+      }
+
+      .member-name {
+        font-weight: 600;
+        color: #2d3436;
+      }
+
+      .member-nick {
+        color: #636e72;
+        font-style: italic;
+      }
+
+      .member-email {
+        color: #0984e3;
+      }
+
+      .member-phone {
+        color: #636e72;
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .table tbody tr {
+        animation: fadeInUp 0.5s ease forwards;
+      }
+
+      .table tbody tr:nth-child(1) {
+        animation-delay: 0.05s;
+      }
+      .table tbody tr:nth-child(2) {
+        animation-delay: 0.1s;
+      }
+      .table tbody tr:nth-child(3) {
+        animation-delay: 0.15s;
+      }
+      .table tbody tr:nth-child(4) {
+        animation-delay: 0.2s;
+      }
+      .table tbody tr:nth-child(5) {
+        animation-delay: 0.25s;
+      }
+    </style>
+
+    <div class="container mt-5">
+      <!-- 헤더 -->
+      <div class="member-header">
+        <h3>👥 회원 관리</h3>
+        <p>전체 회원 정보를 조회하고 관리하세요</p>
+      </div>
+
+      <!-- 검색창 -->
+      <div class="search-card">
+        <form class="row g-3 align-items-center" method="get" action="/admin/member/mem_list">
+          <div class="col-md-9 col-sm-8">
+            <input type="text" name="keyword" class="form-control" placeholder="🔍 아이디, 이름, 이메일로 검색하세요" th:value="${keyword}" />
+          </div>
+          <div class="col-md-3 col-sm-4">
+            <button type="submit" class="btn btn-primary w-100">검색하기</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- 회원 리스트 테이블 -->
+      <div class="table-card">
+        <div class="table-responsive">
+          <table class="table table-hover mb-0 align-middle text-center">
+            <thead>
+              <tr>
+                <th scope="col">아이디</th>
+                <th scope="col">이름</th>
+                <th scope="col">닉네임</th>
+                <th scope="col">이메일</th>
+                <th scope="col">연락처</th>
+                <th scope="col">포인트</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="memberDTO:${mem_list}">
+                <td><span class="member-id" th:text="${memberDTO.mb_id}"></span></td>
+                <td><span class="member-name" th:text="${memberDTO.mb_name}"></span></td>
+                <td><span class="member-nick" th:text="${memberDTO.mb_nick}"></span></td>
+                <td><span class="member-email" th:text="${memberDTO.mb_email}"></span></td>
+                <td><span class="member-phone" th:text="${memberDTO.mb_phone}"></span></td>
+                <td><span class="member-point" th:text="${memberDTO.mb_point}"></span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </th:block>
+</html>
