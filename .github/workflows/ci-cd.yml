@@ -13,6 +13,10 @@ env:
   AWS_CODE_DEPLOY_APPLICATION: kdshop-springboot-webservice
   AWS_CODE_DEPLOY_GROUP: kdshop-springboot-webservice-group
 
+concurrency:
+  group: kdshop-springboot-webservice-group
+  cancel-in-progress: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
