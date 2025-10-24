@@ -29,7 +29,7 @@ public class AdminLoginController {
 	private final StatisticsService statisticsService;
 	@GetMapping("/")
 	public String ad_login() {
-		return "/admin/ad_login";
+		return "admin/ad_login";
 	}
 	
 	@PostMapping("/admin_ok")

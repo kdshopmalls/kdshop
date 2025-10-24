@@ -20,6 +20,7 @@ import java.util.Collections;
 public class OpenAIService {
 
 	private final OrderMapper orderMapper;
+	private String gptModel = "gpt-4o";  // "gpt-3.5-turbo"
 	
     @Value("${openai.api-key}")
     private String apiKey;
@@ -30,7 +31,7 @@ public class OpenAIService {
         String url = "https://api.openai.com/v1/chat/completions";
 
         ChatRequest request = new ChatRequest(
-                "gpt-3.5-turbo",
+        		gptModel,
                 Collections.singletonList(
                         new ChatRequest.Message("user", prompt)
                 )
@@ -85,12 +86,23 @@ public class OpenAIService {
         return askChatGPT(userMessage);
     }
     
-    private Integer extractFirstInteger(String text) {
+    private Integer extractFirstInteger(String userMessage) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private Integer extractOrderNumber(String text) {
+        if (text == null) return null;
         try {
-            String onlyNums = text.replaceAll("[^0-9]+", " ").trim();
-            if (onlyNums.isEmpty()) return null;
-            String first = onlyNums.split("\\s+")[0];
-            return Integer.parseInt(first);
+            // "주문번호"가 포함된 문자열만 처리
+            if (text.contains("주문번호")) {
+                // 숫자만 추출
+                String onlyNums = text.replaceAll("[^0-9]", "");
+                if (!onlyNums.isEmpty()) {
+                    return Integer.parseInt(onlyNums);
+                }
+            }
+            return null;
         } catch (Exception e) {
             return null;
         }

@@ -26,4 +26,12 @@ public class AdProductService {
 	public int getTotalCount(SearchCriteria cri) {
 		return adProductMapper.getTotalCount(cri);
 	}
+	
+	public ProductDTO pro_modify(Integer item_num) {
+		return	adProductMapper.pro_modify(item_num);
+	}
+	
+	public void pro_update_ok(ProductDTO dto) {
+		adProductMapper.pro_update_ok(dto);
+	}
 }

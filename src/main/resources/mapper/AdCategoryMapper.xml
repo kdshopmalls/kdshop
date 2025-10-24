@@ -23,6 +23,16 @@
  where 
  	cate_prtcode = #{firstCategoryCode}
  </select>
+ <select id="getFirstCategoryBySecondCategory" resultType="com.kd.basic.common.dto.CategoryDTO"  parameterType="Integer">
+ 
+ 	select 
+ 		cate_code, cate_prtcode, cate_name 
+ 	from 
+ 		category
+	where 
+		cate_code  = #{secondCategory}
+ 
+ </select>
   	<update id="categorySort" parameterType="map">
 		
 		update

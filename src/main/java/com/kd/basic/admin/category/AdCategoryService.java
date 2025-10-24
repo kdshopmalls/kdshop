@@ -21,6 +21,9 @@ public class AdCategoryService {
 	public List<CategoryDTO> getSecondCategoryList(Integer firstCategoryCode){
 		return adCategoryMapper.getSecondCategoryList(firstCategoryCode);
 	}
+	public CategoryDTO getFirstCategoryBySecondCategory(Integer secondCategory){
+		return adCategoryMapper.getFirstCategoryBySecondCategory(secondCategory);
+	}
 	
 	@Transactional
 	public void categorySort(List<Integer> orderArr) {

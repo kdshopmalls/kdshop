@@ -288,7 +288,10 @@
                     th:src="${'/admin/product/image_display?dateFolderName=' + productDTO.item_up_folder + '&fileName=s_' + productDTO.item_img}"
                   />
                   <div>
-                    <div class="product-name">[[${productDTO.item_name}]]</div>
+                    <div class="product-name">
+                    <a class="order-link" th:href="@{/admin/product/pro_modify(item_num=${productDTO.item_num})}">
+                    [[${productDTO.item_name}]]
+                    </a></div>
                   </div>
                 </div>
               </td>

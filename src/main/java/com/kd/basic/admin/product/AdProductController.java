@@ -12,14 +12,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
-
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.kd.basic.admin.category.AdCategoryService;
 import com.kd.basic.common.constants.Constants;
+import com.kd.basic.common.dto.CategoryDTO;
+import com.kd.basic.common.dto.MemberDTO;
 import com.kd.basic.common.dto.ProductDTO;
 import com.kd.basic.common.utils.FileUtils;
 import com.kd.basic.common.utils.PageMaker;
@@ -27,6 +30,7 @@ import com.kd.basic.common.utils.SearchCriteria;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -41,6 +45,7 @@ public class AdProductController {
 
 	private final AdProductService adProductService;
 	private final AdCategoryService adCategoryService;
+
 	
 	// 상품이미지 관련작업기능
 //	private final FileUtils fileUtils;
@@ -185,4 +190,44 @@ public class AdProductController {
 		return FileUtils.getFile(uploadPath + File.separator + dateFolderName, fileName);
 	}
 	
+	@GetMapping("/pro_modify")
+	public void pro_modify(Integer item_num, Model model) throws Exception {
+			log.info("상품코드" + item_num);
+			model.addAttribute("cate_list", adCategoryService.getFirstCategoryList());
+			ProductDTO productDTO = adProductService.pro_modify(item_num);
+			model.addAttribute("productDTO", productDTO);
+			int secondCategory = productDTO.getCate_code();
+			
+			CategoryDTO categoryDTO = adCategoryService.getFirstCategoryBySecondCategory(secondCategory);
+			
+			model.addAttribute("categoryDTO", categoryDTO);
+			
+			// 1차카테고리 코드
+			int firstCategory = categoryDTO.getCate_prtcode();
+			// 1차카테고리 코드를 부모로하는 2차카테고리 목록.
+			model.addAttribute("secondCategoryDTO", adCategoryService.getSecondCategoryList(firstCategory));
+				
+	}
+	
+	@PostMapping("/pro_update")
+	public String pro_update(ProductDTO dto, MultipartFile item_img_upload, RedirectAttributes rttr) throws Exception {
+		log.info("상품정보"+dto);
+		// 1)상품이미지를 변경했을 경우
+		if(!item_img_upload.isEmpty()) {
+			
+			// 기존이미지 삭제.
+			FileUtils.delete(uploadPath, "s_" + dto.getItem_up_folder(), dto.getItem_img(), "image");
+			
+			// 변경이미지 업로드.
+			String dateFolder = FileUtils.getDateFolder(); // 상품이미지 업로드되는 날짜폴더이름
+			String saveFileName = FileUtils.uploadFile(uploadPath, dateFolder, item_img_upload);
+			
+			dto.setItem_up_folder(dateFolder);
+			dto.setItem_img(saveFileName);
+			
+		}
+		
+		adProductService.pro_update_ok(dto);		
+		return "redirect:/admin/product/pro_list";
+	}
 }
