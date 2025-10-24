@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # start.sh
 
+
 PROJECT="kdshop-1.0.0"
 PROJECT_NAME=kdshop
 PROJECT_FULL_PATH="/home/ec2-user/app1/step1"
