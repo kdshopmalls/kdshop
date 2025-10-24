@@ -13,6 +13,8 @@ public interface AdCategoryMapper {
 	//1차를 참조하는 2차 카테고리 목록
 	List<CategoryDTO> getSecondCategoryList(Integer firstCategoryCode); 
 	
+	CategoryDTO getFirstCategoryBySecondCategory(Integer secondCategory); 
+	
 	// 1차카테고리 정렬
 	void categorySort(@Param("cate_code") Integer cate_code, @Param("order") Integer order );
 	

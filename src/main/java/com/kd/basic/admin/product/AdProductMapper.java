@@ -13,4 +13,6 @@ public interface AdProductMapper {
 	
 	int getTotalCount(SearchCriteria cri);
 	
+	ProductDTO pro_modify(Integer item_num);
+	void pro_update_ok(ProductDTO dto); 
 }

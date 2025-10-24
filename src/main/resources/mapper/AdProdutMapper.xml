@@ -71,5 +71,41 @@
 		   	</if>
 		   </if>
 		 </sql>
+ 	<select id="pro_modify" resultType="com.kd.basic.common.dto.ProductDTO" parameterType="Integer">
+		select 
+			item_num,
+			cate_code,
+			item_name,
+			item_price,
+			item_discount,
+			item_publisher,
+			item_content,
+			item_up_folder,
+			item_img,
+			item_amount,
+			item_review,
+			item_buy
+		from item_list 
+		where item_num = #{item_num}
+	</select>
+	 <update id="pro_update_ok" parameterType="com.kd.basic.common.dto.ProductDTO">
  
+	 	update 
+	 		item_list
+		set 
+			cate_code = #{cate_code}, 
+			item_name = #{item_name}, 
+			item_price = #{item_price}, 
+			item_discount = #{item_discount} , 
+			item_publisher = #{item_publisher}, 
+			item_content  = #{item_content},
+			item_up_folder  = #{item_up_folder},
+			item_img  = #{item_img}, 
+			item_amount  = #{item_amount}, 
+			item_buy = #{item_buy}, 
+			item_updatedate = now()
+		where 
+			item_num = #{item_num}
+
+	 </update>
 </mapper>
