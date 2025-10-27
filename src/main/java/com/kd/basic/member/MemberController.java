@@ -173,7 +173,7 @@ public class MemberController {
 			log.info("회원수정정보" + vo);
 
 			model.addAttribute("memberDTO", vo);
-			url = "/member/modify";
+			url = "member/modify";
 		} else {
 			url = "redirect:/member/login";
 
@@ -242,7 +242,7 @@ public class MemberController {
 		if (dto != null) {
 			MemberDTO member = memberService.mypage(dto.getMb_id());
 			model.addAttribute("memberDTO", member);
-			url = "/member/mypage";
+			url = "member/mypage";
 		} else {
 			url = "redirect:/member/login";		}
 		
