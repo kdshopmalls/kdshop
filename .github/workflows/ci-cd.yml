@@ -9,12 +9,12 @@ on:
 env:
   PROJECT_NAME: kdshop
   AWS_REGION: ap-northeast-2
-  AWS_S3_BUCKET: kdbook-s3-bucket2
-  AWS_CODE_DEPLOY_APPLICATION: kdshop-springboot-webservice
-  AWS_CODE_DEPLOY_GROUP: kdshop-springboot-webservice-group
+  AWS_S3_BUCKET: kdbook-bucket
+  AWS_CODE_DEPLOY_APPLICATION: kdbook-springboot-webservice
+  AWS_CODE_DEPLOY_GROUP: kdbook-springboot-webservice-group
 
 concurrency:
-  group: kdshop-springboot-webservice-group
+  group: kdbook-springboot-webservice-group
   cancel-in-progress: true
 
 jobs:
